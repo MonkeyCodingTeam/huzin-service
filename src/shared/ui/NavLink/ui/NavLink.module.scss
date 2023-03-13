@@ -1,0 +1,15 @@
+.link {
+  padding: 4px;
+
+  font-size: var(--large-font-size);
+  color: var(--dark-color) !important;
+  text-decoration: none;
+
+  border-bottom: 2px solid transparent;
+
+  transition: border .2s ease-in-out;
+
+  &:hover {
+    border-bottom: 2px solid var(--primary-color);
+  }
+}

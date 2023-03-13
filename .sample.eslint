@@ -1,0 +1,74 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true
+  },
+  "plugins": [
+    "react",
+    "import",
+    "jsx-a11y",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/no-unresolved": "off",
+    "import/no-default-export": "error",
+    "import/prefer-default-export": "off",
+    "import/no-named-as-default-member": "off",
+    "react/function-component-definition": "off",
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/*.test.ts",
+          "**/*.test.tsx",
+          "**/*.config.ts",
+          "**/*.config.js"
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "./src/pages/*/ui/*.tsx",
+        "**/*.config.ts"
+      ],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ],
+  "settings": {
+    "react": {
+      "pragma": "React",
+      "version": "detect"
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    }
+  }
+}

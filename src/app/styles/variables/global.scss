@@ -1,0 +1,24 @@
+// colors
+:root {
+  --light-color: #fff;
+  --dark-color: #2E2E2E;
+  --primary-color: #4CA6E7;
+  --secondary-color: #A7A7A7;
+  --background-color: #F9F7F6;
+  --danger-color: #ff9567;
+  --warning-color: #ffd08a;
+  --low-warning-color: #fff8a9;
+
+  // fonts
+  --font-family: 'Roboto';
+  --font-weight: 400;
+  --small-font-size: 8px;
+  --small-line-height: 8px;
+  --regular-font-size: 14px;
+  --regular-line-height: 14px;
+  --large-font-size: 24px;
+  --large-line-height: 24px;
+  --extra-large-font-size: 32px;
+  --extra-large-line-height: 32px;
+  --regular-font: var(--regular-font-size) / var(--regular-line-height) var(--font-family);
+}

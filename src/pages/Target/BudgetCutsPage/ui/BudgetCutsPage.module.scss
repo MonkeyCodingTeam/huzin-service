@@ -1,0 +1,39 @@
+.table {
+  &__header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+
+    &_left {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    &_right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+  }
+}
+
+.container {
+  align-items: center;
+  width: 100vw;
+  padding: 0 16px;
+}
+
+.alertBackground {
+  &_danger {
+    background-color: var(--danger-color);
+  }
+
+  &_warning {
+    background-color: var(--warning-color);
+  }
+
+  &_lowWarning {
+    background-color: var(--low-warning-color);
+  }
+}

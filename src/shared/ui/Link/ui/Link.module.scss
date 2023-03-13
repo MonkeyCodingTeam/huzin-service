@@ -1,0 +1,10 @@
+.link {
+  color: var(--dark-color) !important;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border .2s ease-in-out;
+
+  &:hover {
+    color: var(--primary-color) !important;
+  }
+}

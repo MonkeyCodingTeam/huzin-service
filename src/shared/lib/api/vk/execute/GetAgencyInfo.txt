@@ -1,0 +1,26 @@
+var accounts = API.ads.getAccounts();
+var agency = null;
+while (accounts.length) {
+  var account = accounts.pop();
+  if (account.account_type == 'agency') {
+    agency = account;
+  }
+}
+if (!agency) {
+  return null;
+}
+
+var clients = API.ads.getClients({account_id: agency.account_id});
+
+var clientsIds = clients@.id;
+var clientsIdsString = null;
+
+while (clientsIds.length) {
+  if (clientsIdsString) {
+    clientsIdsString = clientsIdsString + ',' + clientsIds.pop();
+  } else {
+    clientsIdsString = clientsIds.pop();
+  }
+}
+
+return { clients: clients, agency: agency, clientsIds: clients@.id };

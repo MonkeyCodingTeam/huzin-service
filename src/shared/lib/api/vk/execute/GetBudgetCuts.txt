@@ -1,0 +1,21 @@
+var monthCuts = API.ads.getStatistics({
+  account_id: ::ACCOUNT_ID::,
+  ids_type: 'client',
+  ids: "::CLIENTS_IDS::",
+  period: 'month',
+  date_from: "::MONTH_DATE::",
+  date_to: "::MONTH_DATE::",
+  v: 5.131,
+});
+
+var weekCuts = API.ads.getStatistics({
+  account_id: ::ACCOUNT_ID::,
+  ids_type: 'client',
+  ids: "::CLIENTS_IDS::",
+  period: 'week',
+  date_from: "::WEEK_DATE_FROM::",
+  date_to: "::WEEK_DATE_TO::",
+  v: 5.131,
+});
+
+return {month: monthCuts, week: weekCuts};

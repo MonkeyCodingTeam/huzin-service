@@ -1,0 +1,8 @@
+*.tsx
+*.jsx
+*.ts
+*.js
+*.md
+*.svg
+/src/app/styles/normalize.css
+/node_modules
