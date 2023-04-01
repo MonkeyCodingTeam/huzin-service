@@ -142,40 +142,42 @@ const SenlerPage = () => {
     setWeek(weekStart);
   };
 
-  return loading ? (
-    <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
-  ) : (
+  return (
     <Transition className={css.container}>
-      <DataTable
-        value={senlerStats}
-        selectionMode='single'
-        sortField='name'
-        sortOrder={1}
-        scrollable
-        scrollHeight='calc(100vh - 170px)'
-        tableStyle={{
-          borderCollapse: 'separate',
-          alignItems: 'center',
-        }}
-        size='small'
-        showGridlines
-        rows={10}
-        key='id'
-        filters={filters}
-        globalFilterFields={['client.name']}
-        header={
-          <SenlerHeader
-            filterChange={handleFilterChange}
-            onWeekChange={handleWeekChange}
-            dateTime={DateTime.now()}
-          />
-        }
-      >
-        <Column header='Клиенты' body={nameTemplate} />
-        <Column header='Потрачено' body={spentTemplate} />
-        <Column header='Подписки' body={subscribersTemplate} />
-        <Column header='Цена подписки' body={spentPerSubTemplate} />
-      </DataTable>
+      {loading ? (
+        <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
+      ) : (
+        <DataTable
+          value={senlerStats}
+          selectionMode='single'
+          sortField='name'
+          sortOrder={1}
+          scrollable
+          scrollHeight='calc(100vh - 170px)'
+          tableStyle={{
+            borderCollapse: 'separate',
+            alignItems: 'center',
+          }}
+          size='small'
+          showGridlines
+          rows={10}
+          key='id'
+          filters={filters}
+          globalFilterFields={['client.name']}
+          header={
+            <SenlerHeader
+              filterChange={handleFilterChange}
+              onWeekChange={handleWeekChange}
+              dateTime={DateTime.now()}
+            />
+          }
+        >
+          <Column header='Клиенты' body={nameTemplate} />
+          <Column header='Потрачено' body={spentTemplate} />
+          <Column header='Подписки' body={subscribersTemplate} />
+          <Column header='Цена подписки' body={spentPerSubTemplate} />
+        </DataTable>
+      )}
     </Transition>
   );
 };
