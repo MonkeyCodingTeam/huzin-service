@@ -104,14 +104,14 @@ const SenlerPage = () => {
   };
   const spentTemplate = (stat: SenlerStats) => {
     if (loadingStats) {
-      return <Skeleton width='5rem' />;
+      return <Skeleton width='10rem' />;
     }
     return <span>{stat.spent ? Math.trunc(stat.spent).toLocaleString() : 0}</span>;
   };
 
   const subscribersTemplate = (stat: SenlerStats) => {
     if (loadingSenler) {
-      return <Skeleton width='5rem' />;
+      return <Skeleton width='12rem' />;
     }
     if (!stat.groupId || !stat.success) {
       const message = !stat.groupId ? 'Добавьте группу' : 'Проверьте ключ Senler';
@@ -122,11 +122,7 @@ const SenlerPage = () => {
 
   const spentPerSubTemplate = (stat: SenlerStats) => {
     if (loadingSenler) {
-      return (
-        <span>
-          <Skeleton width='5rem' />
-        </span>
-      );
+      return <Skeleton width='5rem' />;
     }
     const spentPerSub =
       stat.spent && stat.subscribers !== undefined
