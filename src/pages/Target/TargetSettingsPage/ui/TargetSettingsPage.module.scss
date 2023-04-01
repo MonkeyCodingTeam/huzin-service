@@ -1,0 +1,28 @@
+.container {
+  width: 70vw;
+  margin: auto;
+  padding: 8px;
+
+  &__block {
+    height: 100%;
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: 8px;
+
+    &__nav {
+      margin-bottom: 1rem;
+      padding: 0 !important;
+
+      &__link {
+        padding: 4px 8px;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .container {
+    width: 100%;
+  }
+}

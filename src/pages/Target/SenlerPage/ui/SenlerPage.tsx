@@ -1,0 +1,183 @@
+import { Transition } from '@widgets';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import css from './SenlerPage.module.scss';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { FilterMatchMode } from 'primereact/api';
+import { SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
+import { DateTime } from 'luxon';
+import { ClientAPI } from '@shared/lib/api';
+import {
+  Client,
+  ClientsStatisticResponse,
+  GetAllSubscribersCountResponse,
+} from '@shared/lib/api/target/types';
+import { GroupAPI } from '@shared/lib/api/target/group';
+import { TableSkeleton } from '@shared/ui/Skeletons';
+import { Skeleton } from 'primereact/skeleton';
+import { Link } from '@shared/ui';
+
+interface SenlerStats {
+  client: Client;
+  spent?: number;
+  subscribers?: number;
+  groupId?: number;
+  success: boolean;
+}
+
+const SenlerPage = () => {
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
+  const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
+  const [senlerStats, setSenlerStats] = useState<SenlerStats[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingSenler, setLoadingSenler] = useState(true);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const [week, setWeek] = useState<DateTime>();
+  const [filters, setFilters] = useState<
+    Record<string, { value: string; matchMode: FilterMatchMode }>
+  >({
+    global: { value: '', matchMode: FilterMatchMode.CONTAINS },
+  });
+
+  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const _filters = { ...filters };
+
+    _filters['global'].value = value;
+
+    setFilters(_filters);
+  };
+
+  useEffect(() => {
+    ClientAPI.getClients().then((res) => {
+      setClients(res.data);
+      setLoading(false);
+    });
+
+    ClientAPI.getAllStatistics({
+      date_from: DateTime.now().minus({ month: 3 }),
+      date_to: DateTime.now(),
+      period: 'week',
+    }).then((res) => {
+      setClientStats(res.data);
+      setLoadingStats(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (week) {
+      setLoadingSenler(true);
+      GroupAPI.getAllSubscribersCount({
+        date_from: week.startOf('week'),
+        date_to: week.endOf('week'),
+      }).then((res) => {
+        setSenlerSubs(res.data);
+        setLoadingSenler(false);
+      });
+    }
+  }, [week]);
+
+  useEffect(() => {
+    if (!clients.length) return;
+
+    const stats = clients.map((client) => {
+      const spent = clientStats.find((stat) => stat.id === client.id);
+      const stat = spent?.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'));
+      return {
+        client,
+        spent: stat?.spent || 0,
+        subscribers: senlerSubs[client.id]?.count_subscribe,
+        groupId: senlerSubs[client.id]?.group_id,
+        success: senlerSubs[client.id]?.success,
+      };
+    });
+    setSenlerStats(stats);
+  }, [clientStats, clients, week, senlerSubs]);
+
+  const nameTemplate = (stat: SenlerStats) => {
+    return (
+      <Link target='_blank' href={`https://vk.com/ads?act=office&union_id=${stat.client.id}`}>
+        {stat.client.name}
+      </Link>
+    );
+  };
+  const spentTemplate = (stat: SenlerStats) => {
+    if (loadingStats) {
+      return <Skeleton width='5rem' />;
+    }
+    return <span>{stat.spent ? Math.trunc(stat.spent).toLocaleString() : 0}</span>;
+  };
+
+  const subscribersTemplate = (stat: SenlerStats) => {
+    if (loadingSenler) {
+      return <Skeleton width='5rem' />;
+    }
+    if (!stat.groupId || !stat.success) {
+      const message = !stat.groupId ? 'Добавьте группу' : 'Проверьте ключ Senler';
+      return <Link href={`/target/settings/client/${stat.client.id}`}>{message}</Link>;
+    }
+    return <span>{stat.subscribers ? stat.subscribers.toLocaleString() : '-'}</span>;
+  };
+
+  const spentPerSubTemplate = (stat: SenlerStats) => {
+    if (loadingSenler) {
+      return (
+        <span>
+          <Skeleton width='5rem' />
+        </span>
+      );
+    }
+    const spentPerSub =
+      stat.spent && stat.subscribers !== undefined
+        ? (stat.subscribers === 0
+            ? stat.spent
+            : Math.trunc(stat.spent / stat.subscribers)
+          ).toLocaleString()
+        : '-';
+    return <span>{spentPerSub}</span>;
+  };
+
+  const handleWeekChange = (weekStart: DateTime) => {
+    setWeek(weekStart);
+  };
+
+  return loading ? (
+    <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
+  ) : (
+    <Transition className={css.container}>
+      <DataTable
+        value={senlerStats}
+        selectionMode='single'
+        sortField='name'
+        sortOrder={1}
+        scrollable
+        scrollHeight='calc(100vh - 170px)'
+        tableStyle={{
+          borderCollapse: 'separate',
+          alignItems: 'center',
+        }}
+        size='small'
+        showGridlines
+        rows={10}
+        key='id'
+        filters={filters}
+        globalFilterFields={['client.name']}
+        header={
+          <SenlerHeader
+            filterChange={handleFilterChange}
+            onWeekChange={handleWeekChange}
+            dateTime={DateTime.now()}
+          />
+        }
+      >
+        <Column header='Клиенты' body={nameTemplate} />
+        <Column header='Потрачено' body={spentTemplate} />
+        <Column header='Подписки' body={subscribersTemplate} />
+        <Column header='Цена подписки' body={spentPerSubTemplate} />
+      </DataTable>
+    </Transition>
+  );
+};
+
+export default SenlerPage;

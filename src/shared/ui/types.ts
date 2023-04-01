@@ -1,6 +1,6 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, DOMAttributes, ReactNode } from 'react';
 
-export interface ComponentProps {
+export interface ComponentProps<T = HTMLAnchorElement> extends DOMAttributes<T> {
   /** Additional classes */
   className?: string;
 

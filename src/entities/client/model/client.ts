@@ -1,4 +1,5 @@
 import { Client } from '@shared/lib/api/target/types/client';
+import { createSlice } from '@reduxjs/toolkit';
 
 export const emptyClientState: Client = {
   id: 0,
@@ -12,3 +13,27 @@ export const emptyClientState: Client = {
   month_spent: 0,
   week_spent: 0,
 };
+
+export const selectedClient = createSlice({
+  initialState: emptyClientState,
+  name: '@@SELECTED_CLIENT',
+  reducers: {
+    selectClient(state, action) {
+      return action.payload;
+    },
+    forgetClient(state, action) {
+      return emptyClientState;
+    },
+  },
+  extraReducers: (builder) => {
+    // builder
+    //   .addCase(createAction('selectClient'), (state, action) => {
+    //     return action.payload;
+    //   })
+    //   .addCase(createAction('forgetClient'), (state, action) => {
+    //     return emptyClientState;
+    //   });
+  },
+});
+
+export const { selectClient, forgetClient } = selectedClient.actions;

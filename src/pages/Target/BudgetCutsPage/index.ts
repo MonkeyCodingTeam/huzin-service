@@ -1,1 +1,1 @@
-export { BudgetCutsAsync as BudgetCutsPage } from './ui/BudgetCuts.async';
+export { BudgetCutsPageAsync as BudgetCutsPage } from './ui/BudgetCuts.async';

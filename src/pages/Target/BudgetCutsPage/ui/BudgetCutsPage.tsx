@@ -1,11 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import css from './BudgetCutsPage.module.scss';
-import { InputText } from 'primereact/inputtext';
 import { DateTime } from 'luxon';
-import { TargetAPI } from '@shared/lib/api';
-import { Dropdown } from 'primereact/dropdown';
+import { ClientAPI } from '@shared/lib/api';
 import { Link } from '@shared/ui/Link';
 import { FilterMatchMode } from 'primereact/api';
 import { TableSkeleton } from '@shared/ui/Skeletons';
@@ -14,12 +12,14 @@ import { EditClientModal } from '@pages/Target/BudgetCutsPage/ui/EditClientModal
 import { Client } from '@shared/lib/api/target/types';
 import { FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
+import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader';
+import { index } from '@shared/lib/util';
+import { Transition } from '@widgets';
 
 const BudgetCutsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClients] = useState<Client>();
   const [editClient, setEditClients] = useState<Client>();
-  const [user, setUser] = useState<Client>();
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<
     Record<string, { value: string; matchMode: FilterMatchMode }>
@@ -28,7 +28,7 @@ const BudgetCutsPage = () => {
   });
   const [editModalVisible, setEditModalVisible] = useState(false);
   const contextMenu = useRef<ContextMenu>(null);
-  const toast = useRef(null);
+  const toast = useRef<Toast>(null);
 
   const dateTime = DateTime.now();
   const daysInMonth = dateTime.daysInMonth;
@@ -54,7 +54,7 @@ const BudgetCutsPage = () => {
   ];
 
   const getClients = () => {
-    TargetAPI.getClients().then((res) => {
+    ClientAPI.getClients().then((res) => {
       setClients(res.data);
       setLoading(false);
     });
@@ -74,11 +74,11 @@ const BudgetCutsPage = () => {
 
   const handleSubmit = useCallback(
     (values: FormikValues) => {
+      console.log(values);
       if (editClient) {
-        TargetAPI.updateClient(editClient.id, values).then(() => {
+        ClientAPI.updateClient(editClient.id, values).then(() => {
           getClients();
           setEditModalVisible(false);
-          // @ts-ignore
           toast.current!.show({
             severity: 'success',
             detail: 'Сохранено!',
@@ -90,37 +90,14 @@ const BudgetCutsPage = () => {
     [editClient],
   );
 
-  const header = (
-    <div className={css.table__header}>
-      <div className={css.table__header_left}>
-        <span>Последнее обновление: {dateTime.toFormat('d.LL HH:mm')}</span>
-        <InputText
-          className={css.table__header_search}
-          type='text'
-          onChange={(e) => {
-            const value = e.target.value;
-            const _filters = { ...filters };
+  const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const _filters = { ...filters };
 
-            _filters['global'].value = value;
+    _filters['global'].value = value;
 
-            setFilters(_filters);
-          }}
-          placeholder='Поиск...'
-        />
-      </div>
-      <label title='Выбрать проекты, привязанные к сотруднику' className={css.table__header_right}>
-        Сотрудник:
-        <Dropdown
-          value={user}
-          className={css.table__header_employee}
-          onChange={(e) => setUser(e.value)}
-          options={clients}
-          optionLabel='name'
-          placeholder='Не выбран'
-        />
-      </label>
-    </div>
-  );
+    setFilters(_filters);
+  };
 
   const nameBodyTemplate = (client: Client) => {
     return (
@@ -149,7 +126,7 @@ const BudgetCutsPage = () => {
   const daySpentAlert = (client: Client) => {
     const daySpentPlan = Math.trunc(client.month_plan / daysInMonth);
     const difference = Math.abs(daySpentPlan - client.day_spent) / daySpentPlan;
-    return getAlertBackground(difference);
+    return index(difference);
   };
 
   const weekSpentBodyTemplate = (client: Client) => {
@@ -164,7 +141,7 @@ const BudgetCutsPage = () => {
   const weekSpentAlert = (client: Client) => {
     const weekSpentPlan = Math.trunc((client.month_plan / daysInMonth) * weekday);
     const difference = Math.abs(weekSpentPlan - client.week_spent) / weekSpentPlan;
-    return getAlertBackground(difference, { low: 0.15, middle: 0.3, height: 0.5 });
+    return index(difference, { low: 0.15, middle: 0.3, height: 0.5 });
   };
 
   const monthSpentBodyTemplate = (client: Client) => {
@@ -179,7 +156,7 @@ const BudgetCutsPage = () => {
   const monthSpentAlert = (client: Client) => {
     const monthSpentPlan = Math.trunc((client.month_plan / daysInMonth) * monthday);
     const difference = Math.abs(monthSpentPlan - client.month_spent) / monthSpentPlan;
-    return getAlertBackground(difference, { low: 0.07, middle: 0.13, height: 0.2 });
+    return index(difference, { low: 0.07, middle: 0.13, height: 0.2 });
   };
 
   const needSpentBodyTemplate = (client: Client) => {
@@ -201,7 +178,7 @@ const BudgetCutsPage = () => {
   };
 
   return (
-    <div className={css.container}>
+    <Transition className={css.container}>
       {loading ? (
         <TableSkeleton rows={10} />
       ) : (
@@ -225,8 +202,7 @@ const BudgetCutsPage = () => {
             sortField='name'
             sortOrder={1}
             scrollable
-            scrollHeight='calc(100vh - 150px)'
-            className={css.table}
+            scrollHeight='calc(100vh - 170px)'
             tableStyle={{
               borderCollapse: 'separate',
               alignItems: 'center',
@@ -238,7 +214,7 @@ const BudgetCutsPage = () => {
             key='id'
             filters={filters}
             globalFilterFields={['name']}
-            header={header}
+            header={<BudgetCutsHeader dateTime={dateTime} filterChange={handleFilterChange} />}
             onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
             contextMenuSelection={selectedClient}
             onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}
@@ -266,25 +242,8 @@ const BudgetCutsPage = () => {
           </DataTable>
         </>
       )}
-    </div>
+    </Transition>
   );
-};
-
-type alertLevel = { low: number; middle: number; height: number };
-const getAlertBackground = (
-  difference: number,
-  level: alertLevel = { low: 0.2, middle: 0.5, height: 0.7 },
-) => {
-  if (level.height < difference) {
-    return css.alertBackground_danger;
-  }
-  if (level.middle < difference) {
-    return css.alertBackground_warning;
-  }
-  if (level.low < difference) {
-    return css.alertBackground_lowWarning;
-  }
-  return '';
 };
 
 export default BudgetCutsPage;

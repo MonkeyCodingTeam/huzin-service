@@ -1,11 +1,15 @@
 import { DotLoader } from 'react-spinners';
-import css from './Loader.module.scss';
 import { LoaderSizeProps } from 'react-spinners/helpers/props';
 
-export const Loader = ({ ...props }: LoaderSizeProps) => {
+interface LoaderProps extends LoaderSizeProps {
+  containerClassName?: string;
+  loaderClassName?: string;
+}
+
+export const Loader = ({ containerClassName, loaderClassName, ...props }: LoaderProps) => {
   return (
-    <div className={css.container}>
-      <DotLoader {...props} />
+    <div className={containerClassName}>
+      <DotLoader {...props} className={loaderClassName} color={'var(--primary-color)'} />
     </div>
   );
 };

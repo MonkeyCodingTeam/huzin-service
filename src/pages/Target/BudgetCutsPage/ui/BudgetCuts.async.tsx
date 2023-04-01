@@ -1,3 +1,3 @@
 import { lazy } from 'react';
 
-export const BudgetCutsAsync = lazy(() => import('./BudgetCutsPage'));
+export const BudgetCutsPageAsync = lazy(() => import('./BudgetCutsPage'));

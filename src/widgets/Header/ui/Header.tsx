@@ -32,8 +32,8 @@ export const Header = () => {
         </div>
 
         <div className={css.header__links}>
-          <NavLink label={'Проекты'} href={ROUTES.TargetProjects} />
-          <NavLink label={'Компании'} href={ROUTES.TargetCompanies} />
+          <NavLink label={'Проекты'} href={ROUTES.TargetClients} />
+          <NavLink label={'Senler'} href={ROUTES.TargetCompanies} />
           <NavLink label={'Открутка'} href={ROUTES.BudgetCuts} />
           <NavLink label={'Настройки'} href={ROUTES.TargetSettings} />
         </div>

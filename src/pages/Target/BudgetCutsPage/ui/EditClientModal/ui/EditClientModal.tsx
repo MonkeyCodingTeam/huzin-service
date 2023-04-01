@@ -35,14 +35,16 @@ export const EditClientModal = ({
     >
       <Formik initialValues={editProps} onSubmit={onSubmit}>
         <Form className={css.form}>
-          <FloatInput name='month_plan' label='План на месяц' placeholder='Нет значения' />
-          <FloatInput
-            name='critical_balance'
-            label='Критический остаток'
-            placeholder='Нет значения'
-          />
+          <div className={css.form__body}>
+            <FloatInput name='month_plan' label='План на месяц' placeholder='Нет значения' />
+            <FloatInput
+              name='critical_balance'
+              label='Критический остаток'
+              placeholder='Нет значения'
+            />
+          </div>
           <div className={css.form__footer}>
-            <Button type='button' label='Отменить' severity='secondary' />
+            <Button type='button' label='Отменить' severity='secondary' onClick={onHide} />
             <Button type='submit' label='Сохранить' />
           </div>
         </Form>

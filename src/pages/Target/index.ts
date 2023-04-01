@@ -1,2 +1,2 @@
-export * from './ProjectsPage';
+export * from './ClientsPage';
 export * from './BudgetCutsPage';

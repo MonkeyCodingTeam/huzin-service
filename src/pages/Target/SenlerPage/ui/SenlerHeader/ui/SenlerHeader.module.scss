@@ -1,0 +1,8 @@
+.panel {
+  display: flex;
+  gap: 8px;
+}
+
+.selectedDropdown {
+  border-color: var(--primary-color) !important;
+}

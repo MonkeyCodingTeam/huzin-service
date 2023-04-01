@@ -1,0 +1,21 @@
+/* ===== Scrollbar CSS ===== */
+
+/* Firefox */
+* {
+  scrollbar-color: var(--secondary-color);
+  scrollbar-width: auto;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar,
+*::-webkit-scrollbar-thumb {
+  width: 6px;
+  height: 6px;
+  background-color: rgb(0 0 0 / 4%);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(177 184 192 / 50%);
+  background-clip: padding-box;
+}

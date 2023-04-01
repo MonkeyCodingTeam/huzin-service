@@ -1,5 +1,6 @@
 @import "reset.css";
 @import 'normalize.css';
+@import 'scroll-bar';
 @import 'variables/global';
 
 @import "primereact/resources/themes/lara-light-blue/theme.css";
@@ -13,6 +14,8 @@
 
 html,
 body {
+  overflow-y: scroll;
+  overflow-y: overlay;
   display: flex;
   flex-direction: column;
 
@@ -27,8 +30,6 @@ body {
   color: var(--dark-color);
 
   background-color: var(--background-color);
-  overflow-y: scroll;
-  overflow-y: overlay;
 }
 
 * {
@@ -37,12 +38,22 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration-color: transparent;
+  color: var(--dark-color);
+  transition: text-decoration-color .2s;
+
+  &:hover {
+    text-decoration-color: var(--dark-color);
+  }
+}
+
 .p-component {
   font-family: inherit;
   font-size: inherit;
   font-weight: inherit;
 }
 
-.p-datatable.p-datatable-selectable .p-datatable-tbody > tr.p-selectable-row:not(.p-highlight):not(.p-datatable-emptymessage):hover {
-  filter: brightness(95%);
+.p-datatable.p-datatable-selectable .p-datatable-tbody > tr.p-selectable-row:not(.p-highlight, .p-datatable-emptymessage):hover {
+  filter: brightness(98%);
 }

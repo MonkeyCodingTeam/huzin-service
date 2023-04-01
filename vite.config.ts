@@ -15,6 +15,7 @@ export default ({ mode }) => {
     },
     define: {
       __MODE__: JSON.stringify(process.env.VITE_MODE),
+      __APP_TITLE__: JSON.stringify(process.env.VITE_APP_TITLE),
       __APP_API_URL__: JSON.stringify(process.env.VITE_APP_API_URL),
       __VK_API_URL__: JSON.stringify(process.env.VITE_VK_API_URL),
       __VK_API_PROXY_URL__: JSON.stringify(process.env.VITE_VK_API_PROXY_URL),

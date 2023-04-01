@@ -1,8 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
+import { selectedClient } from '@entities/client/model';
+
+export const appInitialState = {
+  selectedClient: null,
+};
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    selectedClient: selectedClient.reducer,
+  },
   middleware: (getDefaultMiddleware) => {
     const middlewares = [];
     if (__MODE__ === 'development') {
