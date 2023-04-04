@@ -15,7 +15,7 @@ interface GroupListProps {
 }
 
 export const GroupList: FC<GroupListProps> = ({ groups }) => {
-  const [groupList, setGroupList] = useState<Group[]>([]);
+  const [groupList, setGroupList] = useState<Group[]>(groups);
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export const GroupList: FC<GroupListProps> = ({ groups }) => {
           {group.name}
         </a>
         <Button
+            type='button'
           icon='pi pi-trash'
           area-label='Удалить'
           severity='danger'

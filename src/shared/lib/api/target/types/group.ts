@@ -5,6 +5,7 @@ export interface Group {
   id: number;
   name: string;
   link: string;
+  site?: string;
   screen_name: string;
   city?: string;
   timezone?: number;

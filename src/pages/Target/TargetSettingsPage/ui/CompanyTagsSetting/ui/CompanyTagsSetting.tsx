@@ -30,12 +30,13 @@ export const CompanyTagsSetting = () => {
 
   const getTemplate = () => {
     CompanyTemplateAPI.getAll().then((res) => {
-      setTemplates(res.data);
+      setTemplates(res.data || []);
     });
   };
 
   const addTemplate = (value: CreateCompanyTemplate) => {
     CompanyTemplateAPI.create(value).then((res) => {
+      console.log(templates)
       setTemplates([...templates, res.data]);
     });
   };

@@ -1,6 +1,6 @@
 import { InputText, InputTextProps } from 'primereact/inputtext';
 import classNames from 'classnames';
-import { FC } from 'react';
+import {FC, Ref} from 'react';
 
 interface InputProps extends InputTextProps {
   label?: string;
@@ -8,6 +8,7 @@ interface InputProps extends InputTextProps {
   className?: string;
   labelClassName?: string;
   inGroup?: boolean;
+  ref?: Ref<any>
 }
 
 export const Input: FC<InputProps> = (props) => {
