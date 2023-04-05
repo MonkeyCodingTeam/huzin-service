@@ -16,7 +16,10 @@ import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHead
 import { index } from '@shared/lib/util';
 import { Transition } from '@widgets';
 
+const requestInterval = 1000 * 60 * 10;
+
 const BudgetCutsPage = () => {
+  const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClients] = useState<Client>();
   const [editClient, setEditClients] = useState<Client>();
@@ -62,6 +65,14 @@ const BudgetCutsPage = () => {
 
   useEffect(() => {
     getClients();
+    const interval = setInterval(() => {
+      getClients();
+      setUpdateDate(DateTime.now);
+    }, requestInterval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const redirectToVK = (client?: Client) => {
@@ -214,7 +225,7 @@ const BudgetCutsPage = () => {
             key='id'
             filters={filters}
             globalFilterFields={['name']}
-            header={<BudgetCutsHeader dateTime={dateTime} filterChange={handleFilterChange} />}
+            header={<BudgetCutsHeader dateTime={updateDate} filterChange={handleFilterChange} />}
             onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
             contextMenuSelection={selectedClient}
             onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}

@@ -25,7 +25,10 @@ interface SenlerStats {
   success: boolean;
 }
 
+const requestInterval = 1000 * 60 * 10;
+
 const SenlerPage = () => {
+  const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
   const [clients, setClients] = useState<Client[]>([]);
   const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
@@ -50,32 +53,30 @@ const SenlerPage = () => {
   };
 
   useEffect(() => {
-    ClientAPI.getClients().then((res) => {
-      setClients(res.data);
-      setLoading(false);
-    });
+    getClients();
+    getStatistics();
 
-    ClientAPI.getAllStatistics({
-      date_from: DateTime.now().minus({ month: 3 }),
-      date_to: DateTime.now(),
-      period: 'week',
-    }).then((res) => {
-      setClientStats(res.data);
-      setLoadingStats(false);
-    });
+    const interval = setInterval(() => {
+      getClients();
+      getStatistics();
+      setUpdateDate(DateTime.now);
+    }, requestInterval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   useEffect(() => {
-    if (week) {
-      setLoadingSenler(true);
-      GroupAPI.getAllSubscribersCount({
-        date_from: week.startOf('week'),
-        date_to: week.endOf('week'),
-      }).then((res) => {
-        setSenlerSubs(res.data);
-        setLoadingSenler(false);
-      });
-    }
+    getSenlerStats();
+
+    const interval = setInterval(() => {
+      getSenlerStats();
+    }, requestInterval);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [week]);
 
   useEffect(() => {
@@ -94,6 +95,38 @@ const SenlerPage = () => {
     });
     setSenlerStats(stats);
   }, [clientStats, clients, week, senlerSubs]);
+
+  const getClients = () => {
+    ClientAPI.getClients().then((res) => {
+      setClients(res.data);
+      setLoading(false);
+    });
+  };
+
+  const getStatistics = () => {
+    setLoadingStats(true);
+    ClientAPI.getAllStatistics({
+      date_from: DateTime.now().minus({ month: 3 }),
+      date_to: DateTime.now(),
+      period: 'week',
+    }).then((res) => {
+      setClientStats(res.data);
+      setLoadingStats(false);
+    });
+  };
+
+  const getSenlerStats = () => {
+    if (week) {
+      setLoadingSenler(true);
+      GroupAPI.getAllSubscribersCount({
+        date_from: week.startOf('week'),
+        date_to: week.endOf('week'),
+      }).then((res) => {
+        setSenlerSubs(res.data);
+        setLoadingSenler(false);
+      });
+    }
+  };
 
   const nameTemplate = (stat: SenlerStats) => {
     return (
@@ -164,7 +197,7 @@ const SenlerPage = () => {
             <SenlerHeader
               filterChange={handleFilterChange}
               onWeekChange={handleWeekChange}
-              dateTime={DateTime.now()}
+              dateTime={updateDate}
             />
           }
         >
