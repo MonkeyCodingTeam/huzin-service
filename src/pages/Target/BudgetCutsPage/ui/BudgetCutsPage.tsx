@@ -67,7 +67,7 @@ const BudgetCutsPage = () => {
     getClients();
     const interval = setInterval(() => {
       getClients();
-      setUpdateDate(DateTime.now);
+      setUpdateDate(DateTime.now());
     }, requestInterval);
 
     return () => {

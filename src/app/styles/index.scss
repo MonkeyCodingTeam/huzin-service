@@ -57,3 +57,7 @@ a {
 .p-datatable.p-datatable-selectable .p-datatable-tbody > tr.p-selectable-row:not(.p-highlight, .p-datatable-emptymessage):hover {
   filter: brightness(98%);
 }
+
+.p-disabled, .p-component:disabled {
+  opacity: 0.4;
+}

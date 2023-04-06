@@ -4,24 +4,32 @@ import style from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader/ui/BudgetCut
 import css from './SenlerHeader.module.scss';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
+import { Calendar } from 'primereact/calendar';
+import { Nullable } from 'primereact/ts-helpers';
+import { addLocale } from 'primereact/api';
 
 interface SenlerHeaderProps {
   dateTime: DateTime;
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onWeekChange: (weekStart: DateTime) => void;
+  onRangeChange: (period: Period) => void;
 }
 
 type PeriodName = 'day' | 'week' | 'month' | 'year';
 
-interface Period {
+export interface Period {
   range: string;
-  start_date: DateTime;
-  end_date: DateTime;
+  date_from: DateTime;
+  date_to: DateTime;
 }
 
-export const SenlerHeader: FC<SenlerHeaderProps> = ({ dateTime, filterChange, onWeekChange }) => {
+export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
+  const { dateTime, filterChange, onWeekChange, onRangeChange } = props;
   const [period, setPeriod] = useState<Period>();
+  const [dates, setDates] = useState<Nullable<string | Date | Date[]>>(null);
   const [weeks, setWeeks] = useState<Period[]>([]);
+
+  const maxDate = new Date();
   // const [months, setMonths] = useState<Period[]>([]);
 
   useEffect(() => {
@@ -30,13 +38,29 @@ export const SenlerHeader: FC<SenlerHeaderProps> = ({ dateTime, filterChange, on
   }, []);
 
   useEffect(() => {
-    setPeriod(weeks[0]);
-    onWeekChange(weeks[0]?.start_date);
+    setPeriod(weeks[1]);
+    onWeekChange(weeks[1]?.date_from);
   }, [weeks]);
 
+  useEffect(() => {
+    if (Array.isArray(dates) && dates[0] && dates[1]) {
+      const range = {
+        date_from: DateTime.fromJSDate(dates[0]),
+        date_to: DateTime.fromJSDate(dates[1]),
+      };
+      setPeriod({
+        ...range,
+        range: 'custom',
+      });
+
+      onRangeChange({ ...range, range: 'day' });
+    }
+  }, [dates]);
+
   const handlePeriodChange = (e: DropdownChangeEvent) => {
+    setDates(null);
     setPeriod(e.value);
-    onWeekChange(e.value?.start_date);
+    onWeekChange(e.value?.date_from);
   };
 
   return (
@@ -58,14 +82,30 @@ export const SenlerHeader: FC<SenlerHeaderProps> = ({ dateTime, filterChange, on
           {/*  optionLabel='range'*/}
           {/*  placeholder='Месяц'*/}
           {/*/>*/}
-          <Dropdown
-            required={true}
-            value={period}
-            onChange={handlePeriodChange}
-            options={weeks}
-            optionLabel='range'
-            placeholder='Неделя'
-          />
+          <label className={css.panel}>
+            Неделя:
+            <Dropdown
+              required={true}
+              value={period}
+              onChange={handlePeriodChange}
+              options={weeks}
+              optionLabel='range'
+              placeholder='Выберите неделю'
+            />
+          </label>
+          <label className={css.panel}>
+            Период:
+            <Calendar
+              value={dates}
+              onChange={(e) => setDates(e.value)}
+              selectionMode='range'
+              readOnlyInput
+              maxDate={maxDate}
+              numberOfMonths={2}
+              dateFormat='dd.mm.yy'
+              placeholder='Выберите дату'
+            />
+          </label>
         </div>
       </div>
     </div>
@@ -73,15 +113,15 @@ export const SenlerHeader: FC<SenlerHeaderProps> = ({ dateTime, filterChange, on
 };
 
 function getPeriodList(periodName: PeriodName, numOfPeriod: number) {
-  const weekList: Period[] = [];
+  const periodList: Period[] = [];
   let now = DateTime.now();
   for (let i = 0; i < numOfPeriod; i++) {
-    const start_date = now.startOf(periodName);
-    const end_date = now.endOf(periodName);
+    const date_from = now.startOf(periodName);
+    const date_to = now.endOf(periodName);
     const range = () => {
       switch (periodName) {
         case 'day':
-          return start_date.toFormat('dd.LL.yyyy');
+          return date_from.toFormat('dd.LL.yyyy');
         case 'week':
           if (i === 0) {
             return 'Текущая неделя';
@@ -89,24 +129,24 @@ function getPeriodList(periodName: PeriodName, numOfPeriod: number) {
           if (i === 1) {
             return 'Предыдущая неделя';
           }
-          return `${start_date.toFormat('dd.LL')} - ${end_date.toFormat('dd.LL')}`;
+          return `${date_from.toFormat('dd.LL')} - ${date_to.toFormat('dd.LL')}`;
         case 'month':
           // eslint-disable-next-line no-case-declarations
-          let month = start_date.setLocale('ru').toFormat('LLLL');
+          let month = date_from.setLocale('ru').toFormat('LLLL');
           month = month[0].toUpperCase() + month.slice(1);
           return month;
         case 'year':
-          return start_date.toFormat('yyyy');
+          return date_from.toFormat('yyyy');
         default:
-          return `${start_date.toFormat('dd.LL.yyyy')} - ${end_date.toFormat('dd.LL.yyyy')}`;
+          return `${date_from.toFormat('dd.LL.yyyy')} - ${date_to.toFormat('dd.LL.yyyy')}`;
       }
     };
-    weekList.push({
-      start_date,
-      end_date,
+    periodList.push({
+      date_from,
+      date_to,
       range: range(),
     });
     now = now.minus({ [periodName]: 1 });
   }
-  return weekList;
+  return periodList;
 }

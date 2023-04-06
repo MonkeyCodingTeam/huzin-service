@@ -2,6 +2,7 @@ export interface GetStatisticProps {
   period: 'day' | 'week' | 'month' | 'year' | 'overall';
   date_to: AppDate;
   date_from: AppDate;
+  only_field?: string[];
 }
 
 export interface ClientsStatisticResponse {

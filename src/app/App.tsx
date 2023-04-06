@@ -1,13 +1,50 @@
 import '@app/styles/index.scss';
 import { Header } from '@widgets/Header';
-import { locale } from 'primereact/api';
+import { addLocale, locale } from 'primereact/api';
 import { ScrollTop } from 'primereact/scrolltop';
 import { AppRouter } from '@app/providers/RouterProvider';
 import { Helmet } from 'react-helmet';
 import css from './styles/App.module.scss';
 
 export function App() {
-  locale('en');
+  addLocale('ru', {
+    firstDayOfWeek: 0,
+    dayNames: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресение'],
+    dayNamesShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+    dayNamesMin: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+    monthNames: [
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Октябрь',
+      'Ноябрь',
+      'Декабрь',
+    ],
+    monthNamesShort: [
+      'Янв',
+      'Фев',
+      'Мар',
+      'Апр',
+      'Май',
+      'Июн',
+      'Июл',
+      'Авг',
+      'Сен',
+      'Окт',
+      'Ноя',
+      'Дек',
+    ],
+    today: 'Сегодня',
+    clear: 'Пусто',
+  });
+
+  locale('ru');
 
   return (
     <>
