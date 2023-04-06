@@ -55,7 +55,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
             ...groupVk,
             photo: groupVk?.photo_200,
             site: groupVk?.site,
-            link: groupLink,
+            link: `https://vk.com/${screenName}`,
             city: groupVk?.city?.title,
           });
           setLoadingGroup(false);
