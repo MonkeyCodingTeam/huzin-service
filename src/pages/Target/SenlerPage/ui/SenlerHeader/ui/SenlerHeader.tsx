@@ -9,7 +9,6 @@ import { Nullable } from 'primereact/ts-helpers';
 import { addLocale } from 'primereact/api';
 
 interface SenlerHeaderProps {
-  dateTime: DateTime;
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onWeekChange: (weekStart: DateTime) => void;
   onRangeChange: (period: Period) => void;
@@ -24,7 +23,7 @@ export interface Period {
 }
 
 export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
-  const { dateTime, filterChange, onWeekChange, onRangeChange } = props;
+  const { filterChange, onWeekChange, onRangeChange } = props;
   const [period, setPeriod] = useState<Period>();
   const [dates, setDates] = useState<Nullable<string | Date | Date[]>>(null);
   const [weeks, setWeeks] = useState<Period[]>([]);
@@ -66,7 +65,6 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
   return (
     <div className={style.header}>
       <div className={style.header_left}>
-        <span>Последнее обновление: {dateTime.toFormat('dd.LL HH:mm')}</span>
         <div className={css.panel}>
           <InputText
             className={style.table__header_search}

@@ -30,7 +30,6 @@ interface SenlerStats {
 const requestInterval = 1000 * 60 * 10;
 
 const SenlerPage = () => {
-  const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
   const [clients, setClients] = useState<Client[]>([]);
   const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
@@ -57,31 +56,12 @@ const SenlerPage = () => {
   useEffect(() => {
     getClients();
     getStatistics();
-
-    const interval = setInterval(() => {
-      getClients();
-      getStatistics();
-      setUpdateDate(DateTime.now());
-    }, requestInterval);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
   useEffect(() => {
     if (week) {
       getSenlerStats({ date_from: week.startOf('week'), date_to: week.endOf('week') });
     }
-    const interval = setInterval(() => {
-      if (week) {
-        getSenlerStats({ date_from: week.startOf('week'), date_to: week.endOf('week') });
-      }
-    }, requestInterval);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [week]);
 
   useEffect(() => {
@@ -255,7 +235,6 @@ const SenlerPage = () => {
               filterChange={handleFilterChange}
               onWeekChange={handleWeekChange}
               onRangeChange={handleRangeChange}
-              dateTime={updateDate}
             />
           }
         >
