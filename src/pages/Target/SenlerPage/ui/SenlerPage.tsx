@@ -147,7 +147,7 @@ const SenlerPage = () => {
     }
     const spentPerSub =
       stat.spent && stat.subscribers !== undefined
-        ? (stat.subscribers === 0 ? stat.spent : stat.spent / stat.subscribers).toFixed(2)
+        ? (stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers).toFixed(2)
         : '-';
     return <span>{spentPerSub}</span>;
   };
