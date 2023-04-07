@@ -234,7 +234,7 @@ const SenlerPage = () => {
           value={senlerStats}
           selectionMode='single'
           sortField='success'
-          sortOrder={1}
+          sortOrder={-1}
           scrollable
           scrollHeight='calc(100vh - 170px)'
           tableStyle={{
