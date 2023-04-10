@@ -216,7 +216,7 @@ const SenlerPage = () => {
           sortField='success'
           sortOrder={-1}
           scrollable
-          scrollHeight='calc(100vh - 170px)'
+          scrollHeight='calc(100vh - 140px)'
           tableStyle={{
             borderCollapse: 'separate',
             alignItems: 'center',

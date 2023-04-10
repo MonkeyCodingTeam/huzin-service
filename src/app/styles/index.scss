@@ -1,11 +1,12 @@
 @import "reset.css";
 @import 'normalize.css';
 @import 'scroll-bar';
-@import 'variables/global';
 
-@import "primereact/resources/themes/lara-light-blue/theme.css";
+@import "primereact/resources/themes/mira/theme.css";
 @import "primereact/resources/primereact.min.css";
 @import "primeicons/primeicons.css";
+
+@import 'variables/global';
 
 @font-face {
   font-family: Roboto;
@@ -39,8 +40,8 @@ body {
 }
 
 a {
-  text-decoration-color: transparent;
   color: var(--dark-color);
+  text-decoration-color: transparent;
   transition: text-decoration-color .2s;
 
   &:hover {

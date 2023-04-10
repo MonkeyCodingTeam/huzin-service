@@ -33,20 +33,20 @@ const ClientsPage = () => {
         }
       }
 
-      navigate(`${ROUTES.TargetClients}/${client ? client.id : res.data[0].id}`);
+      navigate(`${ROUTES.TARGET.Clients}/${client ? client.id : res.data[0].id}`);
     });
   };
 
   const handleClientChange = (e: ListBoxChangeEvent) => {
     if (e.value) {
       dispatch(selectClient(e.value));
-      navigate(`${ROUTES.TargetClients}/${e.value.id}`);
+      navigate(`${ROUTES.TARGET.Clients}/${e.value.id}`);
     }
   };
 
   useEffect(() => {
     getClients();
-  }, [navigate]);
+  }, []);
 
   return (
     <>

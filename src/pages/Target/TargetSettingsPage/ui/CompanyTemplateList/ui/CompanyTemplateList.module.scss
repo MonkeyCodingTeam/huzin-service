@@ -6,8 +6,8 @@
 
   &__item {
     &__name {
-      white-space: nowrap;
       color: var(--dark-color);
+      white-space: nowrap;
       background-color: var(--highlight-bg);
     }
   }

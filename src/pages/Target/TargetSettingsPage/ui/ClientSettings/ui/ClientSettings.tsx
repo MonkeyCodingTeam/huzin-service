@@ -31,14 +31,14 @@ export const ClientSettings = () => {
       } else {
         dispatch(selectClient(res.data[0]));
       }
-      navigate(`${ROUTES.TargetSettings}/client/${client ? client.id : res.data[0].id}`);
+      navigate(`${ROUTES.TARGET.Settings}/client/${client ? client.id : res.data[0].id}`);
     });
   }, []);
 
   const handleClientChange = (e: ListBoxChangeEvent) => {
     if (e.value) {
       dispatch(selectClient(clients.find((client) => client.id === e.value)));
-      navigate(`${ROUTES.TargetSettings}/client/${e.value}`);
+      navigate(`${ROUTES.TARGET.Settings}/client/${e.value}`);
     }
   };
 

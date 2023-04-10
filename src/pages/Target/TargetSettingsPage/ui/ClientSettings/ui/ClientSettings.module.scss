@@ -24,11 +24,12 @@
   &__list {
     scroll-behavior: smooth;
 
-    padding: 4px;
     overflow: auto;
     display: flex;
     flex-direction: column;
     gap: 16px;
+
+    padding: 4px;
 
     &__anchor {
       font-size: var(--semi-large-font-size);

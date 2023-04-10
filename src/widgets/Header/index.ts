@@ -1,1 +1,1 @@
-export * from './ui/Header';
+export { HeaderMemo as Header } from './ui/Header';

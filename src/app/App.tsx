@@ -1,10 +1,8 @@
 import '@app/styles/index.scss';
-import { Header } from '@widgets/Header';
 import { addLocale, locale } from 'primereact/api';
 import { ScrollTop } from 'primereact/scrolltop';
 import { AppRouter } from '@app/providers/RouterProvider';
 import { Helmet } from 'react-helmet';
-import css from './styles/App.module.scss';
 
 export function App() {
   addLocale('ru', {
@@ -52,10 +50,7 @@ export function App() {
         <meta charSet='utf-8' />
       </Helmet>
       <ScrollTop />
-      <Header />
-      <div className={css.container}>
-        <AppRouter />
-      </div>
+      <AppRouter />
     </>
   );
 }
