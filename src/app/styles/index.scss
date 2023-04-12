@@ -39,8 +39,8 @@ body {
 }
 
 a {
-  text-decoration-color: transparent;
   color: var(--dark-color);
+  text-decoration-color: transparent;
   transition: text-decoration-color .2s;
 
   &:hover {
