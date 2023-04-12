@@ -1,19 +1,21 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { appRoutes } from '@app/providers/RouterProvider';
+import { AppRoutes, ProtectedAppRoutes } from '@app/providers/RouterProvider';
 import { Loader } from '@shared/ui';
 import css from './AppRouter.module.scss';
 import { Header } from '@widgets';
+import { AppRoute } from '@app/providers/RouterProvider/types';
+import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoutes';
 
 export const AppRouter = () => {
-  const renderRoutes = () => {
-    return appRoutes.map((route) => {
+  const renderRoutes = (routes: AppRoute[]) => {
+    return routes.map((route) => {
       const element = route.header ? <Header>{route.element}</Header> : route.element;
 
-      if (route.children) {
-        return (
-          <Route path={route.path} element={element} key={`${route.path}-${Date.now()}`}>
-            {route.children.map((childRoute) => (
+      return (
+        <Route path={route.path} element={element} key={`${route.path}-${Date.now()}`}>
+          {route.children &&
+            route.children.map((childRoute) => (
               <Route
                 index={childRoute.index}
                 path={childRoute.path}
@@ -21,17 +23,17 @@ export const AppRouter = () => {
                 key={`${childRoute.path}-${Date.now()}`}
               />
             ))}
-          </Route>
-        );
-      }
-
-      return <Route path={route.path} element={element} key={`${route.path}-${Date.now()}`} />;
+        </Route>
+      );
     });
   };
 
   return (
     <Suspense fallback={<Loader containerClassName={css.loader} />}>
-      <Routes>{renderRoutes()}</Routes>
+      <Routes>
+        <Route element={<ProtectedRoutes />}>{renderRoutes(ProtectedAppRoutes)}</Route>
+        {renderRoutes(AppRoutes)}
+      </Routes>
     </Suspense>
   );
 };

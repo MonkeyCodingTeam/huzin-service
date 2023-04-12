@@ -1,4 +1,4 @@
-import { Group } from '@shared/lib/api/target/types';
+import { Group } from '@entities/group/types';
 
 export const emptyGroupState: Group = {
   city: '',

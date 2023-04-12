@@ -6,6 +6,7 @@ import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import HR from '@shared/assets/HR.svg';
 import { AuthAPI } from '@processes/auth';
+import { Navigate } from 'react-router';
 
 interface Auth {
   login: string;
@@ -13,6 +14,12 @@ interface Auth {
 }
 
 const LoginPage = () => {
+  console.log(localStorage.getItem('token'));
+
+  if (localStorage.getItem('token')) {
+    return <Navigate to={'/'} />;
+  }
+
   const handleSubmit = (values: Auth) => {
     AuthAPI.signIn(values);
   };

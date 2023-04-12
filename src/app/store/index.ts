@@ -4,6 +4,7 @@ import { selectedClient } from '@entities/client/model';
 
 export const appInitialState = {
   selectedClient: null,
+  user: null,
 };
 
 export const store = configureStore({

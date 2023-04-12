@@ -2,14 +2,14 @@ import {
   GetAllSubscribersCountResponse,
   GetSubscribersCountRequest,
   GetSubscribersCountResponse,
-  Group,
   GroupCreate,
   GroupGetByProps,
   GroupGetByResponse,
 } from '@shared/lib/api/target/types/group';
 import { AxiosPromise } from 'axios';
 import { axiosAppInstance } from '@shared/lib/axios';
-import { Client } from '@shared/lib/api/target/types';
+import { Client } from '@entities/client/types';
+import { Group } from '@entities/group/types';
 
 const VKAPI_GROUP = 'vk_method/groups';
 const ROUTE = {

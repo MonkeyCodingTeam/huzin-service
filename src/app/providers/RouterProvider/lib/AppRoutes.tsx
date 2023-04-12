@@ -4,12 +4,14 @@ import { TargetRoutes } from '@app/providers/RouterProvider/lib/TargetRoutes';
 import { AuthRoutes } from '@app/providers/RouterProvider/lib/AuthRoutes';
 import { StubPage } from '@pages/StubPage';
 
-export const appRoutes: AppRoute[] = [
-  ...TargetRoutes,
+export const ProtectedAppRoutes: AppRoute[] = [...TargetRoutes];
+
+export const AppRoutes: AppRoute[] = [
   ...AuthRoutes,
   {
     path: '*',
+    header: true,
     protected: false,
-    element: <StubPage/>
-  }
+    element: <StubPage />,
+  },
 ];
