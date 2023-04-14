@@ -9,17 +9,22 @@ import { FilterMatchMode } from 'primereact/api';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { ContextMenu } from 'primereact/contextmenu';
 import { EditClientModal } from '@pages/Target/BudgetCutsPage/ui/EditClientModal';
-import { Client } from '@shared/lib/api/target/types';
 import { FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
 import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader';
 import { index } from '@shared/lib/util';
 import { Transition } from '@widgets';
-
-const requestInterval = 1000 * 60 * 10;
+import { Client } from '@entities/client';
+import { User, UserAPI } from '@entities/user';
+import { DropdownChangeEvent } from 'primereact/dropdown';
+import { useAppSelector } from '@shared/lib/redux';
+import { MenuItem } from 'primereact/menuitem';
 
 const BudgetCutsPage = () => {
   const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
+  const user = useAppSelector((state) => state.user);
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User>();
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClients] = useState<Client>();
   const [editClient, setEditClients] = useState<Client>();
@@ -32,36 +37,69 @@ const BudgetCutsPage = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const contextMenu = useRef<ContextMenu>(null);
   const toast = useRef<Toast>(null);
+  const [menuModel, setMenuModal] = useState<MenuItem[]>([]);
 
   const dateTime = DateTime.now();
   const daysInMonth = dateTime.daysInMonth;
   const monthday = dateTime.day;
   const weekday = dateTime.weekday;
 
-  const menuModel = [
+  const requestInterval = 1000 * 60;
+
+  const getContextMenu = (client?: Client) => [
+    {
+      label: client?.is_mine ? 'Перестать следить' : 'Следить',
+      icon: `pi pi-fw ${client?.is_mine ? 'pi-eye-slash' : 'pi-eye'}`,
+      command: () => {
+        if (client) {
+          ClientAPI.toggleWatcher(client, user).then(() => {
+            setClients(
+              clients.map((item) => {
+                return item.id === client.id ? { ...item, is_mine: !item.is_mine } : item;
+              }),
+            );
+            toast.current!.show({
+              severity: 'success',
+              detail: 'Сохранено!',
+              life: 3000,
+            });
+          });
+        }
+      },
+    },
     {
       label: 'Редактировать',
       icon: 'pi pi-fw pi-pencil',
       command: () => {
-        setEditClients(selectedClient);
+        setEditClients(client);
         setEditModalVisible(true);
       },
     },
     {
       label: 'Открыть в РК',
-      icon: 'pi pi-fw pi-eye',
+      icon: 'pi pi-fw pi-external-link',
       command: () => {
-        redirectToVK(selectedClient);
+        redirectToVK(client);
       },
     },
   ];
 
-  const getClients = () => {
-    ClientAPI.getClients().then((res) => {
+  const getClients = useCallback(() => {
+    ClientAPI.getClients({ user_id: selectedUser?.id }).then((res) => {
       setClients(res.data);
       setLoading(false);
     });
-  };
+  }, [selectedUser]);
+
+  useEffect(() => {
+    setMenuModal(getContextMenu(selectedClient));
+  }, [selectedClient]);
+
+  useEffect(() => {
+    UserAPI.getUsers().then((res) => {
+      setUsers(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     getClients();
@@ -73,7 +111,7 @@ const BudgetCutsPage = () => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [selectedUser]);
 
   const redirectToVK = (client?: Client) => {
     if (!window) {
@@ -85,7 +123,6 @@ const BudgetCutsPage = () => {
 
   const handleSubmit = useCallback(
     (values: FormikValues) => {
-      console.log(values);
       if (editClient) {
         ClientAPI.updateClient(editClient.id, values).then(() => {
           getClients();
@@ -100,6 +137,10 @@ const BudgetCutsPage = () => {
     },
     [editClient],
   );
+
+  const handleUserChange = (e: DropdownChangeEvent) => {
+    setSelectedUser(e.value);
+  };
 
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -225,7 +266,15 @@ const BudgetCutsPage = () => {
             key='id'
             filters={filters}
             globalFilterFields={['name']}
-            header={<BudgetCutsHeader dateTime={updateDate} filterChange={handleFilterChange} />}
+            header={
+              <BudgetCutsHeader
+                dateTime={updateDate}
+                filterChange={handleFilterChange}
+                users={users}
+                selectedUser={selectedUser}
+                onUserChange={handleUserChange}
+              />
+            }
             onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
             contextMenuSelection={selectedClient}
             onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}

@@ -5,23 +5,20 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import HR from '@shared/assets/HR.svg';
-import { AuthAPI } from '@processes/auth';
+import { AuthThunk, SignInData } from '@processes/auth';
 import { Navigate } from 'react-router';
-
-interface Auth {
-  login: string;
-  password: string;
-}
+import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 
 const LoginPage = () => {
-  console.log(localStorage.getItem('token'));
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
-  if (localStorage.getItem('token')) {
+  if (user.id) {
     return <Navigate to={'/'} />;
   }
 
-  const handleSubmit = (values: Auth) => {
-    AuthAPI.signIn(values);
+  const handleSubmit = (values: SignInData) => {
+    return dispatch(AuthThunk.signIn(values));
   };
 
   return (

@@ -8,7 +8,6 @@ import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/u
 import { DateTime } from 'luxon';
 import { ClientAPI } from '@shared/lib/api';
 import {
-  Client,
   ClientsStatisticResponse,
   GetAllSubscribersCountResponse,
   GetStatisticProps,
@@ -18,6 +17,7 @@ import { TableSkeleton } from '@shared/ui/Skeletons';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import classNames from 'classnames';
+import { Client } from '@entities/client';
 
 interface SenlerStats {
   client: Client;
@@ -26,8 +26,6 @@ interface SenlerStats {
   groupId?: number;
   success: boolean;
 }
-
-const requestInterval = 1000 * 60 * 10;
 
 const SenlerPage = () => {
   const [clients, setClients] = useState<Client[]>([]);

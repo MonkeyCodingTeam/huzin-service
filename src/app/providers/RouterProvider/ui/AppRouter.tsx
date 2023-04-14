@@ -3,17 +3,14 @@ import { Route, Routes } from 'react-router';
 import { AppRoutes, ProtectedAppRoutes } from '@app/providers/RouterProvider';
 import { Loader } from '@shared/ui';
 import css from './AppRouter.module.scss';
-import { Header } from '@widgets';
 import { AppRoute } from '@app/providers/RouterProvider/types';
 import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoutes';
 
 export const AppRouter = () => {
   const renderRoutes = (routes: AppRoute[]) => {
     return routes.map((route) => {
-      const element = route.header ? <Header>{route.element}</Header> : route.element;
-
       return (
-        <Route path={route.path} element={element} key={`${route.path}-${Date.now()}`}>
+        <Route path={route.path} element={route.element} key={`${route.path}-${Date.now()}`}>
           {route.children &&
             route.children.map((childRoute) => (
               <Route

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthThunk } from '@processes/auth';
 import { User } from '@entities/user';
 
@@ -14,7 +14,11 @@ export const emptyUserState: User = {
 export const userModel = createSlice({
   initialState: emptyUserState,
   name: '@@USER',
-  reducers: {},
+  reducers: {
+    setUser: (state, action: PayloadAction<User>) => {
+      return action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(AuthThunk.getUser.fulfilled, (state, { payload }) => {
@@ -22,6 +26,11 @@ export const userModel = createSlice({
       })
       .addCase(AuthThunk.signIn.fulfilled, (state, { payload }) => {
         return payload;
+      })
+      .addCase(AuthThunk.logout.fulfilled, (state, { payload }) => {
+        return payload;
       });
   },
 });
+
+export const { setUser } = userModel.actions;

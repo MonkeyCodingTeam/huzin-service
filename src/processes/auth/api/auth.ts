@@ -1,21 +1,24 @@
 import { SignInData } from '@processes/auth';
 import { axiosAppInstance, axiosInstance } from '@shared/lib/axios';
 import { AxiosPromise } from 'axios';
-import { User } from '@entities/user';
+import { emptyUserState, User } from '@entities/user';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const Routes = {
   SIGN_IN: '/login',
-  GET_USER: '/user',
+  LOGOUT: '/logout',
+  GET_USER: '/me',
 };
 
 export const AuthAPI = {
   signIn: (payload: SignInData): AxiosPromise =>
     axiosInstance.get('/sanctum/csrf-cookie').then(() =>
       axiosInstance.post(Routes.SIGN_IN, payload).then((res) => {
+        console.log(res);
         return res;
       }),
     ),
+  logout: (): AxiosPromise => axiosInstance.post(Routes.LOGOUT),
   getUser: (): AxiosPromise<User> => axiosAppInstance.get(Routes.GET_USER),
 };
 
@@ -24,6 +27,10 @@ export const AuthThunk = {
     await AuthAPI.signIn(payload);
     const { data } = await AuthAPI.getUser();
     return data;
+  }),
+  logout: createAsyncThunk(Routes.LOGOUT, async () => {
+    await AuthAPI.logout();
+    return emptyUserState;
   }),
   getUser: createAsyncThunk(Routes.GET_USER, async () => {
     const { data } = await AuthAPI.getUser();

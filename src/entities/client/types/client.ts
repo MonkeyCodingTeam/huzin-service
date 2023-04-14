@@ -11,4 +11,5 @@ export interface Client {
   month_plan: number;
   created_at?: Date;
   updated_at?: Date;
+  is_mine?: boolean;
 }
