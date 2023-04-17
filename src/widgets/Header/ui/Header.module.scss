@@ -32,14 +32,25 @@
   }
 
   &__profile {
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 8px;
+
     background-color: var(--light-color);
-    border-radius: 100%;
+    border: none;
+    border-radius: 9999px;
+
     transition: background-color .2s ease-in;
 
     &:hover {
       cursor: pointer;
       background-color: var(--background-color);
+    }
+
+    &__img {
+      background-color: transparent;
     }
   }
 }

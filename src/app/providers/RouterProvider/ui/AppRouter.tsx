@@ -10,14 +10,14 @@ export const AppRouter = () => {
   const renderRoutes = (routes: AppRoute[]) => {
     return routes.map((route) => {
       return (
-        <Route path={route.path} element={route.element} key={`${route.path}-${Date.now()}`}>
+        <Route path={route.path} element={route.element} key={route.path}>
           {route.children &&
             route.children.map((childRoute) => (
               <Route
                 index={childRoute.index}
                 path={childRoute.path}
                 element={childRoute.element}
-                key={`${childRoute.path}-${Date.now()}`}
+                key={childRoute.path}
               />
             ))}
         </Route>
