@@ -4,12 +4,12 @@ import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ROUTES } from '@shared/const/routes';
-import { Client } from '@shared/lib/api/target/types';
 import { ClientAPI } from '@shared/lib/api';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
 import { ClientSettingsGroup } from '@pages/Target/TargetSettingsPage/ui/ClientSettingsGroup/ui/ClientSettingsGroup';
 import { Loader } from '@shared/ui';
+import { Client } from '@entities/client';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);

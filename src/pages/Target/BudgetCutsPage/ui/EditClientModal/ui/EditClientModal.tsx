@@ -3,8 +3,8 @@ import { Form, Formik, FormikValues } from 'formik';
 import css from './EditClientModal.module.scss';
 import { FloatInput } from '@shared/ui/FloatInput';
 import { Button } from 'primereact/button';
-import { Client } from '@shared/lib/api/target/types';
 import { emptyClientState } from '@entities/client/model/client';
+import { Client } from '@entities/client';
 
 type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan'>;
 

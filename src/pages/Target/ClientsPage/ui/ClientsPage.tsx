@@ -1,14 +1,14 @@
 import { Helmet } from 'react-helmet';
 import css from './ClientsPage.module.scss';
 import { useEffect, useState } from 'react';
-import { Client } from '@shared/lib/api/target/types';
-import { ClientAPI } from '@shared/lib/api';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { ROUTES } from '@shared/const/routes';
 import { Transition } from '@widgets';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
 import { selectClient } from '@entities/client/model';
+import { Client } from '@entities/client';
+import { ClientAPI } from '@shared/lib/api';
 
 const ClientsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);

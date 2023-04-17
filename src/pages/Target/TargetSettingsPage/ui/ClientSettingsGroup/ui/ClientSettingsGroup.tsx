@@ -1,13 +1,13 @@
-import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { GroupAPI } from '@shared/lib/api/target/group';
 import css from './ClientSettingsGroup.module.scss';
-import { Client, Group } from '@shared/lib/api/target/types';
 import { emptyGroupState } from '@entities/group/model';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { GroupList } from '@pages/Target/TargetSettingsPage/ui/ClientSettingsGroup/ui/GroupList';
-import { InputTextProps } from 'primereact/inputtext';
+import { Group } from '@entities/group';
+import { Client } from '@entities/client';
 
 interface ClientSettingsGroup {
   client: Client;

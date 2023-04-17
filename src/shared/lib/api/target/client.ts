@@ -12,7 +12,7 @@ const BASE_URL = 'target/client';
 const STAT_URL = 'target/statistic/client';
 
 export const ClientAPI = {
-  getClients: async (payload: { user_id?: User['id'] }): AxiosPromise<Client[]> => {
+  getClients: async (payload?: { user_id?: User['id'] }): AxiosPromise<Client[]> => {
     return axiosAppInstance.get(BASE_URL, {
       params: payload,
     });
