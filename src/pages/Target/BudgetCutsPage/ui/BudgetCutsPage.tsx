@@ -61,8 +61,11 @@ const BudgetCutsPage = () => {
             toast.current!.show({
               severity: 'success',
               detail: 'Сохранено!',
-              life: 3000,
+              life: 2000,
             });
+            if (selectedUser?.id) {
+              getClients();
+            }
           });
         }
       },
