@@ -8,18 +8,22 @@ import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoute
 
 export const AppRouter = () => {
   const renderRoutes = (routes: AppRoute[]) => {
-    return routes.map((route) => {
+    return routes.map((route, index) => {
+      const routeKey = `route_${route.name}_${index}`;
       return (
-        <Route path={route.path} element={route.element} key={route.path}>
+        <Route path={route.path} element={route.element} key={routeKey}>
           {route.children &&
-            route.children.map((childRoute) => (
-              <Route
-                index={childRoute.index}
-                path={childRoute.path}
-                element={childRoute.element}
-                key={childRoute.path}
-              />
-            ))}
+            route.children.map((childRoute, index) => {
+              const routeKey = `route_${childRoute.path}_${index}`;
+              return (
+                <Route
+                  index={childRoute.index}
+                  path={childRoute.path}
+                  element={childRoute.element}
+                  key={routeKey}
+                />
+              );
+            })}
         </Route>
       );
     });

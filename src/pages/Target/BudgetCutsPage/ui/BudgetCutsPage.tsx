@@ -100,6 +100,12 @@ const BudgetCutsPage = () => {
 
   useEffect(() => {
     UserAPI.getUsers().then((res) => {
+      if (localStorage.getItem('selected-user')) {
+        const selectedUser = res.data.find(
+          (item) => item.id === +localStorage.getItem('selected-user')!,
+        );
+        setSelectedUser(selectedUser);
+      }
       setUsers(res.data);
     });
   }, []);
@@ -143,6 +149,10 @@ const BudgetCutsPage = () => {
 
   const handleUserChange = (e: DropdownChangeEvent) => {
     setSelectedUser(e.value);
+    if (e.value) {
+      return localStorage.setItem('selected-user', e.value.id);
+    }
+    localStorage.removeItem('selected-user');
   };
 
   const handleFilterChange = (e: ChangeEvent<HTMLInputElement>) => {

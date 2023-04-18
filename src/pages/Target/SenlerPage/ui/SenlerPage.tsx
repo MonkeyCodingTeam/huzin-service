@@ -143,11 +143,14 @@ const SenlerPage = () => {
     if (loadingSenler) {
       return <Skeleton width='5rem' />;
     }
-    const spentPerSub =
-      stat.spent && stat.subscribers !== undefined
-        ? (stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers).toFixed(2)
-        : '-';
-    return <span>{spentPerSub}</span>;
+    if (stat.spent && stat.subscribers !== undefined) {
+      return (
+        <span>
+          {(stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers).toFixed(2)}
+        </span>
+      );
+    }
+    return <span>-</span>;
   };
 
   const handleWeekChange = (weekStart: DateTime) => {
