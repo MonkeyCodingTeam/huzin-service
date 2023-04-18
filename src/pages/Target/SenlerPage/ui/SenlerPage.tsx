@@ -4,18 +4,20 @@ import { Column } from 'primereact/column';
 import css from './SenlerPage.module.scss';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FilterMatchMode } from 'primereact/api';
-import { SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
+import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
 import { DateTime } from 'luxon';
 import { ClientAPI } from '@shared/lib/api';
 import {
-  Client,
   ClientsStatisticResponse,
   GetAllSubscribersCountResponse,
+  GetStatisticProps,
 } from '@shared/lib/api/target/types';
 import { GroupAPI } from '@shared/lib/api/target/group';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
+import classNames from 'classnames';
+import { Client } from '@entities/client';
 
 interface SenlerStats {
   client: Client;
@@ -25,10 +27,7 @@ interface SenlerStats {
   success: boolean;
 }
 
-const requestInterval = 1000 * 60 * 10;
-
 const SenlerPage = () => {
-  const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
   const [clients, setClients] = useState<Client[]>([]);
   const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
@@ -55,28 +54,12 @@ const SenlerPage = () => {
   useEffect(() => {
     getClients();
     getStatistics();
-
-    const interval = setInterval(() => {
-      getClients();
-      getStatistics();
-      setUpdateDate(DateTime.now);
-    }, requestInterval);
-
-    return () => {
-      clearInterval(interval);
-    };
   }, []);
 
   useEffect(() => {
-    getSenlerStats();
-
-    const interval = setInterval(() => {
-      getSenlerStats();
-    }, requestInterval);
-
-    return () => {
-      clearInterval(interval);
-    };
+    if (week) {
+      getSenlerStats({ date_from: week.startOf('week'), date_to: week.endOf('week') });
+    }
   }, [week]);
 
   useEffect(() => {
@@ -109,28 +92,31 @@ const SenlerPage = () => {
       date_from: DateTime.now().minus({ month: 3 }),
       date_to: DateTime.now(),
       period: 'week',
+      only_field: ['spent', 'day_from'],
     }).then((res) => {
       setClientStats(res.data);
       setLoadingStats(false);
     });
   };
 
-  const getSenlerStats = () => {
-    if (week) {
-      setLoadingSenler(true);
-      GroupAPI.getAllSubscribersCount({
-        date_from: week.startOf('week'),
-        date_to: week.endOf('week'),
-      }).then((res) => {
-        setSenlerSubs(res.data);
-        setLoadingSenler(false);
-      });
-    }
+  const getSenlerStats = ({ date_from, date_to }: Omit<Period, 'range'>) => {
+    setLoadingSenler(true);
+    GroupAPI.getAllSubscribersCount({
+      date_from,
+      date_to,
+    }).then((res) => {
+      setSenlerSubs(res.data);
+      setLoadingSenler(false);
+    });
   };
 
   const nameTemplate = (stat: SenlerStats) => {
     return (
-      <Link target='_blank' href={`https://vk.com/ads?act=office&union_id=${stat.client.id}`}>
+      <Link
+        className={css.table__column_name}
+        target='_blank'
+        href={`https://vk.com/ads?act=office&union_id=${stat.client.id}`}
+      >
         {stat.client.name}
       </Link>
     );
@@ -157,18 +143,67 @@ const SenlerPage = () => {
     if (loadingSenler) {
       return <Skeleton width='5rem' />;
     }
-    const spentPerSub =
-      stat.spent && stat.subscribers !== undefined
-        ? (stat.subscribers === 0
-            ? stat.spent
-            : Math.trunc(stat.spent / stat.subscribers)
-          ).toLocaleString()
-        : '-';
-    return <span>{spentPerSub}</span>;
+    if (stat.spent && stat.subscribers !== undefined) {
+      return (
+        <span>
+          {(stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers).toFixed(2)}
+        </span>
+      );
+    }
+    return <span>-</span>;
   };
 
   const handleWeekChange = (weekStart: DateTime) => {
     setWeek(weekStart);
+  };
+
+  const handleRangeChange = ({ date_from, date_to, range }: Period) => {
+    setWeek(undefined);
+    setLoadingStats(true);
+    setLoadingSenler(true);
+    ClientAPI.getAllStatistics({
+      date_from,
+      date_to,
+      period: range as GetStatisticProps['period'],
+      only_field: ['spent'],
+    }).then((res) => {
+      if (!clients.length) return;
+
+      GroupAPI.getAllSubscribersCount({
+        date_from,
+        date_to,
+      }).then((subs) => {
+        const senler = subs.data;
+
+        const stats = clients.map((client) => {
+          const spent = res.data.find((stat) => stat.id === client.id);
+          console.log(spent);
+          const stat = spent?.stats.reduce((spent, stat) => {
+            return spent + (+stat.spent || 0);
+          }, 0);
+          return {
+            client,
+            spent: stat,
+            subscribers: senler[client.id]?.count_subscribe,
+            groupId: senler[client.id]?.group_id,
+            success: !!senler[client.id]?.success,
+          };
+        });
+        setSenlerStats(stats);
+        setLoadingSenler(false);
+        setLoadingStats(false);
+      });
+    });
+  };
+
+  const groupHeaderTemplate = (stat: SenlerStats) => {
+    return (
+      <span
+        className={classNames(css.groupHeader, !stat.subscribers ? css.groupHeader__warning : '')}
+      >
+        Senler {stat.success ? 'указан' : 'не указан'}
+      </span>
+    );
   };
 
   return (
@@ -179,10 +214,10 @@ const SenlerPage = () => {
         <DataTable
           value={senlerStats}
           selectionMode='single'
-          sortField='name'
-          sortOrder={1}
+          sortField='success'
+          sortOrder={-1}
           scrollable
-          scrollHeight='calc(100vh - 170px)'
+          scrollHeight='calc(100vh - 140px)'
           tableStyle={{
             borderCollapse: 'separate',
             alignItems: 'center',
@@ -193,11 +228,14 @@ const SenlerPage = () => {
           key='id'
           filters={filters}
           globalFilterFields={['client.name']}
+          rowGroupMode='subheader'
+          groupRowsBy='success'
+          rowGroupHeaderTemplate={groupHeaderTemplate}
           header={
             <SenlerHeader
               filterChange={handleFilterChange}
               onWeekChange={handleWeekChange}
-              dateTime={updateDate}
+              onRangeChange={handleRangeChange}
             />
           }
         >

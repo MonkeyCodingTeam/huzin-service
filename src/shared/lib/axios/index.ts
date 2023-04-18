@@ -13,5 +13,14 @@ export const axiosVkInstance = axios.create({
 });
 
 export const axiosAppInstance = axios.create({
+  baseURL: `${__APP_API_URL__}/api`,
+  withCredentials: true,
+});
+
+export const axiosInstance = axios.create({
   baseURL: __APP_API_URL__,
+  withCredentials: true,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+  },
 });

@@ -1,11 +1,21 @@
-export enum ROUTES {
-  Login = '/login',
-  TargetClients = '/target/client',
-  TargetClient = '/target/client/:clientId',
+export enum TARGET_ROUTES {
+  Clients = '/target/client',
+  Client = '/target/client/:clientId',
   BudgetCuts = '/target/budget-cuts',
-  TargetCompanies = '/target/company',
-  TargetSettings = '/target/settings',
-  TargetSettingsClients = '/target/settings/*',
-  TargetSettingsClient = '/target/settings/client/:clientId',
-  TargetSettingsCompanies = '/target/settings/company',
+  Companies = '/target/company',
+  Settings = '/target/settings',
+  SettingsClients = '/target/settings/*',
+  SettingsClient = '/target/settings/client/:clientId',
+  SettingsCompanies = '/target/settings/company',
 }
+
+enum AUTH_ROUTES {
+  Login = '/login',
+}
+
+export const ROUTES = {
+  TARGET: TARGET_ROUTES,
+  AUTH: AUTH_ROUTES,
+};
+
+export type RouteList = TARGET_ROUTES | AUTH_ROUTES;

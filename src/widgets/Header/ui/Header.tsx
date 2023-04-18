@@ -2,27 +2,66 @@ import HR from '@shared/assets/HR.svg';
 import css from './Header.module.scss';
 import './Header.scss';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
-import { useState } from 'react';
+import { FC, memo, MouseEvent, ReactElement, useRef, useState } from 'react';
 import { Avatar } from 'primereact/avatar';
-import { ROUTES } from '@shared/const/routes';
 import { NavLink } from '@shared/ui/NavLink';
+import { TargetRoutes } from '@app/providers/RouterProvider/lib/TargetRoutes';
+import { AppRoute } from '@app/providers/RouterProvider/types';
+import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
+import { MenuItem } from 'primereact/menuitem';
+import { Menu } from 'primereact/menu';
+import { useNavigate } from 'react-router';
+import { ROUTES } from '@shared/const/routes';
+import { AuthThunk } from '@processes/auth';
+import { Link } from 'react-router-dom';
 
-export const Header = () => {
+export const Header: FC<{ children: ReactElement }> = ({ children }) => {
   const services = [
-    { value: 'target', label: 'Target' },
-    { value: 'content', label: 'Content' },
-    { value: 'admin', label: 'Admin' },
+    { value: TargetRoutes, label: 'Target' },
+    { value: TargetRoutes, label: 'Content' },
+    { value: TargetRoutes, label: 'Admin' },
   ];
-  const [selectedService, setSelectedService] = useState(services[0].value);
+  const [selectedService, setSelectedService] = useState<AppRoute[]>(services[0].value);
+  const user = useAppSelector((state) => state.user);
+  const menu = useRef<Menu>(null);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  if (!user?.id) return children;
+
+  const profileMenuItems: MenuItem[] = [
+    {
+      label: 'Профиль',
+      icon: 'pi pi-user',
+    },
+    {
+      separator: true,
+    },
+    {
+      label: 'Выйти',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        // return navigate(ROUTES.AUTH.Login);
+        dispatch(AuthThunk.logout()).then(() => {
+          return navigate(ROUTES.AUTH.Login);
+        });
+      },
+    },
+  ];
+
   const handleChange = (e: DropdownChangeEvent) => {
     setSelectedService(e.value);
   };
 
+  const handleProfileMenuToggle = (e: MouseEvent<HTMLButtonElement>) => menu.current?.toggle(e);
+
   return (
-    <header className={css.container}>
-      <div className={css.header}>
+    <div>
+      <header className={css.header}>
         <div className={css.header__logo}>
-          <HR />
+          <Link to={'/'}>
+            <HR />
+          </Link>
           <Dropdown
             value={selectedService}
             onChange={handleChange}
@@ -32,14 +71,24 @@ export const Header = () => {
         </div>
 
         <div className={css.header__links}>
-          <NavLink label={'Проекты'} href={ROUTES.TargetClients} />
-          <NavLink label={'Senler'} href={ROUTES.TargetCompanies} />
-          <NavLink label={'Открутка'} href={ROUTES.BudgetCuts} />
-          <NavLink label={'Настройки'} href={ROUTES.TargetSettings} />
+          {selectedService.map((route) => (
+            <NavLink key={route.path} label={route.name} href={route.path || '#'} />
+          ))}
         </div>
-
-        <Avatar icon='pi pi-user' size='large' shape='circle' className={css.header__profile} />
-      </div>
-    </header>
+        <Menu model={profileMenuItems} popup ref={menu} />
+        <button className={css.header__profile} onClick={handleProfileMenuToggle}>
+          {user.name}
+          <Avatar
+            icon='pi pi-user'
+            size='large'
+            shape='circle'
+            className={css.header__profile__img}
+          />
+        </button>
+      </header>
+      <div className={css.container}>{children}</div>
+    </div>
   );
 };
+
+export const HeaderMemo = memo(Header);

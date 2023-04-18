@@ -1,13 +1,13 @@
-import {FC, useCallback, useEffect, useRef, useState} from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { GroupAPI } from '@shared/lib/api/target/group';
 import css from './ClientSettingsGroup.module.scss';
-import { Client, Group } from '@shared/lib/api/target/types';
 import { emptyGroupState } from '@entities/group/model';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { GroupList } from '@pages/Target/TargetSettingsPage/ui/ClientSettingsGroup/ui/GroupList';
-import {InputTextProps} from "primereact/inputtext";
+import { Group } from '@entities/group';
+import { Client } from '@entities/client';
 
 interface ClientSettingsGroup {
   client: Client;
@@ -29,13 +29,13 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
   const handleSubmit = () => {
     GroupAPI.create(client.id, group).then((res) => {
       getGroups();
-      setGroupLink('')
+      setGroupLink('');
     });
   };
 
   useEffect(() => {
     getGroups();
-    setGroupLink('')
+    setGroupLink('');
   }, [client.id]);
 
   useEffect(() => {
@@ -43,23 +43,23 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
     setLoadingGroup(true);
 
     const delayDebounceFn = setTimeout(() => {
-      const screenName = groupLink.match(/vk.com\/(?<screen_name>\w+)/)?.groups?.screen_name;
+      const screenName = groupLink.match(/vk.com\/(?<screen_name>[\w_.]+)/)?.groups?.screen_name;
 
       if (screenName) {
-        GroupAPI.getBy({ group_id: screenName, fields: ['city', 'public_date_label', 'site'] }).then(
-          (res) => {
-            const groupVk = res.data[0];
-            setGroup({
-              ...groupVk,
-              photo: groupVk?.photo_200,
-              site: groupVk?.site,
-              link: groupLink,
-              city: groupVk?.city?.title,
-            });
-            setLoadingGroup(false);
-
-          },
-        );
+        GroupAPI.getBy({
+          group_id: screenName,
+          fields: ['city', 'public_date_label', 'site'],
+        }).then((res) => {
+          const groupVk = res.data[0];
+          setGroup({
+            ...groupVk,
+            photo: groupVk?.photo_200,
+            site: groupVk?.site,
+            link: `https://vk.com/${screenName}`,
+            city: groupVk?.city?.title,
+          });
+          setLoadingGroup(false);
+        });
       }
       // Send Axios request here
     }, 400);

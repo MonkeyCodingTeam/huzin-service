@@ -1,4 +1,3 @@
-import { Group } from '@shared/lib/api/target/types';
 import { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
@@ -9,6 +8,7 @@ import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
+import { Group } from '@entities/group';
 
 interface GroupListProps {
   groups: Group[];
@@ -55,7 +55,7 @@ export const GroupList: FC<GroupListProps> = ({ groups }) => {
           {group.name}
         </a>
         <Button
-            type='button'
+          type='button'
           icon='pi pi-trash'
           area-label='Удалить'
           severity='danger'

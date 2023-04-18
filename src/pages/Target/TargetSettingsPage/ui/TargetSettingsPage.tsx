@@ -5,7 +5,7 @@ import { TabPanel, TabView, TabViewTabChangeEvent } from 'primereact/tabview';
 import { ROUTES } from '@shared/const/routes';
 import { useEffect, useState } from 'react';
 
-const TabRoutes = [ROUTES.TargetSettings, ROUTES.TargetSettingsCompanies];
+const TabRoutes = [ROUTES.TARGET.SettingsClient, ROUTES.TARGET.SettingsCompanies];
 
 export const TargetSettingsPage = () => {
   const [activeTab, setActiveTab] = useState(0);

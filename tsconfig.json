@@ -42,8 +42,7 @@
     "node_modules/@types"
   ],
   "exclude": [
-    "node_modules",
-    "vite.config.ts"
+    "node_modules"
   ],
   "references": [
     {

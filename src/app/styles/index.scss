@@ -1,11 +1,12 @@
 @import "reset.css";
 @import 'normalize.css';
 @import 'scroll-bar';
-@import 'variables/global';
 
-@import "primereact/resources/themes/lara-light-blue/theme.css";
+@import "primereact/resources/themes/mira/theme.css";
 @import "primereact/resources/primereact.min.css";
 @import "primeicons/primeicons.css";
+
+@import 'variables/global';
 
 @font-face {
   font-family: Roboto;
@@ -56,4 +57,8 @@ a {
 
 .p-datatable.p-datatable-selectable .p-datatable-tbody > tr.p-selectable-row:not(.p-highlight, .p-datatable-emptymessage):hover {
   filter: brightness(98%);
+}
+
+.p-disabled, .p-component:disabled {
+  opacity: 0.4;
 }

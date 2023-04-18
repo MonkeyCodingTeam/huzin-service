@@ -6,6 +6,7 @@ import viteSvgr from 'vite-plugin-svgr';
 import process from 'process';
 
 // https://vitejs.dev/config/
+// @ts-ignore
 export default ({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
 

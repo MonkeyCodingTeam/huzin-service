@@ -1,14 +1,17 @@
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { selectedClient } from '@entities/client/model';
+import { userModel } from '@entities/user';
 
 export const appInitialState = {
   selectedClient: null,
+  user: null,
 };
 
 export const store = configureStore({
   reducer: {
     selectedClient: selectedClient.reducer,
+    user: userModel.reducer,
   },
   middleware: (getDefaultMiddleware) => {
     const middlewares = [];

@@ -1,14 +1,11 @@
 .container {
   position: relative;
-  z-index: 1000;
-  width: 100%;
-  height: 64px;
+  overflow: auto;
+  height: calc(100vh - 64px);
+  max-height: calc(100vh - 64px);
 }
 
 .header {
-  position: fixed;
-  top: 0;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,7 +21,7 @@
     gap: 8px;
     justify-content: center;
 
-    & > svg {
+    & a > svg {
       height: 36px;
     }
   }
@@ -35,14 +32,25 @@
   }
 
   &__profile {
-    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 8px;
+
     background-color: var(--light-color);
-    border-radius: 100%;
+    border: none;
+    border-radius: 9999px;
+
     transition: background-color .2s ease-in;
 
     &:hover {
       cursor: pointer;
       background-color: var(--background-color);
+    }
+
+    &__img {
+      background-color: transparent;
     }
   }
 }

@@ -1,23 +1,25 @@
 import css from './BudgetCutsHeader.module.scss';
 import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { DateTime } from 'luxon';
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC } from 'react';
+import { User } from '@entities/user';
 
 interface BudgetCutsHeaderProps {
+  users: User[];
+  selectedUser?: User;
   dateTime: DateTime;
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  onUserChange: (event: DropdownChangeEvent) => void;
 }
 
-export const BudgetCutsHeader: FC<BudgetCutsHeaderProps> = ({ dateTime, filterChange }) => {
-  const users = [
-    { id: 1, name: 'name 1' },
-    { id: 2, name: 'name 2' },
-    { id: 3, name: 'name 3' },
-    { id: 4, name: 'name 4' },
-  ];
-  const [user, setUser] = useState(users[0]);
-
+export const BudgetCutsHeader: FC<BudgetCutsHeaderProps> = ({
+  users,
+  selectedUser,
+  onUserChange,
+  dateTime,
+  filterChange,
+}) => {
   return (
     <div className={css.header}>
       <div className={css.header_left}>
@@ -32,9 +34,10 @@ export const BudgetCutsHeader: FC<BudgetCutsHeaderProps> = ({ dateTime, filterCh
       <label title='Выбрать проекты, привязанные к сотруднику' className={css.header_right}>
         Сотрудник:
         <Dropdown
-          value={user}
+          showClear
+          value={selectedUser}
           className={css.header_right}
-          onChange={(e) => setUser(e.value)}
+          onChange={onUserChange}
           options={users}
           optionLabel='name'
           placeholder='Не выбран'
