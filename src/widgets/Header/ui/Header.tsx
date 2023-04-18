@@ -13,6 +13,7 @@ import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router';
 import { ROUTES } from '@shared/const/routes';
 import { AuthThunk } from '@processes/auth';
+import { Link } from 'react-router-dom';
 
 export const Header: FC<{ children: ReactElement }> = ({ children }) => {
   const services = [
@@ -58,7 +59,9 @@ export const Header: FC<{ children: ReactElement }> = ({ children }) => {
     <div>
       <header className={css.header}>
         <div className={css.header__logo}>
-          <HR />
+          <Link to={'/'}>
+            <HR />
+          </Link>
           <Dropdown
             value={selectedService}
             onChange={handleChange}

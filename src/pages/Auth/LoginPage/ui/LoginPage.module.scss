@@ -32,7 +32,14 @@
 
   &__footer {
     display: flex;
-    justify-content: end;
+    justify-content: space-between;
     margin-top: 16px;
+
+    &__remember {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--primary-color);
+    }
   }
 }

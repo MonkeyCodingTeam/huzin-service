@@ -8,10 +8,12 @@ import { ClientSettings } from '@pages/Target/TargetSettingsPage/ui/ClientSettin
 import { CompanyTagsSetting } from '@pages/Target/TargetSettingsPage/ui/CompanyTagsSetting';
 import React from 'react';
 import { ROUTES } from '@shared/const/routes';
+import { PrimeIcons } from 'primereact/api';
 
 export const TargetRoutes: AppRoute[] = [
   {
-    name: 'Клиент',
+    name: 'Клиенты',
+    icon: PrimeIcons.USERS,
     element: <ClientsPage />,
     path: ROUTES.TARGET.Clients,
     protected: true,
@@ -29,6 +31,7 @@ export const TargetRoutes: AppRoute[] = [
   },
   {
     name: 'Senler',
+    icon: PrimeIcons.COMMENTS,
     element: <SenlerPage />,
     path: ROUTES.TARGET.Companies,
     protected: true,
@@ -36,6 +39,7 @@ export const TargetRoutes: AppRoute[] = [
   },
   {
     name: 'Открут',
+    icon: PrimeIcons.DOLLAR,
     element: <BudgetCutsPage />,
     path: ROUTES.TARGET.BudgetCuts,
     protected: true,
@@ -43,6 +47,7 @@ export const TargetRoutes: AppRoute[] = [
   },
   {
     name: 'Настройки',
+    icon: PrimeIcons.COG,
     element: <TargetSettingsPage />,
     path: ROUTES.TARGET.Settings,
     protected: true,
