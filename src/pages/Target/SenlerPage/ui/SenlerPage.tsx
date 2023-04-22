@@ -7,11 +7,6 @@ import { FilterMatchMode } from 'primereact/api';
 import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
 import { DateTime } from 'luxon';
 import { ClientAPI } from '@shared/lib/api';
-import {
-  ClientsStatisticResponse,
-  GetAllSubscribersCountResponse,
-  GetStatisticProps,
-} from '@shared/lib/api/target/types';
 import { GroupAPI } from '@shared/lib/api/target/group';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { Skeleton } from 'primereact/skeleton';
@@ -29,8 +24,6 @@ interface SenlerStats {
 
 const SenlerPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
-  const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
-  const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
   const [senlerStats, setSenlerStats] = useState<SenlerStats[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingSenler, setLoadingSenler] = useState(true);
@@ -53,60 +46,20 @@ const SenlerPage = () => {
 
   useEffect(() => {
     getClients();
-    getStatistics();
   }, []);
 
   useEffect(() => {
     if (week) {
-      getSenlerStats({ date_from: week.startOf('week'), date_to: week.endOf('week') });
+      handleRangeChange(week.startOf('week'), week.endOf('week'));
     }
   }, [week]);
-
-  useEffect(() => {
-    if (!clients.length) return;
-
-    const stats = clients.map((client) => {
-      const spent = clientStats.find((stat) => stat.id === client.id);
-      const stat = spent?.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'));
-      return {
-        client,
-        spent: stat?.spent || 0,
-        subscribers: senlerSubs[client.id]?.count_subscribe,
-        groupId: senlerSubs[client.id]?.group_id,
-        success: senlerSubs[client.id]?.success,
-      };
-    });
-    setSenlerStats(stats);
-  }, [clientStats, clients, week, senlerSubs]);
 
   const getClients = () => {
     ClientAPI.getClients().then((res) => {
       setClients(res.data);
+      const clients = res.data.map((client) => ({ client, success: false }));
+      setSenlerStats(clients);
       setLoading(false);
-    });
-  };
-
-  const getStatistics = () => {
-    setLoadingStats(true);
-    ClientAPI.getAllStatistics({
-      date_from: DateTime.now().minus({ month: 3 }),
-      date_to: DateTime.now(),
-      period: 'week',
-      only_field: ['spent', 'day_from'],
-    }).then((res) => {
-      setClientStats(res.data);
-      setLoadingStats(false);
-    });
-  };
-
-  const getSenlerStats = ({ date_from, date_to }: Omit<Period, 'range'>) => {
-    setLoadingSenler(true);
-    GroupAPI.getAllSubscribersCount({
-      date_from,
-      date_to,
-    }).then((res) => {
-      setSenlerSubs(res.data);
-      setLoadingSenler(false);
     });
   };
 
@@ -155,18 +108,21 @@ const SenlerPage = () => {
 
   const handleWeekChange = (weekStart: DateTime) => {
     setWeek(weekStart);
+    if (weekStart) {
+      handleRangeChange(weekStart.startOf('week'), weekStart.endOf('week'));
+    }
   };
 
-  const handleRangeChange = ({ date_from, date_to, range }: Period) => {
+  const handleRangeChange = (date_from: Period['date_from'], date_to: Period['date_to']) => {
     setWeek(undefined);
     setLoadingStats(true);
     setLoadingSenler(true);
     ClientAPI.getAllStatistics({
       date_from,
       date_to,
-      period: range as GetStatisticProps['period'],
       only_field: ['spent'],
     }).then((res) => {
+      console.log(res);
       if (!clients.length) return;
 
       GroupAPI.getAllSubscribersCount({
@@ -174,16 +130,11 @@ const SenlerPage = () => {
         date_to,
       }).then((subs) => {
         const senler = subs.data;
-
         const stats = clients.map((client) => {
           const spent = res.data.find((stat) => stat.id === client.id);
-          console.log(spent);
-          const stat = spent?.stats.reduce((spent, stat) => {
-            return spent + (+stat.spent || 0);
-          }, 0);
           return {
             client,
-            spent: stat,
+            spent: spent?.total.spent || 0,
             subscribers: senler[client.id]?.count_subscribe,
             groupId: senler[client.id]?.group_id,
             success: !!senler[client.id]?.success,

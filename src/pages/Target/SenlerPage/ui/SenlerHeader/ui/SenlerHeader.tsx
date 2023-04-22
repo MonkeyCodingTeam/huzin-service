@@ -6,18 +6,17 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Nullable } from 'primereact/ts-helpers';
-import { addLocale } from 'primereact/api';
 
 interface SenlerHeaderProps {
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onWeekChange: (weekStart: DateTime) => void;
-  onRangeChange: (period: Period) => void;
+  onRangeChange: (date_from: Period['date_from'], date_to: Period['date_to']) => void;
 }
 
 type PeriodName = 'day' | 'week' | 'month' | 'year';
 
 export interface Period {
-  range: string;
+  range?: string;
   date_from: DateTime;
   date_to: DateTime;
 }
@@ -32,8 +31,9 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
   // const [months, setMonths] = useState<Period[]>([]);
 
   useEffect(() => {
-    setWeeks(getPeriodList('week', 8));
-    // setMonths(getPeriodList('month', 3));
+    const weekList = getPeriodList('week', 8);
+    setWeeks(weekList);
+    onWeekChange(weekList[1]?.date_from);
   }, []);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
         range: 'custom',
       });
 
-      onRangeChange({ ...range, range: 'day' });
+      onRangeChange(range.date_from, range.date_to);
     }
   }, [dates]);
 

@@ -1,10 +1,6 @@
 import { axiosAppInstance } from '@shared/lib/axios';
 import { AxiosPromise } from 'axios';
-import {
-  ClientsStatisticResponse,
-  GetStatisticProps,
-  StatisticResponse,
-} from '@shared/lib/api/target/types';
+import { ClientsStatisticResponse, GetStatisticProps } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
 
@@ -26,12 +22,12 @@ export const ClientAPI = {
   getStatistics: async (
     id: Client['id'],
     payload: GetStatisticProps,
-  ): AxiosPromise<StatisticResponse[]> => {
+  ): AxiosPromise<ClientsStatisticResponse> => {
     return axiosAppInstance.get(`${STAT_URL}/${id}`, {
       params: payload,
     });
   },
-  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<ClientsStatisticResponse[]> =>
+  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<ClientsStatisticResponse> =>
     axiosAppInstance.get(STAT_URL, {
       params: payload,
     }),
