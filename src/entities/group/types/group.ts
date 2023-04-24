@@ -1,5 +1,4 @@
-export interface Group {
-  id: number;
+export interface Group extends Model {
   name: string;
   link: string;
   site?: string;
@@ -9,8 +8,6 @@ export interface Group {
   photo?: string;
   senler_token_protected?: string;
   senler_token?: string;
-  created_at?: Date;
-  updated_at?: Date;
 }
 
 export interface GroupOptionalProps {

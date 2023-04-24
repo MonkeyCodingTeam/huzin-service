@@ -7,6 +7,7 @@ import {
 } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
+import { Company } from '@entities/company';
 
 const BASE_URL = 'target/client';
 const STAT_URL = 'target/statistic/client';
@@ -36,5 +37,7 @@ export const ClientAPI = {
       params: payload,
     }),
   toggleWatcher: async (client: Client, user: User) =>
-    axiosAppInstance.patch(`target/client/${client.id}/watcher/${user.id}`),
+    axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
+  getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
+    axiosAppInstance.get(`${BASE_URL}/${clientId}/company`),
 };

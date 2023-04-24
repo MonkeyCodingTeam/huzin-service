@@ -3,15 +3,22 @@
   width: 100vw;
   height: 100%;
   padding: 0 16px;
-}
 
-.table {
-  &__column{
-    &_name {
-      font-weight: bolder;
+  &__table {
+    overflow: auto;
+
+    &__column {
+      &_name {
+        font-weight: bolder;
+      }
     }
   }
+
+  &__header {
+
+  }
 }
+
 
 .groupHeader {
   display: flex;

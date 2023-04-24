@@ -216,12 +216,11 @@ const SenlerPage = () => {
           selectionMode='single'
           sortField='success'
           sortOrder={-1}
-          scrollable
-          scrollHeight='calc(100vh - 140px)'
           tableStyle={{
             borderCollapse: 'separate',
             alignItems: 'center',
           }}
+          className={css.table}
           size='small'
           showGridlines
           rows={10}

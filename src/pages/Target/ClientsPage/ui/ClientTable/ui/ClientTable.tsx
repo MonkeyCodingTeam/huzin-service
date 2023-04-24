@@ -7,6 +7,7 @@ import { StatisticResponse } from '@shared/lib/api/target/types';
 import { Column } from 'primereact/column';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { ClientTableHeader } from '@pages/Target/ClientsPage/ui/ClientTable/ui/ClientTableHeader';
+import css from './ClientTable.module.scss';
 
 export const ClientTable = () => {
   const selectedClient = useSelector((state: RootState) => state.selectedClient);
@@ -30,7 +31,7 @@ export const ClientTable = () => {
   }, [selectedClient.id]);
 
   const dateBodyTemplate = (stat: StatisticResponse) => {
-    const date = DateTime.fromFormat(stat.day_to, 'yMMdd').toFormat('dd.MM.yyyy');
+    const date = DateTime.fromFormat(stat.day_from, 'yMMdd').toFormat('dd.MM.yyyy');
     return <span>{date}</span>;
   };
 
@@ -58,59 +59,63 @@ export const ClientTable = () => {
     </span>
   );
 
-  return loading ? (
-    <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
-  ) : (
-    <DataTable
-      selectionMode='single'
-      value={stats}
-      sortField='day_to'
-      sortOrder={-1}
-      scrollable
-      scrollHeight='calc(100vh - 90px)'
-      reorderableColumns
-      tableStyle={{
-        borderCollapse: 'separate',
-        alignItems: 'center',
-      }}
-      style={{ width: '100%' }}
-      showGridlines
-      rows={10}
-      key='id'
-      globalFilterFields={['name']}
-      header={ClientTableHeader}
-      emptyMessage='Нет данных'
-    >
-      <Column header='Дата' field='day_to' sortable body={dateBodyTemplate} />
-      <Column header='Расход' field='spent' sortable body={spentBodyTemplate} />
-      <Column header='Клики' field='clicks' sortable body={clicksBodyTemplate} />
-      <Column header='Охват' field='impressions' sortable body={impressionsBodyTemplate} />
-      <Column
-        header='CTR'
-        field='ctr'
-        headerTooltip='Коэффициент кликабельности'
-        headerTooltipOptions={{
-          position: 'bottom',
-        }}
-      />
-      <Column
-        header='CPC'
-        field='effective_cost_per_click'
-        headerTooltip='Эффективная цена за клик'
-        headerTooltipOptions={{
-          position: 'bottom',
-        }}
-        body={cpcBodyTemplate}
-      />
-      <Column
-        header='CPM'
-        field='effective_cost_per_mille'
-        headerTooltip='Эффективная цена за тысячу показов'
-        headerTooltipOptions={{
-          position: 'bottom',
-        }}
-        body={cpmBodyTemplate}
-      />
-    </DataTable>
+  return (
+    <div className={css.box}>
+      <div className={css.box__container}>
+        <ClientTableHeader client={selectedClient} className={css.box__container__header} />
+        {loading ? (
+          <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
+        ) : (
+          <DataTable
+            selectionMode='single'
+            value={stats}
+            sortField='day_to'
+            sortOrder={-1}
+            reorderableColumns
+            tableStyle={{
+              borderCollapse: 'separate',
+              alignItems: 'center',
+            }}
+            className={css.box__container__table}
+            showGridlines
+            rows={10}
+            key='id'
+            globalFilterFields={['name']}
+            emptyMessage='Нет данных'
+          >
+            <Column header='Дата' field='day_from' sortable body={dateBodyTemplate} />
+            <Column header='Расход' field='spent' sortable body={spentBodyTemplate} />
+            <Column header='Клики' field='clicks' sortable body={clicksBodyTemplate} />
+            <Column header='Охват' field='impressions' sortable body={impressionsBodyTemplate} />
+            <Column
+              header='CTR'
+              field='ctr'
+              headerTooltip='Коэффициент кликабельности'
+              headerTooltipOptions={{
+                position: 'bottom',
+              }}
+            />
+            <Column
+              header='CPC'
+              field='effective_cost_per_click'
+              headerTooltip='Эффективная цена за клик'
+              headerTooltipOptions={{
+                position: 'bottom',
+              }}
+              body={cpcBodyTemplate}
+            />
+            <Column
+              header='CPM'
+              field='effective_cost_per_mille'
+              headerTooltip='Эффективная цена за тысячу показов'
+              headerTooltipOptions={{
+                position: 'bottom',
+              }}
+              body={cpmBodyTemplate}
+            />
+          </DataTable>
+        )}
+      </div>
+    </div>
   );
 };

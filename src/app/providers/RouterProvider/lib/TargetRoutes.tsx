@@ -17,7 +17,6 @@ export const TargetRoutes: AppRoute[] = [
     element: <ClientsPage />,
     path: ROUTES.TARGET.Clients,
     protected: true,
-    header: true,
     children: [
       {
         index: true,
@@ -35,7 +34,6 @@ export const TargetRoutes: AppRoute[] = [
     element: <SenlerPage />,
     path: ROUTES.TARGET.Companies,
     protected: true,
-    header: true,
   },
   {
     name: 'Открут',
@@ -43,7 +41,6 @@ export const TargetRoutes: AppRoute[] = [
     element: <BudgetCutsPage />,
     path: ROUTES.TARGET.BudgetCuts,
     protected: true,
-    header: true,
   },
   {
     name: 'Настройки',
@@ -51,7 +48,6 @@ export const TargetRoutes: AppRoute[] = [
     element: <TargetSettingsPage />,
     path: ROUTES.TARGET.Settings,
     protected: true,
-    header: true,
     children: [
       {
         index: true,

@@ -1,5 +1,4 @@
-export interface Client {
-  id: number;
+export interface Client extends Model {
   name: string;
   balance: number;
   critical_balance: number;
@@ -9,7 +8,5 @@ export interface Client {
   week_spent: number;
   month_spent: number;
   month_plan: number;
-  created_at?: Date;
-  updated_at?: Date;
   is_mine?: boolean;
 }

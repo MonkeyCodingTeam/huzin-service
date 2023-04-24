@@ -8,7 +8,6 @@ export interface AppRoute {
   name?: string;
   icon?: ValueOf<PrimeIconsOptions>;
   description?: string;
-  header?: boolean;
   path?: string;
   children?: Omit<AppRoute, 'protected'>[];
   index?: boolean;
