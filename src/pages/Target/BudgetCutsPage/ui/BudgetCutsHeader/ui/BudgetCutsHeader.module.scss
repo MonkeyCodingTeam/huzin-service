@@ -2,17 +2,17 @@
   display: flex;
   align-items: start;
   justify-content: space-between;
-  padding: 4px 8px;
+  padding: 4px 1rem;
 
   &_left {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 1rem;
   }
 
   &_right {
     display: flex;
-    gap: 8px;
+    gap: 1rem;
     align-items: center;
   }
 }

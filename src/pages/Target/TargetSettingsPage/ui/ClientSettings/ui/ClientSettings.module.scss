@@ -4,7 +4,7 @@
 
 .container {
   display: flex;
-  gap: 8px;
+  gap: 1rem;
   height: calc(100vh - 180px);
 }
 
@@ -12,7 +12,7 @@
   display: flex;
 
   width: 100%;
-  padding: 16px;
+  padding: 1.5rem;
 
   border: solid 1px var(--secondary-color);
   border-radius: 6px;
@@ -27,7 +27,7 @@
     overflow: auto;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.5rem;
 
     padding: 4px;
 
@@ -42,7 +42,7 @@
   &__panel {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1.5rem;
 
     &__anchor {
       font-size: var(--regular-font-size);

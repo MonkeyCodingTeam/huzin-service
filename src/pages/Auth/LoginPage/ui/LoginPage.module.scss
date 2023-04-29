@@ -11,13 +11,13 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.5rem;
 
   width: 30rem;
-  padding: 16px 32px;
+  padding: 1.5rem 32px;
 
   background-color: var(--light-color);
-  border-radius: 8px;
+  border-radius: 1rem;
 
   &__logo {
     display: flex;
@@ -33,11 +33,11 @@
   &__footer {
     display: flex;
     justify-content: space-between;
-    margin-top: 16px;
+    margin-top: 1.5rem;
 
     &__remember {
       display: flex;
-      gap: 8px;
+      gap: 1rem;
       align-items: center;
       color: var(--primary-color);
     }

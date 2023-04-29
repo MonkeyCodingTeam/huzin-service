@@ -6,15 +6,13 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { Calendar } from 'primereact/calendar';
 import { Nullable } from 'primereact/ts-helpers';
-import { addLocale } from 'primereact/api';
+import { getPeriodList } from '@shared/lib/util';
 
 interface SenlerHeaderProps {
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onWeekChange: (weekStart: DateTime) => void;
   onRangeChange: (period: Period) => void;
 }
-
-type PeriodName = 'day' | 'week' | 'month' | 'year';
 
 export interface Period {
   range: string;
@@ -109,42 +107,3 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
     </div>
   );
 };
-
-function getPeriodList(periodName: PeriodName, numOfPeriod: number) {
-  const periodList: Period[] = [];
-  let now = DateTime.now();
-  for (let i = 0; i < numOfPeriod; i++) {
-    const date_from = now.startOf(periodName);
-    const date_to = now.endOf(periodName);
-    const range = () => {
-      switch (periodName) {
-        case 'day':
-          return date_from.toFormat('dd.LL.yyyy');
-        case 'week':
-          if (i === 0) {
-            return 'Текущая неделя';
-          }
-          if (i === 1) {
-            return 'Предыдущая неделя';
-          }
-          return `${date_from.toFormat('dd.LL')} - ${date_to.toFormat('dd.LL')}`;
-        case 'month':
-          // eslint-disable-next-line no-case-declarations
-          let month = date_from.setLocale('ru').toFormat('LLLL');
-          month = month[0].toUpperCase() + month.slice(1);
-          return month;
-        case 'year':
-          return date_from.toFormat('yyyy');
-        default:
-          return `${date_from.toFormat('dd.LL.yyyy')} - ${date_to.toFormat('dd.LL.yyyy')}`;
-      }
-    };
-    periodList.push({
-      date_from,
-      date_to,
-      range: range(),
-    });
-    now = now.minus({ [periodName]: 1 });
-  }
-  return periodList;
-}

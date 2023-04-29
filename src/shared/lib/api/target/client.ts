@@ -18,6 +18,11 @@ export const ClientAPI = {
       params: payload,
     });
   },
+  getClient: async (clientId: Client['id']): AxiosPromise<Client> => {
+    return axiosAppInstance.get(`${BASE_URL}/${clientId}`);
+  },
+  getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
+    axiosAppInstance.get(`${BASE_URL}/${clientId}/company`),
   updateClient: async (
     id: Client['id'],
     payload: Partial<Omit<Client, 'id' | 'created_at' | 'updated_at'>>,
@@ -38,6 +43,4 @@ export const ClientAPI = {
     }),
   toggleWatcher: async (client: Client, user: User) =>
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
-  getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
-    axiosAppInstance.get(`${BASE_URL}/${clientId}/company`),
 };

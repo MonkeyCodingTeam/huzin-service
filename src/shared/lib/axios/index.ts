@@ -3,7 +3,7 @@ import axios from 'axios';
 const VkApiVersion = 5.131;
 
 export const axiosVkInstance = axios.create({
-  baseURL: __MODE__ === 'development' ? __VK_API_PROXY_URL__ : __VK_API_URL__,
+  baseURL: __VK_API_URL__,
   headers: {
     Authorization: `Bearer ${__VK_TOKEN__}`,
   },

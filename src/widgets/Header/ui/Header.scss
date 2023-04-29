@@ -1,10 +1,10 @@
 header {
   .p-dropdown {
-    gap: 8px;
+    gap: 1rem;
     align-items: center;
 
     height: 36px;
-    padding: 8px;
+    padding: 1rem;
 
     border: 1px solid var(--primary-color);
 
@@ -24,7 +24,7 @@ header {
     padding: 0 !important;
 
     .p-dropdown-item {
-      padding: 8px 16px !important;
+      padding: 1rem 1.5rem !important;
     }
   }
 

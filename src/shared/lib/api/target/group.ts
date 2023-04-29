@@ -1,5 +1,6 @@
 import {
   GetAllSubscribersCountResponse,
+  GetSubscribersCountPriodRequest,
   GetSubscribersCountRequest,
   GetSubscribersCountResponse,
   GroupCreate,
@@ -37,6 +38,14 @@ export const GroupAPI = {
     payload: GetSubscribersCountRequest,
   ): AxiosPromise<GetSubscribersCountResponse> => {
     return axiosAppInstance.get(`target/senler/subscribers_count/${groupId}`, {
+      params: payload,
+    });
+  },
+  getSubscribersCountByPeriod: async (
+    groupId: Group['id'],
+    payload: GetSubscribersCountPriodRequest,
+  ): AxiosPromise<Record<string, GetSubscribersCountResponse>> => {
+    return axiosAppInstance.get(`target/senler/subscribers_count/${groupId}/period`, {
       params: payload,
     });
   },

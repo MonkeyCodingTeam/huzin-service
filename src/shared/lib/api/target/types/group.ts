@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import { Client } from '@entities/client/types';
 import { Group, GroupOptionalProps } from '@entities/group/types';
+import { CompanyTemplate } from '@shared/lib/api/target/types/company';
 
 export interface GroupGetByProps {
   group_ids?: string | number;
@@ -29,7 +30,11 @@ export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_toke
 export interface GetSubscribersCountRequest {
   date_from: DateTime;
   date_to: DateTime;
-  subscription_id?: number[];
+  company_template_id?: CompanyTemplate['id'];
+}
+
+export interface GetSubscribersCountPriodRequest extends GetSubscribersCountRequest {
+  period?: 'day' | 'week' | 'month';
 }
 
 export interface GetSubscribersCountResponse {

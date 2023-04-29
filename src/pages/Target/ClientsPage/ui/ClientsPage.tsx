@@ -56,7 +56,8 @@ const ClientsPage = () => {
       <Transition className={css.container}>
         <ListBox
           value={selectedClient}
-          listStyle={{ height: 'calc(100 %- 47px)' }}
+          listStyle={{ height: 'calc(100% - 47px)' }}
+          style={{ height: 'calc(100%- 47px)' }}
           filter
           filterPlaceholder='Поиск'
           options={clients}
