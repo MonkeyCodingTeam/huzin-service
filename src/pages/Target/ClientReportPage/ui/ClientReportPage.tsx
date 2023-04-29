@@ -54,15 +54,6 @@ const ClientReportPage = () => {
             Критический остаток: <b>{client.critical_balance}₽</b>
           </p>
         </div>
-        <div className={css.container__header__chart}>
-          <p>{client?.name}</p>
-          <p>
-            Баланс: <b>{client.balance}₽</b>
-          </p>
-          <p>
-            Критический остаток: <b>{client.critical_balance}₽</b>
-          </p>
-        </div>
       </div>
       <div className={css.container__card}>
         <p className={css.container__card__title}>Общая статистика</p>
