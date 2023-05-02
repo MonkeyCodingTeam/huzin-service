@@ -63,14 +63,16 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   }, []);
 
   useEffect(() => {
+    console.log('SENLER RENDER');
     if (!senlerStats) return;
 
-    setStats((prevState) =>
-      prevState.map((stat) => {
+    setStats((prevState) => {
+      console.log(prevState);
+      return prevState.map((stat) => {
         stat.senler = senlerStats[stat.month].count_subscribe || 0;
         return stat;
-      }),
-    );
+      });
+    });
   }, [senlerStats]);
 
   useEffect(() => {
