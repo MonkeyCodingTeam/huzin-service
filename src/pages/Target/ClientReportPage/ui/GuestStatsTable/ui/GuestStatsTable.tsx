@@ -30,8 +30,13 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   const [stats, setStats] = useState<StatisticResponse[]>([]);
   const [companyStats, setCompanyStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
+
     if (!client?.id) return;
 
     GuestAPI.getCompanyStats(client.id, {
@@ -51,21 +56,36 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     }).then((res) => {
       setSenlerStats(res.data);
     });
+
+    return () => {
+      clearTimeout(timeout);
+    };
   }, []);
 
   useEffect(() => {
-    if (companyStats) {
+    if (!senlerStats) return;
+
+    setStats((prevState) =>
+      prevState.map((stat) => {
+        stat.senler = senlerStats[stat.month].count_subscribe || 0;
+        return stat;
+      }),
+    );
+  }, [senlerStats]);
+
+  useEffect(() => {
+    if (companyStats.length) {
       setStats(() => getStatByCompany(companyStats));
+    } else {
+      setStats([]);
     }
-  }, [companyStats, senlerStats]);
+  }, [companyStats]);
 
   const getStatByCompany = (stats: ClientsStatisticResponse[]): StatisticResponse[] => {
     const result: Record<StatisticResponse['month'], StatisticResponse> = {};
     stats.forEach((company) => {
       company.stats.forEach((stat) => {
         if (result[stat.month]) {
-          const date = DateTime.fromFormat(stat.month, 'yyyy-LL').toFormat('yyyy-LL-dd');
-          result[stat.month]['senler'] = senlerStats ? senlerStats[date]?.count_subscribe : 0 || 0;
           fields.forEach((field) => {
             (result[stat.month][field] as number) =
               (+result[stat.month][field] || 0) + (+stat[field] || 0);
@@ -75,6 +95,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         }
       });
     }, {});
+    setIsLoading(false);
     return Object.values(result);
   };
 
@@ -85,7 +106,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return value.senler ? (value.spent / value.senler).toFixed(2) : '-';
   };
 
-  return stats.length ? (
+  return !isLoading ? (
     <DataTable value={stats} sortField='month' sortOrder={-1}>
       <Column
         header='Месяц'
