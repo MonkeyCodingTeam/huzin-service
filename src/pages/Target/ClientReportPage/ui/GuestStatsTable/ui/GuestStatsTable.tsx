@@ -63,19 +63,6 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   }, []);
 
   useEffect(() => {
-    console.log('SENLER RENDER');
-    if (!senlerStats) return;
-
-    setStats((prevState) => {
-      console.log(prevState);
-      return prevState.map((stat) => {
-        stat.senler = senlerStats[stat.month].count_subscribe || 0;
-        return stat;
-      });
-    });
-  }, [senlerStats]);
-
-  useEffect(() => {
     if (companyStats.length) {
       setStats(() => getStatByCompany(companyStats));
     } else {
@@ -101,11 +88,20 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return Object.values(result);
   };
 
-  const senlerCostBody = (value: StatisticResponse) => {
-    if (value.senler === undefined) {
+  const senlerCountBody = (value: StatisticResponse) => {
+    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
       return <Skeleton width='10rem' />;
     }
-    return value.senler ? (value.spent / value.senler).toFixed(2) : '-';
+    return senlerStats[value.month].count_subscribe;
+  };
+
+  const senlerCostBody = (value: StatisticResponse) => {
+    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
+      return <Skeleton width='10rem' />;
+    }
+    const senler = senlerStats[value.month].count_subscribe;
+
+    return senler ? (value.spent / senler).toFixed(2) : '-';
   };
 
   return !isLoading ? (
@@ -123,11 +119,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         field='spent'
         body={(value) => Math.round(value.spent).toLocaleString()}
       />
-      <Column
-        header='Подписка Senler'
-        field='senler'
-        body={(value) => (value.senler === undefined ? <Skeleton width='5rem' /> : value.senler)}
-      />
+      <Column header='Подписка Senler' field='senler' body={senlerCountBody} />
       <Column header='Цена подписки' body={senlerCostBody} />
       <Column
         header='Охват'

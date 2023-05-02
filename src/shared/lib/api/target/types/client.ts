@@ -30,5 +30,4 @@ export interface StatisticResponse {
   reach: number;
   join_rate: number;
   spent: number;
-  senler?: number;
 }
