@@ -2,6 +2,7 @@ import { Client } from '@entities/client';
 import {
   ClientsStatisticResponse,
   CompanyTemplate,
+  GetSubscribersCountResponse,
   StatisticResponse,
 } from '@shared/lib/api/target/types';
 import { FC, useEffect, useState } from 'react';
@@ -9,7 +10,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
-import { Company } from '@entities/company';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 
@@ -29,6 +29,7 @@ const fields: (keyof Pick<StatisticResponse, 'spent' | 'impressions' | 'clicks' 
 export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
   const [stats, setStats] = useState<StatisticResponse[]>([]);
   const [companyStats, setCompanyStats] = useState<ClientsStatisticResponse[]>([]);
+  const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
 
   useEffect(() => {
     if (!client?.id) return;
@@ -48,16 +49,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       period: 'month',
       company_template_id: company_template?.id,
     }).then((res) => {
-      setStats((prevState) => {
-        return prevState.map((stat) => {
-          const date = DateTime.fromFormat(stat.month, 'yyyy-LL').toFormat('yyyy-LL-dd');
-          console.log(date, stat);
-          return {
-            ...stat,
-            senler: res.data[date]?.count_subscribe | 0,
-          };
-        });
-      });
+      setSenlerStats(res.data);
     });
   }, []);
 
@@ -65,19 +57,15 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     if (companyStats) {
       setStats(() => getStatByCompany(companyStats));
     }
-  }, [companyStats]);
+  }, [companyStats, senlerStats]);
 
-  const getStatByCompany = (
-    stats: ClientsStatisticResponse[],
-    filter: Company[] = [],
-  ): StatisticResponse[] => {
+  const getStatByCompany = (stats: ClientsStatisticResponse[]): StatisticResponse[] => {
     const result: Record<StatisticResponse['month'], StatisticResponse> = {};
     stats.forEach((company) => {
-      if (filter.length && !filter.find((item) => item.id === company.id)) {
-        return;
-      }
       company.stats.forEach((stat) => {
         if (result[stat.month]) {
+          const date = DateTime.fromFormat(stat.month, 'yyyy-LL').toFormat('yyyy-LL-dd');
+          result[stat.month]['senler'] = senlerStats ? senlerStats[date]?.count_subscribe : 0 || 0;
           fields.forEach((field) => {
             (result[stat.month][field] as number) =
               (+result[stat.month][field] || 0) + (+stat[field] || 0);
@@ -90,9 +78,6 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return Object.values(result);
   };
 
-  if (!client) {
-    return <Skeleton />;
-  }
   const senlerCostBody = (value: StatisticResponse) => {
     if (value.senler === undefined) {
       return <Skeleton width='10rem' />;
