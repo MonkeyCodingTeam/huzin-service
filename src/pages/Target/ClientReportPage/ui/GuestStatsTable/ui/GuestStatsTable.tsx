@@ -31,6 +31,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   const [companyStats, setCompanyStats] = useState<ClientsStatisticResponse[]>();
 
   useEffect(() => {
+    console.log(client);
     if (!client?.id) return;
 
     GuestAPI.getCompanyStats(client.id, {
@@ -48,6 +49,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       period: 'month',
       company_template_id: company_template?.id,
     }).then((res) => {
+      console.log(res.data);
       setStats((prevState) => {
         return prevState.map((stat) => {
           const date = DateTime.fromFormat(stat.month, 'yyyy-LL').toFormat('yyyy-LL-dd');
