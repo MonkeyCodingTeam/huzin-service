@@ -1,18 +1,27 @@
 import { DataTable } from 'primereact/datatable';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { ClientAPI } from '@shared/lib/api';
+import { ClientAPI, CompanyTemplateAPI } from '@shared/lib/api';
 import { DateTime } from 'luxon';
-import { StatisticResponse } from '@shared/lib/api/target/types';
+import { CompanyTemplate, StatisticResponse } from '@shared/lib/api/target/types';
 import { Column } from 'primereact/column';
 import { TableSkeleton } from '@shared/ui/Skeletons';
-import { ClientTableHeader } from '@pages/Target/ClientsPage/ui/ClientTable/ui/ClientTableHeader';
 import css from './ClientTable.module.scss';
+import { SelectButton } from 'primereact/selectbutton';
+import { sumStats } from '@shared/lib/util/sumStats';
 
 export const ClientTable = () => {
   const selectedClient = useSelector((state: RootState) => state.selectedClient);
   const [stats, setStats] = useState<StatisticResponse[]>();
+  const [selectedTemplate, setSelectedTemplate] = useState<CompanyTemplate>();
+  const [companyTemplate, setCompanyTemplate] = useState<CompanyTemplate[]>([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    CompanyTemplateAPI.getAll().then((res) => {
+      setCompanyTemplate(res.data);
+    });
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -21,14 +30,15 @@ export const ClientTable = () => {
         period: 'week',
         date_from: DateTime.now().minus({ month: 5 }),
         date_to: DateTime.now(),
+        company_template_id: selectedTemplate?.id,
       }).then((res) => {
-        setStats(res.data);
+        setStats(sumStats(res.data, 'day_from'));
         setLoading(false);
       });
     } else {
       setLoading(false);
     }
-  }, [selectedClient.id]);
+  }, [selectedClient.id, selectedTemplate?.id]);
 
   const dateBodyTemplate = (stat: StatisticResponse) => {
     const date = DateTime.fromFormat(stat.day_from, 'yMMdd').toFormat('dd.MM.yyyy');
@@ -62,7 +72,12 @@ export const ClientTable = () => {
   return (
     <div className={css.box}>
       <div className={css.box__container}>
-        <ClientTableHeader client={selectedClient} className={css.box__container__header} />
+        <SelectButton
+          value={selectedTemplate}
+          options={companyTemplate}
+          onChange={(e) => setSelectedTemplate(e.value)}
+          optionLabel='name'
+        />
         {loading ? (
           <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
         ) : (

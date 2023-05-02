@@ -12,6 +12,7 @@ import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { TableSkeleton } from '@shared/ui/Skeletons';
+import { sumStats } from '@shared/lib/util/sumStats';
 
 interface GuestStatsTableProps {
   client?: Client;
@@ -19,12 +20,6 @@ interface GuestStatsTableProps {
 }
 
 const monthCount = 6;
-const fields: (keyof Pick<StatisticResponse, 'spent' | 'impressions' | 'clicks' | 'reach'>)[] = [
-  'spent',
-  'impressions',
-  'clicks',
-  'reach',
-];
 
 export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
   const [stats, setStats] = useState<StatisticResponse[]>([]);
@@ -64,29 +59,14 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
 
   useEffect(() => {
     if (companyStats.length) {
-      setStats(() => getStatByCompany(companyStats));
+      setStats(() => {
+        setIsLoading(false);
+        return sumStats(companyStats);
+      });
     } else {
       setStats([]);
     }
   }, [companyStats]);
-
-  const getStatByCompany = (stats: ClientsStatisticResponse[]): StatisticResponse[] => {
-    const result: Record<StatisticResponse['month'], StatisticResponse> = {};
-    stats.forEach((company) => {
-      company.stats.forEach((stat) => {
-        if (result[stat.month]) {
-          fields.forEach((field) => {
-            (result[stat.month][field] as number) =
-              (+result[stat.month][field] || 0) + (+stat[field] || 0);
-          });
-        } else {
-          result[stat.month] = { ...stat };
-        }
-      });
-    }, {});
-    setIsLoading(false);
-    return Object.values(result);
-  };
 
   const senlerCountBody = (value: StatisticResponse) => {
     if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
@@ -105,7 +85,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   };
 
   return !isLoading ? (
-    <DataTable value={stats} sortField='month' sortOrder={-1}>
+    <DataTable value={stats} sortField='month' sortOrder={-1} emptyMessage='Нет данных'>
       <Column
         header='Месяц'
         field='month'
