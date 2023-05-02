@@ -51,6 +51,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       setStats((prevState) => {
         return prevState.map((stat) => {
           const date = DateTime.fromFormat(stat.month, 'yyyy-LL').toFormat('yyyy-LL-dd');
+          console.log(date, stat);
           return {
             ...stat,
             senler: res.data[date]?.count_subscribe | 0,
@@ -58,7 +59,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         });
       });
     });
-  }, []);
+  }, [client]);
 
   useEffect(() => {
     if (companyStats) {
