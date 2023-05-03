@@ -20,6 +20,7 @@ const ClientsPage = () => {
   const getClients = () => {
     ClientAPI.getClients().then((res) => {
       setClients(res.data);
+      console.log(res.data);
 
       const client = selectedClient.id
         ? selectedClient

@@ -2,32 +2,50 @@ import { Client } from '@entities/client/types';
 import { CompanyTemplate } from '@shared/lib/api/target/types/company';
 
 export interface GetStatisticProps {
-  period: 'day' | 'week' | 'month' | 'year' | 'overall';
   date_to: AppDate;
   date_from: AppDate;
+  metrics: Metrics[];
   only_field?: string[];
 }
+
+type Metrics = 'all' | 'base' | 'events' | 'video' | 'uniques' | 'tps' | 'playable' | 'romi';
 
 export interface GetStatisticByCompaniesProps extends GetStatisticProps {
   company_template_id?: CompanyTemplate['id'];
 }
 
 export interface ClientsStatisticResponse {
+  items: Statistic[];
+  total: Omit<StatisticResponse, 'date'>;
+}
+
+interface Statistic {
   id: Client['id'];
-  stats: StatisticResponse[];
-  type: 'ad' | 'campaign' | 'client' | 'office';
+  rows: StatisticResponse[];
+  total: Omit<StatisticResponse, 'date'>;
 }
 
 export interface StatisticResponse {
-  clicks: number;
-  ctr: number;
-  day_from: string;
-  day_to: string;
-  month: string;
-  effective_cost_per_click: number;
-  effective_cost_per_mille: number;
-  impressions: number;
-  reach: number;
-  join_rate: number;
+  base?: BaseStatistic;
+  uniques?: UniquesStatistic;
+  date: string;
+}
+
+export interface BaseStatistic {
   spent: number;
+  shows: number;
+  clicks: number;
+  cpc: number;
+  cpm: number;
+  cpa: number;
+  ctr: number;
+  cr: number;
+}
+
+export interface UniquesStatistic {
+  reach: number;
+  total: number;
+  increment: number;
+  initial_total: number;
+  frequency: number;
 }
