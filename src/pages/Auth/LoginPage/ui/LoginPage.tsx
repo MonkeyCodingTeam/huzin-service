@@ -9,9 +9,13 @@ import { AuthThunk, SignInData } from '@processes/auth';
 import { Navigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { Checkbox } from 'primereact/checkbox';
+import { useState } from 'react';
+import classNames from 'classnames';
+import { Message } from 'primereact/message';
 
 const LoginPage = () => {
   const user = useAppSelector((state) => state.user);
+  const [loginFailed, setLoginFailed] = useState(false);
   const dispatch = useAppDispatch();
 
   if (user.id) {
@@ -19,7 +23,10 @@ const LoginPage = () => {
   }
 
   const handleSubmit = (values: SignInData) => {
-    return dispatch(AuthThunk.signIn(values));
+    const authUser = dispatch(AuthThunk.signIn(values)).then((res) => {
+      setLoginFailed(res.meta.requestStatus === 'rejected');
+    });
+    return authUser;
   };
 
   return (
@@ -37,16 +44,23 @@ const LoginPage = () => {
             <div className={css.form__logo}>
               <HR />
             </div>
+            {loginFailed && <Message severity='error' text='Неправильный логин или пароль' />}
             <FloatInput label='Логин'>
-              <Field as={InputText} name='login' className={css.form__input} />
+              <Field
+                as={InputText}
+                name='login'
+                className={classNames(css.form__input, { [css.form__input__invalid]: loginFailed })}
+              />
             </FloatInput>
             <FloatInput label='Пароль'>
               <Field
                 as={Password}
                 name='password'
                 feedback={false}
-                inputClassName={css.form__input}
                 className={css.form__input}
+                inputClassName={classNames(css.form__input, {
+                  [css.form__input__invalid]: loginFailed,
+                })}
               />
             </FloatInput>
             <div className={css.form__footer}>

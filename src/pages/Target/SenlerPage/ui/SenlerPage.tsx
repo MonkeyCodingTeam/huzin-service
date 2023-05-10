@@ -67,7 +67,9 @@ const SenlerPage = () => {
 
     const stats = clients.map((client) => {
       const spent = clientStats.find((stat) => stat.id === client.id);
-      const stat = spent?.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'));
+      const stat = spent?.stats
+        ? spent.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'))
+        : null;
       return {
         client,
         spent: stat?.spent || 0,
