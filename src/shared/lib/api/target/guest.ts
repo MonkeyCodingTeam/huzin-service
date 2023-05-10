@@ -19,7 +19,7 @@ export const GuestAPI = {
   getCompanyStats: async (
     clientId: Client['id'],
     payload: GetStatisticByCompaniesProps,
-  ): AxiosPromise<ClientsStatisticResponse[]> => {
+  ): AxiosPromise<ClientsStatisticResponse> => {
     const route = `${ROUTES.CLIENT}/${clientId}/stats${
       payload.company_template_id ? `/${payload.company_template_id}` : ''
     }`;

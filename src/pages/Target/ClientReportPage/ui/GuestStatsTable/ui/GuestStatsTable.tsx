@@ -1,9 +1,8 @@
 import { Client } from '@entities/client';
 import {
-  ClientsStatisticResponse,
   CompanyTemplate,
   GetSubscribersCountResponse,
-  StatisticResponse,
+  PeriodStatistic,
 } from '@shared/lib/api/target/types';
 import { FC, useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
@@ -12,7 +11,7 @@ import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { TableSkeleton } from '@shared/ui/Skeletons';
-import { sumStats } from '@shared/lib/util/sumStats';
+import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
 
 interface GuestStatsTableProps {
   client?: Client;
@@ -22,8 +21,7 @@ interface GuestStatsTableProps {
 const monthCount = 6;
 
 export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
-  const [stats, setStats] = useState<StatisticResponse[]>([]);
-  const [companyStats, setCompanyStats] = useState<ClientsStatisticResponse[]>([]);
+  const [stats, setStats] = useState<PeriodStatistic[]>([]);
   const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,12 +35,13 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     GuestAPI.getCompanyStats(client.id, {
       date_from: DateTime.now().minus({ month: monthCount - 1 }),
       date_to: DateTime.now(),
-      period: 'month',
+      metrics: ['base', 'uniques'],
       company_template_id: company_template?.id,
     }).then((res) => {
-      setCompanyStats(res.data);
+      setStats(groupStatsByPeriod(res.data, 'month'));
     });
 
+    if (!client.group_id) return;
     GuestAPI.getSubscribersCountByPeriod(client.group_id!, {
       date_from: DateTime.now().minus({ month: monthCount - 1 }),
       date_to: DateTime.now(),
@@ -57,29 +56,18 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     };
   }, []);
 
-  useEffect(() => {
-    if (companyStats.length) {
-      setStats(() => {
-        setIsLoading(false);
-        return sumStats(companyStats);
-      });
-    } else {
-      setStats([]);
-    }
-  }, [companyStats]);
-
-  const senlerCountBody = (value: StatisticResponse) => {
-    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
+  const senlerCountBody = (value: PeriodStatistic) => {
+    if (senlerStats === undefined || senlerStats[value.date].count_subscribe === undefined) {
       return <Skeleton width='10rem' />;
     }
-    return senlerStats[value.month].count_subscribe;
+    return senlerStats[value.date].count_subscribe;
   };
 
-  const senlerCostBody = (value: StatisticResponse) => {
-    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
+  const senlerCostBody = (value: PeriodStatistic) => {
+    if (senlerStats === undefined || senlerStats[value.date].count_subscribe === undefined) {
       return <Skeleton width='10rem' />;
     }
-    const senler = senlerStats[value.month].count_subscribe;
+    const senler = senlerStats[value.date].count_subscribe;
 
     return senler ? (value.spent / senler).toFixed(2) : '-';
   };
@@ -91,7 +79,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         field='month'
         style={{ fontWeight: 'bold' }}
         body={(value) => {
-          return DateTime.fromFormat(value.month, 'yyyy-LL').setLocale('ru').toFormat('LLLL');
+          return DateTime.fromFormat(value.date, 'yyyy-MM-dd').setLocale('ru').toFormat('LLLL');
         }}
       />
       <Column
@@ -108,8 +96,8 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       />
       <Column
         header='Просмотры'
-        field='impressions'
-        body={(value) => Math.round(value.impressions).toLocaleString()}
+        field='shows'
+        body={(value) => Math.round(value.shows).toLocaleString()}
       />
       <Column
         header='Клики'

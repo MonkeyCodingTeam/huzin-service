@@ -34,12 +34,19 @@ export interface StatisticResponse {
 export interface BaseStatistic {
   spent: number;
   shows: number;
+  goals: number;
   clicks: number;
   cpc: number;
   cpm: number;
   cpa: number;
   ctr: number;
   cr: number;
+}
+
+export type SummeryFields = Pick<BaseStatistic, 'spent' | 'shows' | 'clicks'>;
+
+export interface PeriodStatistic extends SummeryFields {
+  date: string;
 }
 
 export interface UniquesStatistic {
