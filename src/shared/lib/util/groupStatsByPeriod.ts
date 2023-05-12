@@ -10,7 +10,11 @@ export const groupStatsByPeriod = (
   period: 'day' | 'week' | 'month' = 'month',
 ): PeriodStatistic[] => {
   const result: Record<string, PeriodStatistic> = {};
+  if (!stats.items) {
+    return [];
+  }
   stats.items.forEach((item) => {
+    if (!item.rows) return;
     item.rows.forEach((row) => {
       const date = DateTime.fromFormat(row.date, 'yyyy-MM-dd')
         .startOf(period)

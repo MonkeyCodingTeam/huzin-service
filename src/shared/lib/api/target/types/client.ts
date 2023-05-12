@@ -4,7 +4,7 @@ import { CompanyTemplate } from '@shared/lib/api/target/types/company';
 export interface GetStatisticProps {
   date_to: AppDate;
   date_from: AppDate;
-  metrics: Metrics[];
+  metrics?: Metrics[];
   only_field?: string[];
 }
 
@@ -19,10 +19,10 @@ export interface ClientsStatisticResponse {
   total: Omit<StatisticResponse, 'date'>;
 }
 
-interface Statistic {
+export interface Statistic {
   id: Client['id'];
-  rows: StatisticResponse[];
-  total: Omit<StatisticResponse, 'date'>;
+  rows?: StatisticResponse[];
+  total: Partial<BaseStatistic & UniquesStatistic>;
 }
 
 export interface StatisticResponse {

@@ -4,6 +4,7 @@ import {
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
+  Statistic,
 } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
@@ -38,7 +39,7 @@ export const ClientAPI = {
       params: payload,
     });
   },
-  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<ClientsStatisticResponse> =>
+  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<Statistic[]> =>
     axiosAppInstance.get(STAT_URL, {
       params: payload,
     }),

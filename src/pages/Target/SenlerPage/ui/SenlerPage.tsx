@@ -13,18 +13,12 @@ import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import classNames from 'classnames';
 import { Client } from '@entities/client';
-
-interface SenlerStats {
-  client: Client;
-  spent?: number;
-  subscribers?: number;
-  groupId?: number;
-  success: boolean;
-}
+import { GetAllSubscribersCountResponse, Statistic } from '@shared/lib/api/target/types';
 
 const SenlerPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
-  const [senlerStats, setSenlerStats] = useState<SenlerStats[]>([]);
+  const [senlerStats, setSenlerStats] = useState<GetAllSubscribersCountResponse>({});
+  const [stats, setStats] = useState<Statistic[]>();
   const [loading, setLoading] = useState(true);
   const [loadingSenler, setLoadingSenler] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
@@ -45,7 +39,10 @@ const SenlerPage = () => {
   };
 
   useEffect(() => {
-    getClients();
+    ClientAPI.getClients().then((res) => {
+      setClients(res.data);
+      setLoading(false);
+    });
   }, []);
 
   useEffect(() => {
@@ -54,56 +51,52 @@ const SenlerPage = () => {
     }
   }, [week]);
 
-  const getClients = () => {
-    ClientAPI.getClients().then((res) => {
-      setClients(res.data);
-      const clients = res.data.map((client) => ({ client, success: false }));
-      setSenlerStats(clients);
-      setLoading(false);
-    });
-  };
-
-  const nameTemplate = (stat: SenlerStats) => {
+  const nameTemplate = (client: Client) => {
     return (
       <Link
         className={css.table__column_name}
         target='_blank'
-        href={`https://vk.com/ads?act=office&union_id=${stat.client.id}`}
+        href={`https://vk.com/ads?act=office&union_id=${client.id}`}
       >
-        {stat.client.name}
+        {client.name}
       </Link>
     );
   };
-  const spentTemplate = (stat: SenlerStats) => {
+  const spentTemplate = (client: Client) => {
+    const spent = stats?.find((item) => item.id === client.id)?.total.spent;
     if (loadingStats) {
       return <Skeleton width='10rem' />;
     }
-    return <span>{stat.spent ? Math.trunc(stat.spent).toLocaleString() : 0}</span>;
+    return <span>{spent ? Math.trunc(spent).toLocaleString() : 0}</span>;
   };
 
-  const subscribersTemplate = (stat: SenlerStats) => {
+  const subscribersTemplate = (client: Client) => {
+    const senlerStat = senlerStats[client.id];
     if (loadingSenler) {
       return <Skeleton width='12rem' />;
     }
-    if (!stat.groupId || !stat.success) {
-      const message = !stat.groupId ? 'Добавьте группу' : 'Проверьте ключ Senler';
-      return <Link href={`/target/settings/client/${stat.client.id}`}>{message}</Link>;
+    if (!senlerStat) {
+      return '-';
     }
-    return <span>{stat.subscribers ? stat.subscribers.toLocaleString() : '-'}</span>;
+    if (!senlerStat.group_id || !senlerStat.success) {
+      const message = !senlerStat.group_id ? 'Добавьте группу' : 'Проверьте ключ Senler';
+      return <Link href={`/target/settings/client/${client.id}`}>{message}</Link>;
+    }
+    return senlerStat.count_subscribe.toLocaleString();
   };
 
-  const spentPerSubTemplate = (stat: SenlerStats) => {
+  const spentPerSubTemplate = (client: Client) => {
+    const senlerStat = senlerStats[client.id];
+    const spent = stats?.find((item) => item.id === client.id)?.total.spent;
     if (loadingSenler) {
-      return <Skeleton width='5rem' />;
+      return <Skeleton width='12rem' />;
     }
-    if (stat.spent && stat.subscribers !== undefined) {
-      return (
-        <span>
-          {(stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers).toFixed(2)}
-        </span>
-      );
+    if (!senlerStat || !spent) {
+      return '-';
     }
-    return <span>-</span>;
+    return (
+      senlerStat.count_subscribe === 0 ? +spent : +spent / senlerStat.count_subscribe
+    ).toFixed(2);
   };
 
   const handleWeekChange = (weekStart: DateTime) => {
@@ -122,37 +115,29 @@ const SenlerPage = () => {
       date_to,
       only_field: ['spent'],
     }).then((res) => {
-      console.log(res);
+      console.log(res.data);
       if (!clients.length) return;
-
-      GroupAPI.getAllSubscribersCount({
-        date_from,
-        date_to,
-      }).then((subs) => {
-        const senler = subs.data;
-        const stats = clients.map((client) => {
-          const spent = res.data.find((stat) => stat.id === client.id);
-          return {
-            client,
-            spent: spent?.total.spent || 0,
-            subscribers: senler[client.id]?.count_subscribe,
-            groupId: senler[client.id]?.group_id,
-            success: !!senler[client.id]?.success,
-          };
-        });
-        setSenlerStats(stats);
-        setLoadingSenler(false);
-        setLoadingStats(false);
-      });
+      setStats(res.data);
+      setLoadingStats(false);
+    });
+    GroupAPI.getAllSubscribersCount({
+      date_from,
+      date_to,
+    }).then((res) => {
+      setSenlerStats(res.data);
+      setLoadingSenler(false);
     });
   };
 
-  const groupHeaderTemplate = (stat: SenlerStats) => {
+  const groupHeaderTemplate = (client: Client) => {
     return (
       <span
-        className={classNames(css.groupHeader, !stat.subscribers ? css.groupHeader__warning : '')}
+        className={classNames(
+          css.groupHeader,
+          !senlerStats[client.id] ? css.groupHeader__warning : '',
+        )}
       >
-        Senler {stat.success ? 'указан' : 'не указан'}
+        Senler {senlerStats[client.id] ? 'указан' : 'не указан'}
       </span>
     );
   };
@@ -163,7 +148,7 @@ const SenlerPage = () => {
         <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
       ) : (
         <DataTable
-          value={senlerStats}
+          value={clients}
           selectionMode='single'
           sortField='success'
           sortOrder={-1}
