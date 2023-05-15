@@ -1,5 +1,5 @@
 import { Transition } from '@widgets';
-import css from './TargetSettingsPage.module.scss';
+import css from './SettingsPage.module.scss';
 import { Outlet, useNavigate } from 'react-router';
 import { TabPanel, TabView, TabViewTabChangeEvent } from 'primereact/tabview';
 import { ROUTES } from '@shared/const/routes';
@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const TabRoutes = [ROUTES.TARGET.SettingsClient, ROUTES.TARGET.SettingsCompanies];
 
-export const TargetSettingsPage = () => {
+export const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState(0);
   const navigate = useNavigate();
   const handleTabChange = (e: TabViewTabChangeEvent) => {

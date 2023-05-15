@@ -5,6 +5,7 @@ import { AuthRoutes } from '@app/providers/RouterProvider/lib/AuthRoutes';
 import { StubPage } from '@pages/StubPage';
 import { MainPage } from '@pages/MainPage';
 import { ClientReportPage } from '@pages/Target/ClientReportPage';
+import { ROUTES } from '@shared/const/routes';
 
 export const ProtectedAppRoutes: AppRoute[] = [
   ...TargetRoutes,
@@ -23,7 +24,7 @@ export const AppRoutes: AppRoute[] = [
     element: <StubPage />,
   },
   {
-    path: '/client_report/:clientId/:token',
+    path: ROUTES.TARGET.ClientReport,
     protected: false,
     element: <ClientReportPage />,
   },

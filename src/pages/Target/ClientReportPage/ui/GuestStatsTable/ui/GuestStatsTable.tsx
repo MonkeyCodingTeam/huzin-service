@@ -12,6 +12,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
+import logger from 'redux-logger';
 
 interface GuestStatsTableProps {
   client?: Client;
@@ -57,17 +58,19 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   }, []);
 
   const senlerCountBody = (value: PeriodStatistic) => {
-    if (senlerStats === undefined || senlerStats[value.date].count_subscribe === undefined) {
+    if (senlerStats === undefined) {
       return <Skeleton width='10rem' />;
     }
-    return senlerStats[value.date].count_subscribe;
+    const senler = senlerStats[value.date]?.count_subscribe;
+
+    return senler || '-';
   };
 
   const senlerCostBody = (value: PeriodStatistic) => {
-    if (senlerStats === undefined || senlerStats[value.date].count_subscribe === undefined) {
+    if (senlerStats === undefined) {
       return <Skeleton width='10rem' />;
     }
-    const senler = senlerStats[value.date].count_subscribe;
+    const senler = senlerStats[value.date]?.count_subscribe;
 
     return senler ? (value.spent / senler).toFixed(2) : '-';
   };
@@ -79,7 +82,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         field='month'
         style={{ fontWeight: 'bold' }}
         body={(value) => {
-          return DateTime.fromFormat(value.date, 'yyyy-MM-dd').setLocale('ru').toFormat('LLLL');
+          return DateTime.fromFormat(value.date, 'yyyy-MM').setLocale('ru').toFormat('LLLL');
         }}
       />
       <Column
@@ -89,11 +92,6 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       />
       <Column header='Подписка Senler' field='senler' body={senlerCountBody} />
       <Column header='Цена подписки' body={senlerCostBody} />
-      <Column
-        header='Охват'
-        field='reach'
-        body={(value) => Math.round(value.reach).toLocaleString()}
-      />
       <Column
         header='Просмотры'
         field='shows'

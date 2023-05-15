@@ -7,8 +7,8 @@ import { ROUTES } from '@shared/const/routes';
 import { ClientAPI } from '@shared/lib/api';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
-import { ClientSettingsGroup } from '@pages/Target/TargetSettingsPage/ui/ClientSettingsGroup/ui/ClientSettingsGroup';
-import { Loader } from '@shared/ui';
+import { ClientSettingsGroup } from '@pages/Target/SettingsPage/ui/ClientSettingsGroup/ui/ClientSettingsGroup';
+import { Link, Loader } from '@shared/ui';
 import { Client } from '@entities/client';
 
 export const ClientSettings = () => {
@@ -63,6 +63,9 @@ export const ClientSettings = () => {
           ) : (
             <>
               <p className={css.settings__title}>{selectedClient.name}</p>
+              <Link href={`/client_report/${selectedClient.id}/${selectedClient.token}`}>
+                <p>Ссылка на отчёт</p>
+              </Link>
               <div>
                 <Divider style={{ marginTop: 0 }} id='main' align='left'>
                   <a className={css.settings__list__anchor} href='#main'>

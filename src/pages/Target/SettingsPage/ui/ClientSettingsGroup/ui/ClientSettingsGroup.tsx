@@ -5,7 +5,7 @@ import { emptyGroupState } from '@entities/group/model';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
-import { GroupList } from '@pages/Target/TargetSettingsPage/ui/ClientSettingsGroup/ui/GroupList';
+import { GroupList } from '@pages/Target/SettingsPage/ui/ClientSettingsGroup/ui/GroupList';
 import { Group } from '@entities/group';
 import { Client } from '@entities/client';
 

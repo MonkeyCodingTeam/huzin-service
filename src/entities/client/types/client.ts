@@ -10,4 +10,5 @@ export interface Client extends Model {
   month_plan: number;
   is_mine?: boolean;
   group_id?: number;
+  token?: string;
 }

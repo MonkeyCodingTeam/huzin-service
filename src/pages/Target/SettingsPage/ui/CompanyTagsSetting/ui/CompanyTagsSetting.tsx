@@ -7,7 +7,7 @@ import { CompanyTemplateAPI } from '@shared/lib/api/target/company';
 import type { CompanyTemplate, CreateCompanyTemplate } from '@shared/lib/api/target/types';
 import { useEffect, useRef, useState } from 'react';
 import { Toast } from 'primereact/toast';
-import { CompanyTemplateList } from '@pages/Target/TargetSettingsPage/ui/CompanyTemplateList';
+import { CompanyTemplateList } from '@pages/Target/SettingsPage/ui/CompanyTemplateList';
 
 export const CompanyTagsSetting = () => {
   const [templates, setTemplates] = useState<CompanyTemplate[]>([]);
@@ -36,7 +36,7 @@ export const CompanyTagsSetting = () => {
 
   const addTemplate = (value: CreateCompanyTemplate) => {
     CompanyTemplateAPI.create(value).then((res) => {
-      console.log(templates)
+      console.log(templates);
       setTemplates([...templates, res.data]);
     });
   };

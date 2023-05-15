@@ -4,7 +4,7 @@ import css from './CompanyTemplateList.module.scss';
 import classNames from 'classnames';
 import { Button } from 'primereact/button';
 import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
-import { CompanyTemplateTags } from '@pages/Target/TargetSettingsPage/ui/CompanyTemplateTags';
+import { CompanyTemplateTags } from '@pages/Target/SettingsPage/ui/CompanyTemplateTags';
 
 interface CompanyTemplateProps {
   templates: CompanyTemplate[];
