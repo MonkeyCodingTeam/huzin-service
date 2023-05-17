@@ -19,6 +19,8 @@ import { User, UserAPI } from '@entities/user';
 import { DropdownChangeEvent } from 'primereact/dropdown';
 import { useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
+import { sort } from 'semver';
+import { Badge } from 'primereact/badge';
 
 const BudgetCutsPage = () => {
   const [updateDate, setUpdateDate] = useState<DateTime>(DateTime.now());
@@ -58,7 +60,7 @@ const BudgetCutsPage = () => {
                 return item.id === client.id ? { ...item, is_mine: !item.is_mine } : item;
               }),
             );
-            toast.current!.show({
+            toast.current?.show({
               severity: 'success',
               detail: 'Сохранено!',
               life: 2000,
@@ -229,17 +231,48 @@ const BudgetCutsPage = () => {
     if (monthSpentPlan < client.month_spent) {
       return '-';
     }
-    const daySpentPlan = Math.trunc(client.month_plan / daysInMonth);
     const dayDifference = daysInMonth - monthday;
+    const daySpentPlan = Math.trunc(client.month_plan / daysInMonth);
+
+    if (client.zero_days) {
+      return Math.trunc(
+        (client.month_plan +
+          client.budget_adjustment -
+          client.month_spent -
+          client.zero_days * daySpentPlan) /
+          dayDifference,
+      ).toLocaleString();
+    }
+
     const differencePlan = monthSpentPlan - client.month_spent;
     const required = dayDifference ? Math.trunc(differencePlan / dayDifference) : 0;
 
-    return <span>{(daySpentPlan + required).toLocaleString()}</span>;
+    return (daySpentPlan + required).toLocaleString();
+  };
+
+  const monthPlanBody = (client: Client) => {
+    if (client.budget_adjustment == 0) {
+      return client.month_plan.toLocaleString();
+    }
+    return (
+      <div className={css.adjustment}>
+        <span className='p-overlay-badge'>{client.month_plan.toLocaleString()}</span>
+        <span
+          title='Корректировка бюджета'
+          style={{
+            fontSize: '12px',
+            color: client.budget_adjustment > 0 ? 'green' : 'red',
+          }}
+        >
+          {(client.budget_adjustment > 0 ? '+' : '') + client.budget_adjustment.toLocaleString()}
+        </span>
+      </div>
+    );
   };
 
   const needRequestBodyTemplate = (client: Client) => {
     const need = client.month_plan - client.month_spent - client.balance;
-    return <span>{need > 0 ? need.toLocaleString() : '-'}</span>;
+    return need > 0 ? need.toLocaleString() : '-';
   };
 
   return (
@@ -292,7 +325,11 @@ const BudgetCutsPage = () => {
             contextMenuSelection={selectedClient}
             onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}
           >
-            <Column body={nameBodyTemplate} header='Проект' style={{ maxWidth: '4rem' }} />
+            <Column
+              body={nameBodyTemplate}
+              header='Проект'
+              style={{ maxWidth: '4rem', overflow: 'hidden' }}
+            />
             <Column body={balanceBodyTemplate} header='Баланс' />
             <Column
               bodyClassName={daySpentAlert}
@@ -309,7 +346,7 @@ const BudgetCutsPage = () => {
               body={monthSpentBodyTemplate}
               header='Траты: месяц'
             />
-            <Column field='month_plan' header='План' />
+            <Column field='month_plan' body={monthPlanBody} header='План' />
             <Column body={needSpentBodyTemplate} header='Докрут в день' />
             <Column body={needRequestBodyTemplate} header='Зачислить' />
           </DataTable>

@@ -7,7 +7,7 @@ import { emptyClientState } from '@entities/client/model/client';
 import { Client } from '@entities/client';
 import { InputText } from 'primereact/inputtext';
 
-type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan'>;
+type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan' | 'budget_adjustment'>;
 
 interface EditClientProps {
   client?: Client;
@@ -25,6 +25,7 @@ export const EditClientModal = ({
   const editProps: EditClientFields = {
     critical_balance: client.critical_balance,
     month_plan: client.month_plan,
+    budget_adjustment: client.budget_adjustment,
   };
 
   return (
@@ -42,6 +43,9 @@ export const EditClientModal = ({
             </FloatInput>
             <FloatInput label='Критический остаток'>
               <Field as={InputText} name='critical_balance' />
+            </FloatInput>
+            <FloatInput label='Корректировка бюджета'>
+              <Field as={InputText} name='budget_adjustment' />
             </FloatInput>
           </div>
           <div className={css.form__footer}>
