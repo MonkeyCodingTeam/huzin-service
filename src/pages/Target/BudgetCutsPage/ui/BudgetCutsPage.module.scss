@@ -18,3 +18,13 @@
 .middleBalance {
   background-color: var(--warning-color);
 }
+
+.budgetCell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  &__tag {
+    font-size: var(--small-font-size);
+  }
+}

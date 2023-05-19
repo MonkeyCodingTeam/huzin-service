@@ -19,6 +19,7 @@ import { User, UserAPI } from '@entities/user';
 import { DropdownChangeEvent } from 'primereact/dropdown';
 import { useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
+import { Tag } from 'primereact/tag';
 
 interface SpentPlans {
   day_plan: number;
@@ -204,9 +205,21 @@ const BudgetCutsPage = () => {
 
   const balanceBodyTemplate = (client: ClientPlans) => {
     return (
-      <span>
-        {client.balance.toLocaleString()} / {client.critical_balance.toLocaleString()}
-      </span>
+      <div className={css.budgetCell}>
+        <span>
+          {client.balance.toLocaleString()} / {client.critical_balance.toLocaleString()}
+        </span>
+        {client.zero_days !== 0 && (
+          <Tag
+            title='Дней без затрат'
+            className={css.budgetCell__tag}
+            icon='pi pi-exclamation-triangle'
+            severity='warning'
+            value={`${client.zero_days}`}
+            rounded
+          />
+        )}
+      </div>
     );
   };
 
