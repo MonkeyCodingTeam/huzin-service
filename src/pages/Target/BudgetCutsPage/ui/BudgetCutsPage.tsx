@@ -341,6 +341,7 @@ const BudgetCutsPage = () => {
             sortField='name'
             sortOrder={1}
             scrollable
+            removableSort
             scrollHeight='calc(100vh - 170px)'
             tableStyle={{
               borderCollapse: 'separate',
@@ -369,6 +370,8 @@ const BudgetCutsPage = () => {
             <Column
               body={nameBodyTemplate}
               header='Проект'
+              field='name'
+              sortable
               style={{ maxWidth: '4rem', overflow: 'hidden' }}
             />
             <Column
