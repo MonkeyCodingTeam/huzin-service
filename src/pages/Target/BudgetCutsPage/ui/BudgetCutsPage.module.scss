@@ -10,3 +10,11 @@
   align-items: start;
   gap: 4px;
 }
+
+.lowBalance {
+  background-color: var(--danger-color);
+}
+
+.middleBalance {
+  background-color: var(--warning-color);
+}
