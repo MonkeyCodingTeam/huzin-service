@@ -9,6 +9,7 @@ import { CompanyTagsSetting } from '@pages/Target/SettingsPage/ui/CompanyTagsSet
 import React from 'react';
 import { ROUTES } from '@shared/const/routes';
 import { PrimeIcons } from 'primereact/api';
+import { InvoicePage } from '@pages/Target/InvoicePage';
 
 export const TargetRoutes: AppRoute[] = [
   {
@@ -40,6 +41,13 @@ export const TargetRoutes: AppRoute[] = [
     icon: PrimeIcons.DOLLAR,
     element: <BudgetCutsPage />,
     path: ROUTES.TARGET.BudgetCuts,
+    protected: true,
+  },
+  {
+    name: 'Счета',
+    icon: PrimeIcons.CREDIT_CARD,
+    element: <InvoicePage />,
+    path: ROUTES.TARGET.Invoice,
     protected: true,
   },
   {

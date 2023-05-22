@@ -276,6 +276,9 @@ const BudgetCutsPage = () => {
     const dayDifference = daysInMonth - monthday;
 
     if (client.zero_days) {
+      if (client.zero_days === daysInMonth) {
+        return '-';
+      }
       return Math.trunc(
         (client.month_plan +
           client.budget_adjustment -
@@ -288,6 +291,7 @@ const BudgetCutsPage = () => {
     const differencePlan = client.month_plan - client.month_spent;
     const required = dayDifference ? Math.trunc(differencePlan / dayDifference) : 0;
 
+    console.log(required, client.day_plan);
     return ((client.day_plan || 0) + required).toLocaleString();
   };
 
