@@ -8,6 +8,8 @@ export interface Client extends Model {
   week_spent: number;
   month_spent: number;
   month_plan: number;
+  zero_days: number;
+  budget_adjustment: number;
   is_mine?: boolean;
   group_id?: number;
   token?: string;

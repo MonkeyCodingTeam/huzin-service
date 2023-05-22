@@ -4,3 +4,27 @@
   height: 100%;
   padding: 0 1.5rem;
 }
+
+.adjustment {
+  display: flex;
+  align-items: start;
+  gap: 4px;
+}
+
+.lowBalance {
+  background-color: var(--danger-color);
+}
+
+.middleBalance {
+  background-color: var(--warning-color);
+}
+
+.budgetCell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+
+  &__tag {
+    font-size: var(--small-font-size);
+  }
+}

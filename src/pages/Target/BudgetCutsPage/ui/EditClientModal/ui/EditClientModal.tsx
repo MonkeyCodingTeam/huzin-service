@@ -1,12 +1,13 @@
 import { Dialog } from 'primereact/dialog';
-import { Form, Formik, FormikValues } from 'formik';
+import { Field, Form, Formik, FormikValues } from 'formik';
 import css from './EditClientModal.module.scss';
 import { FloatInput } from '@shared/ui/FloatInput';
 import { Button } from 'primereact/button';
 import { emptyClientState } from '@entities/client/model/client';
 import { Client } from '@entities/client';
+import { InputText } from 'primereact/inputtext';
 
-type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan'>;
+type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan' | 'budget_adjustment'>;
 
 interface EditClientProps {
   client?: Client;
@@ -24,6 +25,7 @@ export const EditClientModal = ({
   const editProps: EditClientFields = {
     critical_balance: client.critical_balance,
     month_plan: client.month_plan,
+    budget_adjustment: client.budget_adjustment,
   };
 
   return (
@@ -36,12 +38,15 @@ export const EditClientModal = ({
       <Formik initialValues={editProps} onSubmit={onSubmit}>
         <Form className={css.form}>
           <div className={css.form__body}>
-            <FloatInput name='month_plan' label='План на месяц' placeholder='Нет значения' />
-            <FloatInput
-              name='critical_balance'
-              label='Критический остаток'
-              placeholder='Нет значения'
-            />
+            <FloatInput label='План на месяц'>
+              <Field as={InputText} name='month_plan' />
+            </FloatInput>
+            <FloatInput label='Критический остаток'>
+              <Field as={InputText} name='critical_balance' />
+            </FloatInput>
+            <FloatInput label='Корректировка бюджета'>
+              <Field as={InputText} name='budget_adjustment' />
+            </FloatInput>
           </div>
           <div className={css.form__footer}>
             <Button type='button' label='Отменить' severity='secondary' onClick={onHide} />

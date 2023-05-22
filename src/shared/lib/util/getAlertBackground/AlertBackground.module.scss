@@ -1,13 +1,13 @@
 .alertBackground {
   &_danger {
-    background-color: rgb(255 182 163);
+    background-color: var(--danger-color);
   }
 
   &_warning {
-    background-color: rgb(255 222 162);
+    background-color: var(--warning-color);
   }
 
   &_lowWarning {
-    background-color: rgb(255 254 201);
+    background-color: var(--low-warning-color);
   }
 }

@@ -12,6 +12,8 @@ export const emptyClientState: Client = {
   month_plan: 0,
   month_spent: 0,
   week_spent: 0,
+  zero_days: 0,
+  budget_adjustment: 0,
 };
 
 export const selectedClient = createSlice({

@@ -62,3 +62,11 @@ a {
 .p-disabled, .p-component:disabled {
   opacity: 0.4;
 }
+
+.p-inline-message-error {
+  background-color: rgb(255 70 46 / 25%) !important;
+
+  & > span {
+    color: #df4d39 !important;
+  }
+}

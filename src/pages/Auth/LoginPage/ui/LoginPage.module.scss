@@ -28,6 +28,11 @@
 
   &__input {
     width: 100%;
+
+    &__invalid {
+      background-color: rgb(227 160 135 / 10%);
+      border-color: var(--danger-color);
+    }
   }
 
   &__footer {
