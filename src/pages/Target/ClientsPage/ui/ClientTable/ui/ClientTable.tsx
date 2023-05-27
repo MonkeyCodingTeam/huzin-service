@@ -5,10 +5,10 @@ import { ClientAPI, CompanyTemplateAPI } from '@shared/lib/api';
 import { DateTime } from 'luxon';
 import { CompanyTemplate, StatisticResponse } from '@shared/lib/api/target/types';
 import { Column } from 'primereact/column';
-import { TableSkeleton } from '@shared/ui/Skeletons';
 import css from './ClientTable.module.scss';
 import { SelectButton } from 'primereact/selectbutton';
 import { sumStats } from '@shared/lib/util/sumStats';
+import { TableLoader } from '@widgets';
 
 export const ClientTable = () => {
   const selectedClient = useSelector((state: RootState) => state.selectedClient);
@@ -78,9 +78,7 @@ export const ClientTable = () => {
           onChange={(e) => setSelectedTemplate(e.value)}
           optionLabel='name'
         />
-        {loading ? (
-          <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
-        ) : (
+        <TableLoader isLoading={loading}>
           <DataTable
             selectionMode='single'
             value={stats}
@@ -93,7 +91,8 @@ export const ClientTable = () => {
             }}
             className={css.box__container__table}
             showGridlines
-            rows={10}
+            scrollable
+            scrollHeight='calc(100vh - 64px)'
             key='id'
             globalFilterFields={['name']}
             emptyMessage='Нет данных'
@@ -129,7 +128,7 @@ export const ClientTable = () => {
               body={cpmBodyTemplate}
             />
           </DataTable>
-        )}
+        </TableLoader>
       </div>
     </div>
   );

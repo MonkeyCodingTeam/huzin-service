@@ -7,10 +7,10 @@ import { User } from '@entities/user';
 
 interface BudgetCutsHeaderProps {
   users: User[];
-  selectedUser?: User;
-  dateTime: DateTime;
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onUserChange: (event: DropdownChangeEvent) => void;
+  selectedUser?: User;
+  dateTime?: DateTime;
 }
 
 export const BudgetCutsHeader: FC<BudgetCutsHeaderProps> = ({
@@ -23,7 +23,7 @@ export const BudgetCutsHeader: FC<BudgetCutsHeaderProps> = ({
   return (
     <div className={css.header}>
       <div className={css.header_left}>
-        <span>Последнее обновление: {dateTime.toFormat('dd.LL HH:mm')}</span>
+        {dateTime && <span>Последнее обновление: {dateTime.toFormat('dd.LL HH:mm')}</span>}
         <InputText
           className={css.table__header_search}
           type='text'

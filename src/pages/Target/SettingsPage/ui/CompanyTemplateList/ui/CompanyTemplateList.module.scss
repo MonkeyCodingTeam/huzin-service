@@ -1,0 +1,14 @@
+.templateList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+
+  &__item {
+    &__name {
+      color: var(--dark-color);
+      white-space: nowrap;
+      background-color: var(--highlight-bg);
+    }
+  }
+}

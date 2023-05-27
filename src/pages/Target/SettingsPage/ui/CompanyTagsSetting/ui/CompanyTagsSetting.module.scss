@@ -1,0 +1,14 @@
+.divider {
+  display: flex;
+  align-content: center;
+}
+
+.toolPanel {
+  width: 50%;
+}
+
+@media screen and (max-width: 761rem) {
+  .toolPanel {
+    width: 100%;
+  }
+}

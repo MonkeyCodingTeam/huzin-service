@@ -4,6 +4,7 @@ import {
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
+  InvoiceUpdatePayload,
 } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
@@ -42,6 +43,8 @@ export const ClientAPI = {
     axiosAppInstance.get(STAT_URL, {
       params: payload,
     }),
-  toggleWatcher: async (client: Client, user: User) =>
+  toggleWatcher: async (client: Client, user: User): AxiosPromise<boolean> =>
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
+  updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
+    axiosAppInstance.patch(`${BASE_URL}/${client.id}/invoice`, payload),
 };

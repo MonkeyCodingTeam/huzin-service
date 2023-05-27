@@ -31,3 +31,5 @@ export interface StatisticResponse {
   join_rate: number;
   spent: number;
 }
+
+export type InvoiceUpdatePayload = Partial<Pick<Client, 'recommended_budget' | 'is_budget_agreed'>>;

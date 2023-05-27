@@ -1,0 +1,56 @@
+.clientList {
+  width: 20rem;
+}
+
+.container {
+  display: flex;
+  gap: 1rem;
+  height: calc(100vh - 180px);
+}
+
+.settings {
+  display: flex;
+
+  width: 100%;
+  padding: 1.5rem;
+
+  border: solid 1px var(--secondary-color);
+  border-radius: 6px;
+
+  &__title {
+    font-size: var(--large-font-size);
+  }
+
+  &__list {
+    scroll-behavior: smooth;
+
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    padding: 4px;
+
+    &__anchor {
+      font-size: var(--semi-large-font-size);
+      font-weight: 600;
+      color: var(--light-dark-color);
+      text-decoration: none;
+    }
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &__anchor {
+      font-size: var(--regular-font-size);
+      font-weight: 600;
+      color: var(--light-dark-color);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+  }
+
+}

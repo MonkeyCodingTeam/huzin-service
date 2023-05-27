@@ -1,8 +1,13 @@
 .container {
   position: relative;
+
   overflow: auto;
+  align-items: center;
+
+  width: 100vw;
   height: calc(100vh - 64px);
   max-height: calc(100vh - 64px);
+  padding: 0 1.5rem;
 }
 
 .header {
