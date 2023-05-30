@@ -99,7 +99,7 @@ const BudgetCutsPage = () => {
     },
   ];
 
-  const getClients = useCallback(() => {
+  const getClients = () => {
     ClientAPI.getClients({ user_id: selectedUser?.id }).then((res) => {
       setClients(() =>
         res.data.map((client: ClientPlans) => {
@@ -123,7 +123,7 @@ const BudgetCutsPage = () => {
       );
       setLoading(false);
     });
-  }, [selectedUser]);
+  };
 
   useEffect(() => {
     setMenuModal(getContextMenu(selectedClient));

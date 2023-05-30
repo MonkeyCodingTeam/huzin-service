@@ -14,7 +14,6 @@ export const AuthAPI = {
   signIn: (payload: SignInData): AxiosPromise =>
     axiosInstance.get('/sanctum/csrf-cookie').then(() =>
       axiosInstance.post(Routes.SIGN_IN, payload).then((res) => {
-        console.log(res);
         return res;
       }),
     ),

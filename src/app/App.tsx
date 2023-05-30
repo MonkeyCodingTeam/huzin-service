@@ -18,11 +18,9 @@ export function App() {
     });
   }, []);
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <>
       <Helmet titleTemplate={`${__APP_TITLE__} | %s`} defaultTitle={__APP_TITLE__}>
         <meta charSet='utf-8' />
