@@ -46,5 +46,21 @@ export const ClientAPI = {
   toggleWatcher: async (client: Client, user: User): AxiosPromise<boolean> =>
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
   updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
-    axiosAppInstance.patch(`${BASE_URL}/${client.id}/invoice`, payload),
+    axiosAppInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),
+  uploadInvoice: async (clientId: Client['id'], invoice: File): AxiosPromise<Client> =>
+    axiosAppInstance.post(
+      `target/invoice/client/${clientId}`,
+      { invoice },
+      {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      },
+    ),
+  getCurrentInvoice: async (clientId: Client['id']): AxiosPromise<File> =>
+    axiosAppInstance.get(`target/invoice/client/${clientId}/current`, {
+      responseType: 'blob',
+    }),
+  deleteInvoice: async (invoiceId: Client['current_invoice_id']): AxiosPromise<Client> =>
+    axiosAppInstance.delete(`target/invoice/${invoiceId}`),
+  invoicePaid: async (invoiceId: Client['current_invoice_id']): AxiosPromise<Client> =>
+    axiosAppInstance.post(`target/invoice/${invoiceId}/paid`),
 };

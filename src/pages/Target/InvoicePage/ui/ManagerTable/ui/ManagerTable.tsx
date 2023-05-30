@@ -139,10 +139,8 @@ export const ManagerTable: FC<ManagerTableProps> = ({ user, toast }) => {
 
   const changeRecommendedBudget = useCallback(
     (client: Client, event: InputNumberValueChangeEvent) => {
-      if (!event.value) return;
-
       ClientAPI.updateInvoice(client, {
-        recommended_budget: event.value,
+        recommended_budget: event.value || null,
       }).then((res) => {
         setClients((prevState) =>
           prevState.map((client) => (client.id === res.data.id ? res.data : client)),

@@ -14,6 +14,7 @@ export interface Client extends Model {
   days_in_low_balance: number;
   days_in_zero_balance: number;
   is_budget_agreed: boolean | 0 | 1;
+  current_invoice_id: number | null;
 
   group_id?: number;
   is_mine?: boolean;
