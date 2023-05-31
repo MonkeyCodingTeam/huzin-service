@@ -100,7 +100,7 @@ const BudgetCutsPage = () => {
     },
   ];
 
-  const getClients = useCallback(() => {
+  const getClients = () => {
     ClientAPI.getClients({ user_id: selectedUser?.id }).then((res) => {
       setClients(() =>
         res.data.map((client: ClientPlans) => {
@@ -124,7 +124,7 @@ const BudgetCutsPage = () => {
       );
       setLoading(false);
     });
-  }, [selectedUser]);
+  };
 
   useEffect(() => {
     setMenuModal(getContextMenu(selectedClient));
@@ -232,7 +232,8 @@ const BudgetCutsPage = () => {
     );
   };
   const daySpentAlert = (client: ClientPlans) => {
-    return index(client.day_difference || 1);
+    const difference = client.monthday_difference === undefined ? 1 : client.monthday_difference;
+    return index(difference);
   };
 
   const weekSpentBodyTemplate = (client: ClientPlans) => {
@@ -244,7 +245,8 @@ const BudgetCutsPage = () => {
     );
   };
   const weekSpentAlert = (client: ClientPlans) => {
-    return index(client.weekday_difference || 1, { low: 0.15, middle: 0.3, height: 0.5 });
+    const difference = client.weekday_difference === undefined ? 1 : client.weekday_difference;
+    return index(difference, { low: 0.15, middle: 0.3, height: 0.5 });
   };
 
   const monthSpentBodyTemplate = (client: ClientPlans) => {
@@ -256,7 +258,8 @@ const BudgetCutsPage = () => {
     );
   };
   const monthSpentAlert = (client: ClientPlans) => {
-    return index(client.monthday_difference || 1, { low: 0.07, middle: 0.13, height: 0.2 });
+    const difference = client.monthday_difference === undefined ? 1 : client.monthday_difference;
+    return index(difference, { low: 0.07, middle: 0.13, height: 0.2 });
   };
 
   const needSpentBodyTemplate = (client: ClientPlans) => {
@@ -264,6 +267,10 @@ const BudgetCutsPage = () => {
       return '-';
     }
     const dayDifference = daysInMonth - monthday;
+
+    if (dayDifference === 0) {
+      return '-';
+    }
 
     if (client.zero_days) {
       return Math.trunc(

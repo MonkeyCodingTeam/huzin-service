@@ -24,6 +24,9 @@ export const userModel = createSlice({
       .addCase(AuthThunk.getUser.fulfilled, (state, { payload }) => {
         return payload;
       })
+      .addCase(AuthThunk.getUser.rejected, (state, { payload }) => {
+        return emptyUserState;
+      })
       .addCase(AuthThunk.signIn.fulfilled, (state, { payload }) => {
         return payload;
       })
