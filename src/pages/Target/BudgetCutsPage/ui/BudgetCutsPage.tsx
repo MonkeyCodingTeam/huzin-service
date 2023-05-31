@@ -278,6 +278,10 @@ const BudgetCutsPage = () => {
     }
     const dayDifference = daysInMonth - monthday;
 
+    if (dayDifference === 0) {
+      return '-';
+    }
+
     if (client.zero_days) {
       return Math.trunc(
         (client.month_plan +
