@@ -14,7 +14,10 @@ const BASE_URL = 'target/client';
 const STAT_URL = 'target/statistic/client';
 
 export const ClientAPI = {
-  getClients: async (payload?: { user_id?: User['id'] }): AxiosPromise<Client[]> => {
+  getClients: async (payload?: {
+    user_id?: User['id'];
+    with?: 'currentInvoice'[];
+  }): AxiosPromise<Client[]> => {
     return axiosAppInstance.get(BASE_URL, {
       params: payload,
     });
@@ -59,8 +62,4 @@ export const ClientAPI = {
     axiosAppInstance.get(`target/invoice/client/${clientId}/current`, {
       responseType: 'blob',
     }),
-  deleteInvoice: async (invoiceId: Client['current_invoice_id']): AxiosPromise<Client> =>
-    axiosAppInstance.delete(`target/invoice/${invoiceId}`),
-  invoicePaid: async (invoiceId: Client['current_invoice_id']): AxiosPromise<Client> =>
-    axiosAppInstance.post(`target/invoice/${invoiceId}/paid`),
 };

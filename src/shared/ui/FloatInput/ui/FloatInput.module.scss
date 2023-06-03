@@ -2,6 +2,10 @@
   width: 100%;
   margin-top: 1.5rem;
 
+  & > input {
+    width: 100%;
+  }
+
   &__input {
     width: 100%;
   }

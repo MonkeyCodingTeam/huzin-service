@@ -1,7 +1,5 @@
 import { FC, useState } from 'react';
-import classNames from 'classnames';
-import { PrimeIcons } from 'primereact/api';
-import { Tag } from 'primereact/tag';
+import { Button } from 'primereact/button';
 
 interface CopyToClipboardButtonProps {
   text: string;
@@ -11,10 +9,10 @@ export const CopyToClipboardButton: FC<CopyToClipboardButtonProps> = ({ text }) 
   const [isCopied, setIsCopied] = useState(false);
 
   return (
-    <Tag
+    <Button
       title='Скопировать'
-      severity={isCopied ? 'success' : null}
-      value={<i className={classNames('pi', isCopied ? PrimeIcons.CHECK : PrimeIcons.COPY)}></i>}
+      severity={isCopied ? 'success' : undefined}
+      icon='pi pi-copy'
       onClick={() => {
         navigator.clipboard.writeText(text).then(() => {
           setIsCopied(true);

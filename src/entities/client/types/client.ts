@@ -18,4 +18,17 @@ export interface Client extends Model {
 
   group_id?: number;
   is_mine?: boolean;
+
+  current_invoice?: Invoice;
+}
+
+export interface Invoice {
+  id: number;
+  budget: number;
+  client_id: number;
+  path: string;
+  number: string;
+  inn: string;
+  customer: string;
+  is_paid: boolean;
 }

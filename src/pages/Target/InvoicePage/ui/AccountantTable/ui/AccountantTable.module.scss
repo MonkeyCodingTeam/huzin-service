@@ -4,3 +4,17 @@
   align-items: center;
 }
 
+.form {
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    margin-bottom: 1rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem
+  }
+}
