@@ -11,16 +11,16 @@ import { Toast } from 'primereact/toast';
 import { Group } from '@entities/group';
 
 interface GroupListProps {
-  groups: Group[];
+  currentGroup: Group;
 }
 
-export const GroupList: FC<GroupListProps> = ({ groups }) => {
-  const [groupList, setGroupList] = useState<Group[]>(groups);
+export const GroupList: FC<GroupListProps> = ({ currentGroup }) => {
+  const [group, setGroup] = useState<Group>();
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
-    setGroupList(groups);
-  }, [groups]);
+    setGroup(currentGroup);
+  }, [currentGroup]);
 
   const confirmRemove = useCallback((e: MouseEvent<HTMLButtonElement>, group: Group) => {
     confirmPopup({
@@ -28,7 +28,7 @@ export const GroupList: FC<GroupListProps> = ({ groups }) => {
       message: 'Хотите удалить группу?',
       accept: () => {
         GroupAPI.delete(group.id).then(() => {
-          setGroupList(groupList.filter((item) => item.id !== group.id));
+          return setGroup(undefined);
         });
       },
       acceptLabel: 'Да',
@@ -77,41 +77,40 @@ export const GroupList: FC<GroupListProps> = ({ groups }) => {
     });
   };
 
+  if (!group) {
+    return <></>;
+  }
+
   return (
     <div className={css.group__list}>
       <Toast ref={toast} />
       <ConfirmPopup />
-      {groupList &&
-        groupList.map((group) => {
-          return (
-            <Formik
-              initialValues={{ senler_token: group.senler_token || '' }}
-              onSubmit={(e, formikHelpers) => {
-                saveGroupChange(e, group);
-                e.senler_token = '';
-              }}
-              key={group.id}
-            >
-              <Form>
-                <Card title={titleTemplate(group)}>
-                  <div className={css.group__item__body}>
-                    <InputGroup>
-                      <Field
-                        as={Input}
-                        label='ключ Senler'
-                        name='senler_token'
-                        placeholder={group.senler_token_protected || 'Введите API ключ Senler'}
-                      />
-                    </InputGroup>
-                    <div>
-                      <Button type='submit'>Сохранить</Button>
-                    </div>
-                  </div>
-                </Card>
-              </Form>
-            </Formik>
-          );
-        })}
+      <Formik
+        initialValues={{ senler_token: group.senler_token || '' }}
+        onSubmit={(e, formikHelpers) => {
+          saveGroupChange(e, group);
+          e.senler_token = '';
+        }}
+        key={group.id}
+      >
+        <Form>
+          <Card title={titleTemplate(group)}>
+            <div className={css.group__item__body}>
+              <InputGroup>
+                <Field
+                  as={Input}
+                  label='ключ Senler'
+                  name='senler_token'
+                  placeholder={group.senler_token_protected || 'Введите API ключ Senler'}
+                />
+              </InputGroup>
+              <div>
+                <Button type='submit'>Сохранить</Button>
+              </div>
+            </div>
+          </Card>
+        </Form>
+      </Formik>
     </div>
   );
 };

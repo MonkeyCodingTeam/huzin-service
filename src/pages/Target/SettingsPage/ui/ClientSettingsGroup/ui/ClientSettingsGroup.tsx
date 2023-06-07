@@ -5,9 +5,9 @@ import { emptyGroupState } from '@entities/group/model';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
-import { GroupList } from '@pages/Target/SettingsPage/ui/ClientSettingsGroup/ui/GroupList';
 import { Group } from '@entities/group';
 import { Client } from '@entities/client';
+import { GroupList } from './GroupList';
 
 interface ClientSettingsGroup {
   client: Client;
@@ -16,25 +16,23 @@ interface ClientSettingsGroup {
 export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
   const [groupLink, setGroupLink] = useState('');
   const [group, setGroup] = useState<Group>(emptyGroupState);
-  const [groups, setGroups] = useState<Group[]>([]);
   const [loadingGroup, setLoadingGroup] = useState(false);
 
   const getGroups = useCallback(() => {
     GroupAPI.get(client.id).then((res) => {
       res.data;
-      setGroups(res.data);
+      setGroup(res.data);
     });
   }, [client.id]);
 
   const handleSubmit = () => {
     GroupAPI.create(client.id, group).then((res) => {
-      getGroups();
+      setGroup(res.data);
       setGroupLink('');
     });
   };
 
   useEffect(() => {
-    getGroups();
     setGroupLink('');
   }, [client.id]);
 
@@ -85,7 +83,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
       {/*<Formik initialValues={{}} onSubmit={handleClientChange}>*/}
       {/*  <Form></Form>*/}
       {/*</Formik>*/}
-      <GroupList groups={groups} />
+      <GroupList currentGroup={group} />
     </div>
   );
 };

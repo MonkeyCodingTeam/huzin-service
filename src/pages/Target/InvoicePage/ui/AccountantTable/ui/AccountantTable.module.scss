@@ -4,6 +4,15 @@
   align-items: center;
 }
 
+.row {
+  vertical-align: middle !important;
+
+  & > td {
+    vertical-align: middle !important;
+  }
+}
+
+
 .form {
   &__body {
     display: flex;
@@ -14,7 +23,7 @@
 
   &__footer {
     display: flex;
-    justify-content: space-between;
-    gap: 1rem
+    gap: 1rem;
+    justify-content: space-between
   }
 }

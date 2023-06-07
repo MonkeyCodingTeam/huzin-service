@@ -1,7 +1,7 @@
 import { TableLoader } from '@widgets';
 import { Client, Invoice } from '@entities/client';
 import { DataTable, DataTableDataSelectableEvent } from 'primereact/datatable';
-import { FC, RefObject, useCallback, useEffect, useState } from 'react';
+import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { ClientAPI, InvoiceApi } from '@shared/lib/api';
 import { Column } from 'primereact/column';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
@@ -18,6 +18,8 @@ import { Dialog } from 'primereact/dialog';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { FloatInput } from '@shared/ui';
+import { InputTextarea } from 'primereact/inputtextarea';
+import classNames from 'classnames';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
@@ -27,7 +29,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [clientsData, setClientsData] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isInvoiceHidden, setIsInvoiceHidden] = useState(true);
+  const [isInvoiceHidden, setIsInvoiceHidden] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>();
 
   useEffect(() => {
@@ -51,7 +53,10 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   useEffect(() => {
     setClientsData(() => {
       if (isInvoiceHidden) {
-        return clients.filter((client) => !client.current_invoice_id);
+        return clients.filter((client) => {
+          const { current_invoice } = client;
+          return !current_invoice?.is_vk_paid;
+        });
       }
       return clients;
     });
@@ -77,9 +82,15 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     const file = event.files.pop();
     if (!file) return;
 
-    ClientAPI.uploadInvoice(client.id, file).then((res) => {
+    InvoiceApi.uploadInvoice(client.id, file).then((res) => {
       setClients((prevState) =>
-        prevState.map((client) => (res.data.id === client.id ? res.data : client)),
+        prevState.map((client) => {
+          if (client.id === res.data.client_id) {
+            client.current_invoice = res.data;
+            client.current_invoice_id = res.data.id;
+          }
+          return client;
+        }),
       );
       toast.current?.show({ severity: 'info', summary: 'Сохранено', detail: 'Счёт добавлен' });
     });
@@ -116,11 +127,20 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
 
   const removeCurrentInvoice = (client: Client) => {
     if (!client.current_invoice_id) return;
-    InvoiceApi.deleteInvoice(client.current_invoice_id).then((res) => {
-      setClients((prevState) =>
-        prevState.map((client) => (res.data.id === client.id ? res.data : client)),
-      );
-    });
+    InvoiceApi.deleteInvoice(client.current_invoice_id)
+      .then((res) => {
+        setClients((prevState) =>
+          prevState.map((client) => (res.data.id === client.id ? res.data : client)),
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.current?.show({
+          severity: 'error',
+          summary: client.name,
+          detail: err.response.data.message,
+        });
+      });
   };
 
   const invoiceBody = (client: Client) => {
@@ -171,7 +191,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const header = () => {
     return (
       <div className={css.filterInvoice}>
-        <label htmlFor='invoiceShow'>Скрыть клиентов со счетами</label>
+        <label htmlFor='invoiceShow'>Скрыть оплаченных</label>
         <Checkbox
           id='invoiceShow'
           checked={isInvoiceHidden}
@@ -184,14 +204,22 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const paidAccept = (client: Client) => {
     InvoiceApi.invoicePaid(client.current_invoice_id).then((res) => {
       setClients((prevState) =>
-        prevState.map((client) => (res.data.id === client.id ? res.data : client)),
+        prevState.map((client) => {
+          if (client.id === res.data.client_id) {
+            client.current_invoice = res.data;
+          }
+          return client;
+        }),
       );
       toast.current?.show({ severity: 'info', summary: client.name, detail: 'Счёт оплачен' });
     });
   };
 
-  // @ts-ignore
-  const paidConfirm = (client: Client, event: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const paidConfirm = (
+    client: Client,
+    // @ts-ignore
+    event: MessageEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     confirmPopup({
       target: event.currentTarget,
       message: 'Счёт оплачен?',
@@ -203,7 +231,68 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   };
 
   const paidTemplate = (client: Client) => {
-    return <Button label='Оплачен' onClick={(e) => paidConfirm(client, e)} />;
+    if (client.current_invoice?.is_paid) {
+      return <Badge severity='success' value='Оплачен' />;
+    }
+    return (
+      <Button
+        label='Не оплачен'
+        severity='danger'
+        disabled={!client.current_invoice_id}
+        onClick={(e) => paidConfirm(client, e)}
+      />
+    );
+  };
+
+  const submitVkInvoice = (value: FormikValues) => {
+    console.log(value);
+    InvoiceApi.invoiceVkPaid(value.id, value.vk_number)
+      .then((res) => {
+        setClients((prevState) =>
+          prevState.map((client) => {
+            if (client.id === res.data.client_id) {
+              client.current_invoice = res.data;
+            }
+            return client;
+          }),
+        );
+        toast.current?.show({ severity: 'info', detail: 'Счёт ВК оплачен' });
+      })
+      .catch(() => {
+        toast.current?.show({ severity: 'error', detail: 'Проверьте номер счёта ВК' });
+      });
+  };
+
+  const vkPaidTemplate = (client: Client) => {
+    const { current_invoice } = client;
+
+    if (current_invoice?.is_vk_paid) {
+      return <Badge severity='success' value='Оплачен' />;
+    }
+
+    return (
+      <Formik
+        onSubmit={(values) => {
+          submitVkInvoice({ id: current_invoice?.id, ...values });
+        }}
+        initialValues={{ vk_number: current_invoice?.vk_number || '' }}
+      >
+        <Form
+          className={classNames('p-inputgroup', {
+            'p-disabled': !client.current_invoice?.is_paid,
+          })}
+          style={{ justifyContent: 'center' }}
+        >
+          <Field
+            as={InputText}
+            name='vk_number'
+            style={{ maxWidth: '8rem' }}
+            placeholder='Счёт вк'
+          />
+          <Button label='Не оплачен' severity='danger' type='submit' />
+        </Form>
+      </Formik>
+    );
   };
 
   const changeRecommendedBudget = useCallback(
@@ -226,8 +315,8 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   );
 
   const submitInvoiceChange = (invoice: FormikValues) => {
-    const { number, inn, customer } = invoice;
-    InvoiceApi.updateInvoice(invoice.id, { number, inn, customer }).then((res) => {
+    const { number, inn, customer, description } = invoice;
+    InvoiceApi.updateInvoice(invoice.id, { number, inn, customer, description }).then((res) => {
       setClients((prevState) =>
         prevState.map((client) => {
           if (client.id === res.data.client_id) {
@@ -236,6 +325,11 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           return client;
         }),
       );
+      toast.current?.show({
+        severity: 'success',
+        detail: 'Сохранено!',
+        life: 2000,
+      });
       setSelectedInvoice(undefined);
     });
   };
@@ -260,6 +354,9 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
               <FloatInput label='ИНН'>
                 <Field as={InputText} name='inn' />
               </FloatInput>
+              <FloatInput label='Комментарий'>
+                <Field as={InputTextarea} name='description' />
+              </FloatInput>
             </div>
             <div className={css.form__footer}>
               <Button
@@ -283,7 +380,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           sortField='is_budget_agreed'
           sortOrder={-1}
           isDataSelectable={isRowAvailable}
-          rowClassName={rowClassName}
+          rowClassName={(data) => classNames(rowClassName(data), css.row)}
           header={header}
         >
           <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
@@ -300,6 +397,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
             body={invoiceBody}
           />
           <Column header='Оплачен' align='center' body={paidTemplate} />
+          <Column header='Оплачен ВК' align='center' body={vkPaidTemplate} />
         </DataTable>
       </TableLoader>
     </>
@@ -314,5 +412,5 @@ ${invoice.customer}
 };
 
 const isInvoiceFullFilled = (invoice: Invoice) => {
-  return invoice.budget && invoice.inn && invoice.customer;
+  return invoice.inn && invoice.customer && invoice.number;
 };

@@ -7,9 +7,9 @@ import { ROUTES } from '@shared/const/routes';
 import { ClientAPI } from '@shared/lib/api';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
-import { ClientSettingsGroup } from '@pages/Target/SettingsPage/ui/ClientSettingsGroup/ui/ClientSettingsGroup';
 import { Link, Loader } from '@shared/ui';
 import { Client } from '@entities/client';
+import { ClientSettingsGroup } from '../../ClientSettingsGroup';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);

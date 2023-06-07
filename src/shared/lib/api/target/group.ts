@@ -18,7 +18,7 @@ const ROUTE = {
 };
 
 export const GroupAPI = {
-  get: async (clientId: Client['id']): AxiosPromise<Group[]> => {
+  get: async (clientId: Client['id']): AxiosPromise<Group> => {
     return axiosAppInstance.get(`target/client/${clientId}/group`);
   },
   getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetByResponse[]> => {

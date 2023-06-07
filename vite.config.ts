@@ -1,9 +1,9 @@
-import {defineConfig, loadEnv} from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from "vite";
+import react from "@vitejs/plugin-react";
 // eslint-disable-next-line import/no-extraneous-dependencies
-import tsconfigPaths from 'vite-tsconfig-paths';
-import viteSvgr from 'vite-plugin-svgr';
-import process from 'process';
+import tsconfigPaths from "vite-tsconfig-paths";
+import viteSvgr from "vite-plugin-svgr";
+import process from "process";
 
 // https://vitejs.dev/config/
 // @ts-ignore

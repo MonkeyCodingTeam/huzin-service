@@ -9,6 +9,7 @@ export const emptyUserState: User = {
   email: '',
   created_at: '',
   updated_at: '',
+  roles: [],
 };
 
 export const userModel = createSlice({

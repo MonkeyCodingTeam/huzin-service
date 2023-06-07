@@ -1,3 +1,5 @@
+import { Role } from '@entities/client';
+
 export interface User extends Model {
   name: string;
   login: string;
@@ -5,4 +7,5 @@ export interface User extends Model {
   feedback_link?: string;
   telegram?: string;
   email_verified_at?: string;
+  roles: Role[];
 }

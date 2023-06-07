@@ -50,14 +50,6 @@ export const ClientAPI = {
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
   updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),
-  uploadInvoice: async (clientId: Client['id'], invoice: File): AxiosPromise<Client> =>
-    axiosAppInstance.post(
-      `target/invoice/client/${clientId}`,
-      { invoice },
-      {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      },
-    ),
   getCurrentInvoice: async (clientId: Client['id']): AxiosPromise<File> =>
     axiosAppInstance.get(`target/invoice/client/${clientId}/current`, {
       responseType: 'blob',
