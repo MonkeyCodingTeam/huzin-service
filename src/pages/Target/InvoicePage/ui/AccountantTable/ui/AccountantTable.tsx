@@ -399,7 +399,6 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           rowClassName={(data) => classNames(rowClassName(data), css.row)}
           header={header}
           filters={filters}
-          filterDisplay="row"
           globalFilterFields={['name', 'current_invoice.inn', 'current_invoice.customer', 'current_invoice.number']}
         >
           <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
