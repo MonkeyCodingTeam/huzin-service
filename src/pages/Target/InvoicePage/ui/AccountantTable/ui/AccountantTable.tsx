@@ -1,40 +1,36 @@
-import { TableLoader } from '@widgets';
-import { Client, Invoice } from '@entities/client';
-import { DataTable, DataTableDataSelectableEvent, DataTableFilterMeta } from 'primereact/datatable';
-import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
-import { ClientAPI, InvoiceApi } from '@shared/lib/api';
-import { Column } from 'primereact/column';
-import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
-import { Toast } from 'primereact/toast';
-import { Badge } from 'primereact/badge';
-import { Button } from 'primereact/button';
-import {FilterMatchMode, PrimeIcons } from 'primereact/api';
-import { Checkbox } from 'primereact/checkbox';
+import {TableLoader} from '@widgets';
+import {Client, Invoice} from '@entities/client';
+import {DataTable, DataTableDataSelectableEvent} from 'primereact/datatable';
+import {FC, MouseEvent, RefObject, useCallback, useEffect, useState} from 'react';
+import {ClientAPI, InvoiceApi} from '@shared/lib/api';
+import {Column} from 'primereact/column';
+import {FileUpload, FileUploadHandlerEvent} from 'primereact/fileupload';
+import {Toast} from 'primereact/toast';
+import {Badge} from 'primereact/badge';
+import {Button} from 'primereact/button';
+import {PrimeIcons} from 'primereact/api';
+import {Checkbox} from 'primereact/checkbox';
 import css from './AccountantTable.module.scss';
-import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
-import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
-import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
-import { Dialog } from 'primereact/dialog';
-import { Field, Form, Formik, FormikValues } from 'formik';
-import { InputText } from 'primereact/inputtext';
-import { FloatInput } from '@shared/ui';
-import { InputTextarea } from 'primereact/inputtextarea';
+import {CopyToClipboardButton} from '@shared/ui/CopyToClipboardButton';
+import {confirmPopup, ConfirmPopup} from 'primereact/confirmpopup';
+import {InputNumber, InputNumberValueChangeEvent} from 'primereact/inputnumber';
+import {Dialog} from 'primereact/dialog';
+import {Field, Form, Formik, FormikValues} from 'formik';
+import {InputText} from 'primereact/inputtext';
+import {FloatInput} from '@shared/ui';
+import {InputTextarea} from 'primereact/inputtextarea';
 import classNames from 'classnames';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
 }
 
-export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
+export const AccountantTable: FC<AccountantTableProps> = ({toast}) => {
   const [clients, setClients] = useState<Client[]>([]);
   const [clientsData, setClientsData] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [isInvoiceHidden, setIsInvoiceHidden] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>();
-  const [filters, setFilters] = useState<DataTableFilterMeta>({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
-  });
-  const [globalFilterValue, setGlobalFilterValue] = useState('');
 
   useEffect(() => {
     getClients();
@@ -48,7 +44,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   }, []);
 
   const getClients = useCallback(() => {
-    ClientAPI.getClients({ with: ['currentInvoice'] }).then((res) => {
+    ClientAPI.getClients({with: ['currentInvoice']}).then((res) => {
       setClients(res.data);
       setLoading(false);
     });
@@ -58,7 +54,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     setClientsData(() => {
       if (isInvoiceHidden) {
         return clients.filter((client) => {
-          const { current_invoice } = client;
+          const {current_invoice} = client;
           return !current_invoice?.is_vk_paid;
         });
       }
@@ -69,17 +65,17 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const recommendedBudgetTemplate = (client: Client) => {
     if (client.is_budget_agreed) {
       return (
-        <span className='p-inputgroup' style={{ maxWidth: '12rem' }}>
+        <span className='p-inputgroup' style={{maxWidth: '12rem'}}>
           <InputNumber
             value={client.recommended_budget}
             onValueChange={(e) => changeRecommendedBudget(client, e)}
           />
-          <CopyToClipboardButton text={client.recommended_budget?.toString() || ''} />
+          <CopyToClipboardButton text={client.recommended_budget?.toString() || ''}/>
         </span>
       );
     }
 
-    return <Badge value='Не согласован' severity='warning' />;
+    return <Badge value='Не согласован' severity='warning'/>;
   };
 
   const uploadInvoice = (client: Client, event: FileUploadHandlerEvent) => {
@@ -96,7 +92,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           return client;
         }),
       );
-      toast.current?.show({ severity: 'info', summary: 'Сохранено', detail: 'Счёт добавлен' });
+      toast.current?.show({severity: 'info', summary: 'Сохранено', detail: 'Счёт добавлен'});
     });
   };
 
@@ -124,7 +120,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const getCurrentInvoice = (client: Client) => {
     ClientAPI.getCurrentInvoice(client.id).then((res) => {
       console.log(res);
-      const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf' }));
+      const url = window.URL.createObjectURL(new Blob([res.data], {type: 'application/pdf'}));
       window.open(url);
     });
   };
@@ -148,7 +144,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   };
 
   const invoiceBody = (client: Client) => {
-    const { current_invoice } = client;
+    const {current_invoice} = client;
     if (current_invoice) {
       let invoiceTitle = '';
       if (current_invoice) {
@@ -192,22 +188,19 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     return invoiceTemplate(client);
   };
 
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    console.log(value);
-    setGlobalFilterValue(value);
-    setFilters((prevState) => {
-      if ('value' in prevState['global']) {
-        prevState['global'].value = value;
-      }
-      return prevState;
-    });
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const {value} = e.target;
+    setClientsData(clients.filter((client) => {
+      const compare = client.name.toLowerCase().includes(value.toLowerCase())
+      console.log(client.name, value, compare);
+      return compare;
+    }));
   };
 
   const header = () => {
     return (
       <div className={css.filterInvoice}>
-        <InputText placeholder="Поиск" onChange={onGlobalFilterChange} value={globalFilterValue}/>
+        <InputText placeholder="Поиск" onChange={handleSearch}/>
         <label htmlFor='invoiceShow'>Скрыть оплаченных</label>
         <Checkbox
           id='invoiceShow'
@@ -228,7 +221,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           return client;
         }),
       );
-      toast.current?.show({ severity: 'info', summary: client.name, detail: 'Счёт оплачен' });
+      toast.current?.show({severity: 'info', summary: client.name, detail: 'Счёт оплачен'});
     });
   };
 
@@ -249,7 +242,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
 
   const paidTemplate = (client: Client) => {
     if (client.current_invoice?.is_paid) {
-      return <Badge severity='success' value='Оплачен' />;
+      return <Badge severity='success' value='Оплачен'/>;
     }
     return (
       <Button
@@ -273,40 +266,40 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
             return client;
           }),
         );
-        toast.current?.show({ severity: 'info', detail: 'Счёт ВК оплачен' });
+        toast.current?.show({severity: 'info', detail: 'Счёт ВК оплачен'});
       })
       .catch(() => {
-        toast.current?.show({ severity: 'error', detail: 'Проверьте номер счёта ВК' });
+        toast.current?.show({severity: 'error', detail: 'Проверьте номер счёта ВК'});
       });
   };
 
   const vkPaidTemplate = (client: Client) => {
-    const { current_invoice } = client;
+    const {current_invoice} = client;
 
     if (current_invoice?.is_vk_paid) {
-      return <Badge severity='success' value='Оплачен' />;
+      return <Badge severity='success' value='Оплачен'/>;
     }
 
     return (
       <Formik
         onSubmit={(values) => {
-          submitVkInvoice({ id: current_invoice?.id, ...values });
+          submitVkInvoice({id: current_invoice?.id, ...values});
         }}
-        initialValues={{ vk_number: current_invoice?.vk_number || '' }}
+        initialValues={{vk_number: current_invoice?.vk_number || ''}}
       >
         <Form
           className={classNames('p-inputgroup', {
             'p-disabled': !client.current_invoice?.is_paid,
           })}
-          style={{ justifyContent: 'center' }}
+          style={{justifyContent: 'center'}}
         >
           <Field
             as={InputText}
             name='vk_number'
-            style={{ maxWidth: '8rem' }}
+            style={{maxWidth: '8rem'}}
             placeholder='Счёт вк'
           />
-          <Button label='Не оплачен' severity='danger' type='submit' />
+          <Button label='Не оплачен' severity='danger' type='submit'/>
         </Form>
       </Formik>
     );
@@ -332,8 +325,8 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   );
 
   const submitInvoiceChange = (invoice: FormikValues) => {
-    const { number, inn, customer, description } = invoice;
-    InvoiceApi.updateInvoice(invoice.id, { number, inn, customer, description }).then((res) => {
+    const {number, inn, customer, description} = invoice;
+    InvoiceApi.updateInvoice(invoice.id, {number, inn, customer, description}).then((res) => {
       setClients((prevState) =>
         prevState.map((client) => {
           if (client.id === res.data.client_id) {
@@ -353,7 +346,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
 
   return (
     <>
-      <ConfirmPopup />
+      <ConfirmPopup/>
       <Dialog
         visible={!!selectedInvoice}
         onHide={() => setSelectedInvoice(undefined)}
@@ -363,16 +356,16 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           <Form>
             <div className={css.form__body}>
               <FloatInput label='Номер счёта'>
-                <Field as={InputText} name='number' />
+                <Field as={InputText} name='number'/>
               </FloatInput>
               <FloatInput label='Заказчик'>
-                <Field as={InputText} name='customer' />
+                <Field as={InputText} name='customer'/>
               </FloatInput>
               <FloatInput label='ИНН'>
-                <Field as={InputText} name='inn' />
+                <Field as={InputText} name='inn'/>
               </FloatInput>
               <FloatInput label='Комментарий'>
-                <Field as={InputTextarea} name='description' />
+                <Field as={InputTextarea} name='description'/>
               </FloatInput>
             </div>
             <div className={css.form__footer}>
@@ -382,7 +375,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
                 severity='secondary'
                 onClick={() => setSelectedInvoice(undefined)}
               />
-              <Button type='submit' label='Сохранить' />
+              <Button type='submit' label='Сохранить'/>
             </div>
           </Form>
         </Formik>
@@ -399,10 +392,8 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           isDataSelectable={isRowAvailable}
           rowClassName={(data) => classNames(rowClassName(data), css.row)}
           header={header}
-          filters={filters}
-          globalFilterFields={['name', 'current_invoice.inn', 'current_invoice.customer', 'current_invoice.number']}
         >
-          <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
+          <Column field='name' header='Клиент' style={{maxWidth: '10rem'}}/>
           <Column
             field='recommended_budget'
             header='Рекомндованный бюджет'
@@ -411,12 +402,12 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           <Column
             field='current_invoice_id'
             header='Счёт'
-            bodyStyle={{ minWidth: '14rem' }}
+            bodyStyle={{minWidth: '14rem'}}
             align='center'
             body={invoiceBody}
           />
-          <Column header='Оплачен' align='center' body={paidTemplate} />
-          <Column header='Оплачен ВК' align='center' body={vkPaidTemplate} />
+          <Column header='Оплачен' align='center' body={paidTemplate}/>
+          <Column header='Оплачен ВК' align='center' body={vkPaidTemplate}/>
         </DataTable>
       </TableLoader>
     </>
