@@ -16,6 +16,7 @@ export interface Client extends Model {
   is_budget_agreed: boolean | 0 | 1;
   current_invoice_id: number | null;
   token: string;
+  has_telegram: boolean;
 
   group_id?: number;
   is_mine?: boolean;

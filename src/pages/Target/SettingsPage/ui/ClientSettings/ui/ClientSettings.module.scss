@@ -8,6 +8,16 @@
   height: calc(100vh - 180px);
 }
 
+.telegramBlock {
+  display: flex;
+  gap: 8px;
+
+  &__label {
+    padding: 8px 0;
+    font-size: var(--semi-large-font-size)
+  }
+}
+
 .settings {
   display: flex;
 
