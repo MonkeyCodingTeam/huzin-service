@@ -11,26 +11,19 @@ import { Toast } from 'primereact/toast';
 import { Group } from '@entities/group';
 
 interface GroupListProps {
-  currentGroup: Group;
+  group: Group;
+  onDelete: () => void;
 }
 
-export const GroupList: FC<GroupListProps> = ({ currentGroup }) => {
-  const [group, setGroup] = useState<Group>();
+export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
   const toast = useRef<Toast>(null);
 
-  useEffect(() => {
-    setGroup(currentGroup);
-  }, [currentGroup]);
 
   const confirmRemove = useCallback((e: MouseEvent<HTMLButtonElement>, group: Group) => {
     confirmPopup({
       target: e.currentTarget,
       message: 'Хотите удалить группу?',
-      accept: () => {
-        GroupAPI.delete(group.id).then(() => {
-          return setGroup(undefined);
-        });
-      },
+      accept: onDelete,
       acceptLabel: 'Да',
       rejectLabel: 'Отмена',
     });
@@ -76,10 +69,6 @@ export const GroupList: FC<GroupListProps> = ({ currentGroup }) => {
       });
     });
   };
-
-  if (!group) {
-    return <></>;
-  }
 
   return (
     <div className={css.group__list}>

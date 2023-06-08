@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Client } from '@entities/client/types/client';
 
 export const emptyClientState: Client = {
+  token: "",
   id: 0,
   name: '',
   all_limit: 0,
@@ -18,7 +19,7 @@ export const emptyClientState: Client = {
   days_in_zero_balance: 0,
   is_budget_agreed: false,
   recommended_budget: null,
-  current_invoice_id: null,
+  current_invoice_id: null
 };
 
 export const selectedClient = createSlice({

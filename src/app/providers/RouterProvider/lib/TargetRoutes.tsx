@@ -3,13 +3,13 @@ import { BudgetCutsPage, ClientsPage } from '@pages/Target';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { ClientTable } from '@pages/Target/ClientsPage/ui/ClientTable';
 import { SenlerPage } from '@pages/Target/SenlerPage';
-import { TargetSettingsPage } from '@pages/Target/TargetSettingsPage';
-import { ClientSettings } from '@pages/Target/TargetSettingsPage/ui/ClientSettings';
-import { CompanyTagsSetting } from '@pages/Target/TargetSettingsPage/ui/CompanyTagsSetting';
 import React from 'react';
 import { ROUTES } from '@shared/const/routes';
 import { PrimeIcons } from 'primereact/api';
 import { InvoicePage } from '@pages/Target/InvoicePage';
+import {SettingsPage} from "@pages/Target/SettingsPage";
+import { ClientSettings } from '@pages/Target/SettingsPage/ui/ClientSettings';
+import { CompanyTagsSetting } from '@pages/Target/SettingsPage/ui/CompanyTagsSetting';
 
 export const TargetRoutes: AppRoute[] = [
   {
@@ -53,7 +53,7 @@ export const TargetRoutes: AppRoute[] = [
   {
     name: 'Настройки',
     icon: PrimeIcons.COG,
-    element: <TargetSettingsPage />,
+    element: <SettingsPage />,
     path: ROUTES.TARGET.Settings,
     protected: true,
     children: [
