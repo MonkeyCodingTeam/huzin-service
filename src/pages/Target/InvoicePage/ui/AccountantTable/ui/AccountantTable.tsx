@@ -190,11 +190,9 @@ export const AccountantTable: FC<AccountantTableProps> = ({toast}) => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {value} = e.target;
-    setClientsData(clients.filter((client) => {
-      const compare = client.name.toLowerCase().includes(value.toLowerCase())
-      console.log(client.name, value, compare);
-      return compare;
-    }));
+    setClientsData(
+      clients.filter((client) => client.name.toLowerCase().includes(value.toLowerCase()))
+    );
   };
 
   const header = () => {
