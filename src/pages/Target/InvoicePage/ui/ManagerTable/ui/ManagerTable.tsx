@@ -189,7 +189,7 @@ export const ManagerTable: FC<ManagerTableProps> = ({ user, toast }) => {
         <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
         <Column
           field='recommended_budget'
-          header='Рекомндованный бюджет'
+          header='Рекомeндованный бюджет'
           body={(client: Client) => (
             <InputNumber
               value={client.recommended_budget}

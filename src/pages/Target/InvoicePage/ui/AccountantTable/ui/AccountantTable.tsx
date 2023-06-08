@@ -1,6 +1,6 @@
 import { TableLoader } from '@widgets';
 import { Client, Invoice } from '@entities/client';
-import { DataTable, DataTableDataSelectableEvent } from 'primereact/datatable';
+import { DataTable, DataTableDataSelectableEvent, DataTableFilterMeta } from 'primereact/datatable';
 import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { ClientAPI, InvoiceApi } from '@shared/lib/api';
 import { Column } from 'primereact/column';
@@ -8,7 +8,7 @@ import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
+import {FilterMatchMode, PrimeIcons } from 'primereact/api';
 import { Checkbox } from 'primereact/checkbox';
 import css from './AccountantTable.module.scss';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
@@ -31,6 +31,10 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const [loading, setLoading] = useState(true);
   const [isInvoiceHidden, setIsInvoiceHidden] = useState(false);
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice>();
+  const [filters, setFilters] = useState<DataTableFilterMeta>({
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+  });
+  const [globalFilterValue, setGlobalFilterValue] = useState('');
 
   useEffect(() => {
     getClients();
@@ -188,9 +192,21 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     return invoiceTemplate(client);
   };
 
+  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGlobalFilterValue(value);
+    setFilters((prevState) => {
+      if ('value' in prevState['global']) {
+        prevState['global'].value = value;
+      }
+      return prevState;
+    });
+  };
+
   const header = () => {
     return (
       <div className={css.filterInvoice}>
+        <InputText placeholder="Поиск" onChange={onGlobalFilterChange} value={globalFilterValue}/>
         <label htmlFor='invoiceShow'>Скрыть оплаченных</label>
         <Checkbox
           id='invoiceShow'
@@ -382,6 +398,9 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           isDataSelectable={isRowAvailable}
           rowClassName={(data) => classNames(rowClassName(data), css.row)}
           header={header}
+          filters={filters}
+          filterDisplay="row"
+          globalFilterFields={['name', 'current_invoice.inn', 'current_invoice.customer', 'current_invoice.number']}
         >
           <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
           <Column
