@@ -194,6 +194,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
 
   const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    console.log(value);
     setGlobalFilterValue(value);
     setFilters((prevState) => {
       if ('value' in prevState['global']) {
