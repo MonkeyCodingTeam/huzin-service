@@ -1,9 +1,8 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { AppRoutes, ProtectedAppRoutes } from '@app/providers/RouterProvider';
+import { AppRoute, AppRoutes, ProtectedAppRoutes } from '@app/providers/RouterProvider';
 import { Loader } from '@shared/ui';
 import css from './AppRouter.module.scss';
-import { AppRoute } from '@app/providers/RouterProvider/types';
 import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoutes';
 
 export const AppRouter = () => {

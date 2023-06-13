@@ -5,8 +5,6 @@ import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { FC, memo, MouseEvent, ReactElement, useRef, useState } from 'react';
 import { Avatar } from 'primereact/avatar';
 import { NavLink } from '@shared/ui/NavLink';
-import { TargetRoutes } from '@app/providers/RouterProvider/lib/TargetRoutes';
-import { AppRoute } from '@app/providers/RouterProvider/types';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
 import { Menu } from 'primereact/menu';
@@ -14,11 +12,12 @@ import { useNavigate } from 'react-router';
 import { ROUTES } from '@shared/const/routes';
 import { AuthThunk } from '@processes/auth';
 import { Link } from 'react-router-dom';
+import { AppRoute, ContentRoutes, TargetRoutes } from '@app/providers/RouterProvider';
 
 export const Header: FC<{ children: ReactElement }> = ({ children }) => {
   const services = [
     { value: TargetRoutes, label: 'Target' },
-    { value: TargetRoutes, label: 'Content' },
+    { value: ContentRoutes, label: 'Content' },
     { value: TargetRoutes, label: 'Admin' },
   ];
   const [selectedService, setSelectedService] = useState<AppRoute[]>(services[0].value);

@@ -1,5 +1,5 @@
-import { AppRoute } from '@app/providers/RouterProvider/types';
 import { LoginPage } from '@pages/Auth/LoginPage';
+import { AppRoute } from '@app/providers/RouterProvider';
 
 export const AuthRoutes: AppRoute[] = [
   {

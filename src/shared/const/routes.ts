@@ -10,12 +10,17 @@ export enum TARGET_ROUTES {
   SettingsCompanies = '/target/settings/company',
 }
 
+export enum CONTENT_ROUTES {
+  Stories = '/content/stories'
+}
+
 enum AUTH_ROUTES {
   Login = '/login',
 }
 
 export const ROUTES = {
   TARGET: TARGET_ROUTES,
+  CONTENT: CONTENT_ROUTES,
   AUTH: AUTH_ROUTES,
 };
 

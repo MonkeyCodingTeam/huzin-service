@@ -1,13 +1,12 @@
 import React from 'react';
-import { AppRoute } from '@app/providers/RouterProvider/types';
-import { TargetRoutes } from '@app/providers/RouterProvider/lib/TargetRoutes';
-import { AuthRoutes } from '@app/providers/RouterProvider/lib/AuthRoutes';
 import { StubPage } from '@pages/StubPage';
 import { MainPage } from '@pages/MainPage';
 import { ClientReportPage } from '@pages/Target/ClientReportPage';
+import {AppRoute, AuthRoutes, ContentRoutes, TargetRoutes} from "@app/providers/RouterProvider";
 
 export const ProtectedAppRoutes: AppRoute[] = [
   ...TargetRoutes,
+  ...ContentRoutes,
   {
     path: '/',
     protected: true,
