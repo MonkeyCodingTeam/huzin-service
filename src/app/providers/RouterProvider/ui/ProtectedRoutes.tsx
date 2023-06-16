@@ -3,8 +3,9 @@ import { Navigate, Outlet, RouteProps, useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { ROUTES } from '@shared/const/routes';
 import { AuthThunk } from '@processes/auth';
+import { Role } from '@entities/user';
 
-export const ProtectedRoutes: FC<RouteProps> = () => {
+export const ProtectedRoutes: FC<RouteProps & { roles?: Role['slug'][] }> = ({ roles = [] }) => {
   const user = useAppSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -20,6 +21,19 @@ export const ProtectedRoutes: FC<RouteProps> = () => {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    const hasAccess = !!user.roles.find((role) => {
+      if (!roles.length) return true;
+      if (role.slug === 'admin') return true;
+
+      return !!roles.find((slug) => slug === role.slug);
+    });
+
+    if (!hasAccess) {
+      navigate('/');
+    }
+  }, [user.roles]);
 
   return user?.id ? <Outlet /> : <Navigate to={ROUTES.AUTH.Login} />;
 };

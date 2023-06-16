@@ -10,6 +10,5 @@ export const ContentRoutes: AppRoute[] = [
     icon: PrimeIcons.VIDEO,
     element: <StubPage />,
     path: ROUTES.CONTENT.Stories,
-    protected: true,
   },
 ];

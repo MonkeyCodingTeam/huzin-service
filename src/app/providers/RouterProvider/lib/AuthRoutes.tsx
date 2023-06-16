@@ -5,6 +5,5 @@ export const AuthRoutes: AppRoute[] = [
   {
     path: '/login',
     element: <LoginPage />,
-    protected: false,
   },
 ];

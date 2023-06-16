@@ -1,3 +1,5 @@
+import { User } from '@entities/user';
+
 export interface Client extends Model {
   name: string;
   balance: number;
@@ -11,23 +13,19 @@ export interface Client extends Model {
   budget_adjustment: number;
   recommended_budget: number | null;
   zero_days: number;
-  days_in_low_balance: number;
-  days_in_zero_balance: number;
   is_budget_agreed: boolean | 0 | 1;
   current_invoice_id: number | null;
   token: string;
   has_telegram: boolean;
+  paid_at: string | null;
+  zero_balance_at: string | null;
+  low_balance_at: string | null;
 
   group_id?: number;
   is_mine?: boolean;
 
   current_invoice?: Invoice;
-}
-
-export interface Role {
-  id: number;
-  name: string;
-  slug: string;
+  users?: User[];
 }
 
 export interface Invoice {

@@ -8,6 +8,7 @@ const Routes = {
   SIGN_IN: '/login',
   LOGOUT: '/logout',
   GET_USER: '/me',
+  CSRF_COOKIE: '/sanctum/csrf-cookie',
 };
 
 export const AuthAPI = {
