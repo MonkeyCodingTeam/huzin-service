@@ -36,8 +36,7 @@
     "vite.config.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src",
-    "node_modules/ts-jest/globals.d.ts"
+    "src"
   ],
   "typeRoots": [
     "node_modules/@types"

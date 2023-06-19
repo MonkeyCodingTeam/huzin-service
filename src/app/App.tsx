@@ -14,7 +14,7 @@ export function App() {
 
   useEffect(() => {
     dispatch(AuthThunk.getUser()).finally(() => setLoading(false));
-  }, []);
+  }, [dispatch]);
 
   return loading ? (
     <Loader />

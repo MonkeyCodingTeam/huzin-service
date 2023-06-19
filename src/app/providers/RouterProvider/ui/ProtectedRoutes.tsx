@@ -20,7 +20,7 @@ export const ProtectedRoutes: FC<RouteProps & { roles?: Role['slug'][] }> = ({ r
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [navigate, dispatch]);
 
   useEffect(() => {
     const hasAccess = !!user.roles.find((role) => {

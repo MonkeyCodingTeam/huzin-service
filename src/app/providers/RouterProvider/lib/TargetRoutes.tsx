@@ -1,18 +1,13 @@
-import {
-  BudgetCutsPage,
-  ClientSettings,
-  ClientsPage,
-  ClientTable,
-  CompanyTagsSetting,
-  InvoicePage,
-  SenlerPage,
-  SettingsPage,
-} from '@pages/Target';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import React from 'react';
 import { ROUTES } from '@shared/const/routes';
 import { PrimeIcons } from 'primereact/api';
 import { AppRoute } from '@app/providers/RouterProvider';
+import { ClientsPage, ClientTable } from '@pages/Target/ClientsPage';
+import { SenlerPage } from '@pages/Target/SenlerPage';
+import { BudgetCutsPage } from '@pages/Target/BudgetCutsPage';
+import { InvoicePage } from '@pages/Target/InvoicePage';
+import { ClientSettings, CompanyTagsSetting, SettingsPage } from '@pages/Target/SettingsPage';
 
 export const TargetRoutes: AppRoute[] = [
   {
