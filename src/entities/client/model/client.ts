@@ -14,13 +14,14 @@ export const emptyClientState: Client = {
   week_spent: 0,
   zero_days: 0,
   budget_adjustment: 0,
-  days_in_low_balance: 0,
-  days_in_zero_balance: 0,
   is_budget_agreed: false,
   has_telegram: false,
-  token: "",
+  token: '',
   recommended_budget: null,
-  current_invoice_id: null
+  current_invoice_id: null,
+  low_balance_at: null,
+  paid_at: null,
+  zero_balance_at: null,
 };
 
 export const selectedClient = createSlice({
