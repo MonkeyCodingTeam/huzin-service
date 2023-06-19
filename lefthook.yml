@@ -20,7 +20,7 @@ pre-commit:
       run: yarn lint {staged_files}
     types:
       glob: "*.{json,js,ts,tsx}"
-      run: tsc --noEmit
+      run: tsc --noEmit {staged_files}
 #     rubocop:
 #       tags: backend style
 #       glob: "*.rb"
