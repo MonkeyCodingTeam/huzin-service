@@ -17,10 +17,7 @@ pre-commit:
   commands:
     eslint:
       glob: "*.{ts,tsx}"
-      run: yarn eslint {staged_files}
-    typescript:
-      glob: "*.{ts,tsx}"
-      run: tsc
+      run: yarn lint {staged_files}
 #     rubocop:
 #       tags: backend style
 #       glob: "*.rb"
