@@ -11,7 +11,7 @@
     "proxy": "lcp --proxyUrl https://api.vk.com",
     "lint": "npm run lint:eslint && npm run lint:stylelint",
     "lint:eslint": "eslint .",
-    "lint:stylelint": "stylelint \"**/*.sass\"",
+    "lint:stylelint": "stylelint \"**/*.scss\"",
     "test": "jest",
     "prepare": "husky install"
   },
