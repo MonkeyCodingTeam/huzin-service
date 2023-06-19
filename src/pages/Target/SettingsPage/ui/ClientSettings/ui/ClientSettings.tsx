@@ -1,7 +1,7 @@
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { selectClient } from '@entities/client/model';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { ROUTES } from '@shared/const/routes';
 import { ClientAPI } from '@shared/lib/api';
@@ -10,11 +10,11 @@ import { Divider } from 'primereact/divider';
 import { Link, Loader } from '@shared/ui';
 import { Client } from '@entities/client';
 import { ClientSettingsGroup } from '../../ClientSettingsGroup';
-import { Button } from 'primereact/button';
 import { Tag } from 'primereact/tag';
 import { PrimeIcons } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
+import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -45,18 +45,6 @@ export const ClientSettings = () => {
       dispatch(selectClient(clients.find((client) => client.id === e.value)));
       navigate(`${ROUTES.TARGET.Settings}/client/${e.value}`);
     }
-  };
-
-  const copyTelegramCommand = (e: MouseEvent<HTMLButtonElement>) => {
-    const command = `/register ${selectedClient.id}`;
-    const { currentTarget } = e;
-    currentTarget.classList.add('p-button-success');
-
-    navigator.clipboard.writeText(command).then(() => {
-      setTimeout(() => {
-        currentTarget.classList.remove('p-button-success');
-      }, 2000);
-    });
   };
 
   const clientListTemplate = (data: Client) => {
@@ -116,10 +104,15 @@ export const ClientSettings = () => {
               </Divider>
               <div>
                 <div className={css.telegramBlock}>
-                  <span className={css.telegramBlock__label}>Регистрация клиента:</span>
                   <div className={classNames('p-inputgroup', css.telegramBlock__command)}>
-                    <Button icon={PrimeIcons.COPY} size='small' onClick={copyTelegramCommand} />
+                    <span className='p-inputgroup-addon'>Telegram бот:</span>
+                    <InputText readOnly value={__TELEGRAM_BOT__} />
+                    <CopyToClipboardButton text={__TELEGRAM_BOT__} />
+                  </div>
+                  <div className={classNames('p-inputgroup', css.telegramBlock__command)}>
+                    <span className='p-inputgroup-addon'>Регистрация клиента:</span>
                     <InputText readOnly value={`/register ${selectedClient.id}`} />
+                    <CopyToClipboardButton text={`/register ${selectedClient.id}`} />
                   </div>
                   {selectedClient.has_telegram ? (
                     <Tag severity='success' value='Есть чат' />
