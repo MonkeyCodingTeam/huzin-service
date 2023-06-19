@@ -119,7 +119,7 @@ export const ClientSettings = () => {
                   <span className={css.telegramBlock__label}>Регистрация клиента:</span>
                   <div className={classNames('p-inputgroup', css.telegramBlock__command)}>
                     <Button icon={PrimeIcons.COPY} size='small' onClick={copyTelegramCommand} />
-                    <InputText readOnly value={`/register ${selectedClient.id}`} size='small' />
+                    <InputText readOnly value={`/register ${selectedClient.id}`} />
                   </div>
                   {selectedClient.has_telegram ? (
                     <Tag severity='success' value='Есть чат' />
