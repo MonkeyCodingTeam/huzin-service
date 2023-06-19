@@ -18,6 +18,9 @@ pre-commit:
     eslint:
       glob: "*.{ts,tsx}"
       run: yarn lint {staged_files}
+    types:
+      glob: "*.{json,js,ts,tsx}"
+      run: yarn tsc --noEmit
 #     rubocop:
 #       tags: backend style
 #       glob: "*.rb"
