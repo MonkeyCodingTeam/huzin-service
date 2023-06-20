@@ -12,9 +12,7 @@
     "scss/at-rule-no-unknown": true,
     "no-empty-source": null,
     "declaration-empty-line-before": null,
-    "no-missing-end-of-source-newline": null,
     "selector-class-pattern": null,
-    "keyframes-name-pattern": null,
-    "indentation": 2
+    "keyframes-name-pattern": null
   }
 }
