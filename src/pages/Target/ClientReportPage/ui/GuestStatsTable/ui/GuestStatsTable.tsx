@@ -69,14 +69,14 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
   }, [companyStats]);
 
   const senlerCountBody = (value: StatisticResponse) => {
-    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
+    if (senlerStats === undefined || senlerStats[value.month]?.count_subscribe === undefined) {
       return <Skeleton width='10rem' />;
     }
     return senlerStats[value.month].count_subscribe;
   };
 
   const senlerCostBody = (value: StatisticResponse) => {
-    if (senlerStats === undefined || senlerStats[value.month].count_subscribe === undefined) {
+    if (senlerStats === undefined || senlerStats[value.month]?.count_subscribe === undefined) {
       return <Skeleton width='10rem' />;
     }
     const senler = senlerStats[value.month].count_subscribe;

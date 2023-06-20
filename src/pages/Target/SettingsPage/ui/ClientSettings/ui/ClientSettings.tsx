@@ -26,17 +26,19 @@ export const ClientSettings = () => {
   useEffect(() => {
     ClientAPI.getClients().then((res) => {
       setClients(res.data);
-
-      const client = selectedClient.id
-        ? selectedClient
-        : res.data.find((client) => client.id === (+params.clientId! || res.data[0].id));
-
-      if (client) {
-        dispatch(selectClient(client));
-      } else {
-        dispatch(selectClient(res.data[0]));
+      if (!res.data.length) {
+        return;
       }
-      navigate(`${ROUTES.TARGET.Settings}/client/${client ? client.id : res.data[0].id}`);
+
+      if (selectedClient.id) {
+        return navigate(`${ROUTES.TARGET.Settings}/client/${selectedClient.id}`);
+      }
+
+      const { clientId = res.data[0].id } = params;
+      const client = res.data.find((client) => client.id === +clientId) || res.data[0];
+
+      dispatch(selectClient(client));
+      navigate(`${ROUTES.TARGET.Settings}/client/${client.id}`);
     });
   }, []);
 
