@@ -1,4 +1,5 @@
 import { User } from '@entities/user';
+import { Group } from '@entities/group';
 
 export interface Client extends Model {
   name: string;
@@ -26,6 +27,7 @@ export interface Client extends Model {
 
   current_invoice?: Invoice;
   users?: User[];
+  group?: Group;
 }
 
 export interface Invoice {

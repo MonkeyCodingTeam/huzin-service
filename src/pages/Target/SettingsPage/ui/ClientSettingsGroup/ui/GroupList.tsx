@@ -1,4 +1,4 @@
-import { FC, MouseEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { FC, MouseEvent, useCallback, useRef } from 'react';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import css from './ClientSettingsGroup.module.scss';
@@ -17,7 +17,6 @@ interface GroupListProps {
 
 export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
   const toast = useRef<Toast>(null);
-
 
   const confirmRemove = useCallback((e: MouseEvent<HTMLButtonElement>, group: Group) => {
     confirmPopup({
@@ -85,6 +84,22 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
         <Form>
           <Card title={titleTemplate(group)}>
             <div className={css.group__item__body}>
+              <InputGroup>
+                <Field
+                  as={Input}
+                  label='Город'
+                  name='city'
+                  placeholder={'Введите город круппы'}
+                  value={group.city}
+                />
+                <Field
+                  as={Input}
+                  label='Часовой пояс (от МСК)'
+                  name='timezone'
+                  placeholder={'Введите город круппы'}
+                  value={group.timezone}
+                />
+              </InputGroup>
               <InputGroup>
                 <Field
                   as={Input}

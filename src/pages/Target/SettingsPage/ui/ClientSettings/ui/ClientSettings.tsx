@@ -24,7 +24,7 @@ export const ClientSettings = () => {
   const params = useParams<{ clientId: string }>();
 
   useEffect(() => {
-    ClientAPI.getClients().then((res) => {
+    ClientAPI.getClients({ with: ['group'] }).then((res) => {
       setClients(res.data);
       if (!res.data.length) {
         return;

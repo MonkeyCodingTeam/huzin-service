@@ -1,56 +1,53 @@
-import {FC, useCallback, useEffect, useState} from 'react';
-import {GroupAPI} from '@shared/lib/api/target/group';
+import { FC, useEffect, useState } from 'react';
+import { GroupAPI } from '@shared/lib/api/target/group';
 import css from './ClientSettingsGroup.module.scss';
-import {Button} from 'primereact/button';
-import {InputGroup} from '@shared/ui/InputGroup';
-import {Input} from '@shared/ui/Input';
-import {Group} from '@entities/group';
-import {Client} from '@entities/client';
-import {GroupList} from './GroupList';
+import { Button } from 'primereact/button';
+import { InputGroup } from '@shared/ui/InputGroup';
+import { Input } from '@shared/ui/Input';
+import { Group } from '@entities/group';
+import { Client } from '@entities/client';
+import { GroupList } from './GroupList';
 
 interface ClientSettingsGroup {
   client: Client;
 }
 
-export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({client}) => {
+export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
   const [groupLink, setGroupLink] = useState('');
   const [group, setGroup] = useState<Group>();
   const [loadingGroup, setLoadingGroup] = useState(false);
 
-  const getGroups = useCallback(() => {
-    GroupAPI.get(client.id).then((res) => {
-      res.data;
-      setGroup(res.data);
-    });
-  }, [client.id]);
-
   const handleSubmit = () => {
     const screenName = groupLink.match(/vk.com\/(?<screen_name>[\w_.]+)/)?.groups?.screen_name;
+    setLoadingGroup(true);
 
     if (screenName) {
       GroupAPI.getBy({
         group_id: screenName,
-        fields: ['city', 'public_date_label', 'site'],
+        fields: ['city', 'site'],
       }).then((res) => {
-        const groupVk = res.data[0];
+        const { id, city, place, screen_name, name, photo_200, site } = res.data[0];
         const group = {
-          ...groupVk,
-          photo: groupVk?.photo_200,
-          site: groupVk?.site,
+          id,
+          name,
+          site,
+          screen_name,
+          photo: photo_200,
           link: `https://vk.com/${screenName}`,
-          city: groupVk?.city?.title,
+          city: city?.title,
         };
 
         GroupAPI.create(client.id, group).then((res) => {
           setGroup(res.data);
           setGroupLink('');
+          setLoadingGroup(false);
         });
       });
     }
   };
 
   useEffect(() => {
-    getGroups();
+    setGroup(client.group);
     setGroupLink('');
   }, [client.id]);
 
@@ -60,7 +57,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({client}) => {
     GroupAPI.delete(group.id).then(() => {
       return setGroup(undefined);
     });
-  }
+  };
 
   if (!group?.id) {
     return (
@@ -76,9 +73,8 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({client}) => {
             Сохранить
           </Button>
         </InputGroup>
-      </div>);
+      </div>
+    );
   }
-  return (
-    <GroupList group={group} onDelete={handleDeleteGroup}/>
-  );
+  return <GroupList group={group} onDelete={handleDeleteGroup} />;
 };
