@@ -99,7 +99,7 @@ const ReportPage = () => {
       sortField='name'
       sortOrder={1}
       scrollable
-      scrollHeight='calc(100vh - 140px)'
+      scrollHeight='calc(100vh - 170px)'
       value={clientsFiltered}
       filters={filters}
       header={

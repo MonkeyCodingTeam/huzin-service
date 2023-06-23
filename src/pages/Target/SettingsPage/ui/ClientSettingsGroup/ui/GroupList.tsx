@@ -1,9 +1,8 @@
 import { FC, MouseEvent, useCallback, useRef } from 'react';
-import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import css from './ClientSettingsGroup.module.scss';
 import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
-import { GroupAPI } from '@shared/lib/api/target/group';
+import { GroupApi } from '@shared/lib/api/target/group';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { Field, Form, Formik, FormikValues } from 'formik';
@@ -51,6 +50,7 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
           icon='pi pi-trash'
           area-label='Удалить'
           severity='danger'
+          title='Удалить группу'
           outlined
           onClick={(event) => confirmRemove(event, group)}
         />
@@ -59,7 +59,7 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
   };
 
   const saveGroupChange = (values: FormikValues, group: Group) => {
-    GroupAPI.update(group.id, values).then((res) => {
+    GroupApi.update(group.id, values).then((res) => {
       console.log(res.data);
       toast.current!.show({
         severity: 'success',
@@ -82,37 +82,61 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
         key={group.id}
       >
         <Form>
-          <Card title={titleTemplate(group)}>
-            <div className={css.group__item__body}>
-              <InputGroup>
-                <Field
-                  as={Input}
-                  label='Город'
-                  name='city'
-                  placeholder={'Введите город круппы'}
-                  value={group.city}
+          <div className={css.group__item__body}>
+            <div className={css.group__item__header}>
+              <a
+                className={css.group__item__header__title}
+                href={group.link}
+                target='_blank'
+                rel='noreferrer'
+              >
+                <img
+                  className={css.group__item__header__image}
+                  height={32}
+                  width={32}
+                  src={group.photo}
+                  alt='group icon'
                 />
-                <Field
-                  as={Input}
-                  label='Часовой пояс (от МСК)'
-                  name='timezone'
-                  placeholder={'Введите город круппы'}
-                  value={group.timezone}
-                />
-              </InputGroup>
-              <InputGroup>
-                <Field
-                  as={Input}
-                  label='ключ Senler'
-                  name='senler_token'
-                  placeholder={group.senler_token_protected || 'Введите API ключ Senler'}
-                />
-              </InputGroup>
-              <div>
-                <Button type='submit'>Сохранить</Button>
-              </div>
+                {group.name}
+              </a>
+              <Button
+                type='button'
+                icon='pi pi-trash'
+                area-label='Удалить'
+                severity='danger'
+                title='Удалить группу'
+                outlined
+                onClick={(event) => confirmRemove(event, group)}
+              />
             </div>
-          </Card>
+            <InputGroup>
+              <Field
+                as={Input}
+                label='Город'
+                name='city'
+                placeholder={'Введите город круппы'}
+                value={group.city}
+              />
+              <Field
+                as={Input}
+                label='Часовой пояс (от МСК)'
+                name='timezone'
+                placeholder={'Введите город круппы'}
+                value={group.timezone}
+              />
+            </InputGroup>
+            <InputGroup>
+              <Field
+                as={Input}
+                label='ключ Senler'
+                name='senler_token'
+                placeholder={group.senler_token_protected || 'Введите API ключ Senler'}
+              />
+            </InputGroup>
+            <div>
+              <Button type='submit'>Сохранить</Button>
+            </div>
+          </div>
         </Form>
       </Formik>
     </div>

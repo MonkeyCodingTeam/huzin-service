@@ -8,7 +8,7 @@ interface TransitionProps {
 
 export const Transition: FC<TransitionProps> = ({ children, className }) => {
   return (
-    <motion.main
+    <motion.div
       className={className}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -16,6 +16,6 @@ export const Transition: FC<TransitionProps> = ({ children, className }) => {
       transition={{ duration: 0.3 }}
     >
       {children}
-    </motion.main>
+    </motion.div>
   );
 };

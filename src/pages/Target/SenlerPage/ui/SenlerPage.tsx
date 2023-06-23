@@ -12,7 +12,7 @@ import {
   GetAllSubscribersCountResponse,
   GetStatisticProps,
 } from '@shared/lib/api/target/types';
-import { GroupAPI } from '@shared/lib/api/target/group';
+import { ClientGroupAPI } from '@shared/lib/api/target/group';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import classNames from 'classnames';
@@ -102,7 +102,7 @@ const SenlerPage = () => {
 
   const getSenlerStats = ({ date_from, date_to }: Omit<Period, 'range'>) => {
     setLoadingSenler(true);
-    GroupAPI.getAllSubscribersCount({
+    ClientGroupAPI.getAllSubscribersCount({
       date_from,
       date_to,
     }).then((res) => {
@@ -170,7 +170,7 @@ const SenlerPage = () => {
     }).then((res) => {
       if (!clients.length) return;
 
-      GroupAPI.getAllSubscribersCount({
+      ClientGroupAPI.getAllSubscribersCount({
         date_from,
         date_to,
       }).then((subs) => {
@@ -229,7 +229,7 @@ const SenlerPage = () => {
           groupRowsBy='success'
           rowGroupHeaderTemplate={groupHeaderTemplate}
           scrollable
-          scrollHeight='calc(100vh - 120px)'
+          scrollHeight='calc(100vh - 150px)'
           header={
             <SenlerHeader
               filterChange={handleFilterChange}

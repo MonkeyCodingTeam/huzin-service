@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { GroupAPI } from '@shared/lib/api/target/group';
+import { ClientGroupAPI } from '@shared/lib/api/target/group';
 import css from './ClientSettingsGroup.module.scss';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
@@ -22,7 +22,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
     setLoadingGroup(true);
 
     if (screenName) {
-      GroupAPI.getBy({
+      ClientGroupAPI.getBy({
         group_id: screenName,
         fields: ['city', 'site'],
       }).then((res) => {
@@ -37,7 +37,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
           city: city?.title,
         };
 
-        GroupAPI.create(client.id, group).then((res) => {
+        ClientGroupAPI.create(client.id, group).then((res) => {
           setGroup(res.data);
           setGroupLink('');
           setLoadingGroup(false);
@@ -47,14 +47,16 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
   };
 
   useEffect(() => {
-    setGroup(client.group);
+    ClientGroupAPI.get(client.id).then((res) => {
+      setGroup(res.data);
+    });
     setGroupLink('');
   }, [client.id]);
 
   const handleDeleteGroup = () => {
-    if (!group?.id) return;
+    if (!client.group_id) return;
 
-    GroupAPI.delete(group.id).then(() => {
+    ClientGroupAPI.delete(client).then(() => {
       return setGroup(undefined);
     });
   };

@@ -5,14 +5,13 @@
 .container {
   display: flex;
   gap: 1rem;
-  height: calc(100vh - 180px);
+  height: calc(100% - 44px);
 }
 
 .telegramBlock {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 30rem !important;
+  gap: 1rem;
 
   &__label {
     padding: 8px 0;
@@ -22,12 +21,6 @@
 
 .settings {
   display: flex;
-
-  width: 100%;
-  padding: 1.5rem;
-
-  border: solid 1px var(--secondary-color);
-  border-radius: 6px;
 
   &__title {
     font-size: var(--large-font-size);
@@ -42,7 +35,8 @@
     gap: 1.5rem;
 
     width: 100%;
-    padding: 4px;
+    height: 100%;
+    padding: 1rem;
 
     &__anchor {
       font-size: var(--semi-large-font-size);
@@ -56,6 +50,7 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+    width: 10rem;
 
     &__anchor {
       font-size: var(--regular-font-size);

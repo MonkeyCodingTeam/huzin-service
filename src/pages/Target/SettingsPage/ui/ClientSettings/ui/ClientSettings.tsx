@@ -24,7 +24,7 @@ export const ClientSettings = () => {
   const params = useParams<{ clientId: string }>();
 
   useEffect(() => {
-    ClientAPI.getClients({ with: ['group'] }).then((res) => {
+    ClientAPI.getClients().then((res) => {
       setClients(res.data);
       if (!res.data.length) {
         return;
@@ -65,12 +65,12 @@ export const ClientSettings = () => {
     return data.name;
   };
 
-  // @ts-ignore
   return (
     <div className={css.container}>
       <ListBox
         className={css.clientList}
-        listStyle={{ height: 'calc(100% - 61px)' }}
+        listStyle={{ height: 'calc(100% - 58px)', overflow: 'auto' }}
+        style={{ height: 'calc(100% - 10px)' }}
         value={selectedClient.id}
         filter
         filterPlaceholder='Поиск'
@@ -92,9 +92,9 @@ export const ClientSettings = () => {
                 <p>Ссылка на отчёт</p>
               </Link>
               <div>
-                <Divider style={{ marginTop: 0 }} id='main' align='left'>
-                  <a className={css.settings__list__anchor} href='#main'>
-                    # Группы
+                <Divider style={{ marginTop: 0 }} id='group' align='left'>
+                  <a className={css.settings__list__anchor} href='#group'>
+                    # Группа
                   </a>
                 </Divider>
                 <ClientSettingsGroup client={selectedClient} />
@@ -128,8 +128,8 @@ export const ClientSettings = () => {
         </div>
         <Divider layout='vertical' />
         <div className={css.settings__panel}>
-          <a href='#main' className={css.settings__panel__anchor}>
-            # Группы
+          <a href='#group' className={css.settings__panel__anchor}>
+            # Группа
           </a>
           <a href='#telegram' className={css.settings__panel__anchor}>
             # Telegram

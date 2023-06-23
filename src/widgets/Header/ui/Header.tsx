@@ -46,7 +46,7 @@ export const Header: FC<{ children: ReactElement }> = ({ children }) => {
       const base = location.pathname.split('/')[1];
       return services.find((item) => item.base === base)?.value || services[0].value;
     });
-  }, [services]);
+  }, [services, navigate]);
 
   if (!user?.id) return children;
 

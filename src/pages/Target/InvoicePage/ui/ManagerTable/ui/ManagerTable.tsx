@@ -175,7 +175,7 @@ export const ManagerTable: FC<ManagerTableProps> = ({ user, toast }) => {
         value={clients}
         size='small'
         scrollable
-        scrollHeight='calc(100vh - 120px)'
+        scrollHeight='calc(100vh - 160px)'
         selectionMode='single'
         onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
         contextMenuSelection={selectedClient}

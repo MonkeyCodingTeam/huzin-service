@@ -92,7 +92,7 @@ export const ClientTable = () => {
             className={css.box__container__table}
             showGridlines
             scrollable
-            scrollHeight='calc(100vh - 64px)'
+            scrollHeight='calc(100vh - 120px)'
             key='id'
             globalFilterFields={['name']}
             emptyMessage='Нет данных'
