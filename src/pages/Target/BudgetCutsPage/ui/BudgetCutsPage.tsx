@@ -283,9 +283,9 @@ const BudgetCutsPage = () => {
     }
 
     const differencePlan = client.month_plan - client.month_spent;
-    const required = dayDifference ? Math.trunc(differencePlan / dayDifference) : 0;
+    const required = Math.trunc(differencePlan / dayDifference);
 
-    return ((client.day_plan || 0) + required).toLocaleString();
+    return required.toLocaleString();
   };
 
   const monthPlanBody = (client: ClientPlans) => {
