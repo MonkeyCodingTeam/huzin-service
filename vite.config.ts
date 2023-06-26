@@ -22,6 +22,7 @@ export default ({ mode }) => {
       __VK_API_URL__: JSON.stringify(process.env.VITE_VK_API_URL),
       __VK_TOKEN__: JSON.stringify(process.env.VITE_VK_TOKEN),
       __VK_AGENCY__: JSON.stringify(process.env.VITE_VK_AGENCY),
+      __TELEGRAM_BOT__: JSON.stringify(process.env.VITE_TELEGRAM_BOT),
     },
     plugins: [react(), viteSvgr({ exportAsDefault: true }), tsconfigPaths()],
   });

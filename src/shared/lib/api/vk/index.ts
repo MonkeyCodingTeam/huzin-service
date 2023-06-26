@@ -1,2 +1,2 @@
 export { AdsAPI } from './ads';
-export { HelperApi } from '../target/helper';
+export { HelperApi } from '../helper';

@@ -27,8 +27,15 @@
       &__block {
         margin: 1rem 1.5rem 1rem 0;
         padding: 1.5rem;
+
         background-color: var(--light-color);
-        border-radius: 1rem
+        border-radius: 1rem;
+
+        transition: box-shadow .2s ease-out;
+
+        &:hover {
+          box-shadow: 4px 4px 8px 0 rgb(34 60 80 / 10%);
+        }
       }
 
       &__title {

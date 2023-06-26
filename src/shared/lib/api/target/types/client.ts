@@ -56,3 +56,5 @@ export interface UniquesStatistic {
   initial_total: number;
   frequency: number;
 }
+
+export type InvoiceUpdatePayload = Partial<Pick<Client, 'recommended_budget' | 'is_budget_agreed'>>;

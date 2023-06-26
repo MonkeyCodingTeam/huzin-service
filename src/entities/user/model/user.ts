@@ -9,6 +9,7 @@ export const emptyUserState: User = {
   email: '',
   created_at: '',
   updated_at: '',
+  roles: [],
 };
 
 export const userModel = createSlice({
@@ -23,6 +24,9 @@ export const userModel = createSlice({
     builder
       .addCase(AuthThunk.getUser.fulfilled, (state, { payload }) => {
         return payload;
+      })
+      .addCase(AuthThunk.getUser.rejected, (state, { payload }) => {
+        return emptyUserState;
       })
       .addCase(AuthThunk.signIn.fulfilled, (state, { payload }) => {
         return payload;

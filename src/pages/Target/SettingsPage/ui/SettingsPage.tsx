@@ -29,9 +29,7 @@ export const SettingsPage = () => {
           <TabPanel header='Проекты' />
           <TabPanel header='Компании' />
         </TabView>
-        <Transition>
-          <Outlet />
-        </Transition>
+        <Outlet />
       </div>
     </Transition>
   );

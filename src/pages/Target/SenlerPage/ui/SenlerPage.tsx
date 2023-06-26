@@ -1,4 +1,4 @@
-import { Transition } from '@widgets';
+import { TableLoader, Transition } from '@widgets';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import css from './SenlerPage.module.scss';
@@ -6,9 +6,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FilterMatchMode } from 'primereact/api';
 import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
 import { DateTime } from 'luxon';
-import { ClientAPI } from '@shared/lib/api';
-import { GroupAPI } from '@shared/lib/api/target/group';
-import { TableSkeleton } from '@shared/ui/Skeletons';
+import { ClientAPI, ClientGroupAPI } from '@shared/lib/api';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import classNames from 'classnames';
@@ -120,7 +118,7 @@ const SenlerPage = () => {
       setStats(res.data);
       setLoadingStats(false);
     });
-    GroupAPI.getAllSubscribersCount({
+    ClientGroupAPI.getAllSubscribersCount({
       date_from,
       date_to,
     }).then((res) => {
@@ -144,9 +142,7 @@ const SenlerPage = () => {
 
   return (
     <Transition className={css.container}>
-      {loading ? (
-        <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
-      ) : (
+      <TableLoader isLoading={loading}>
         <DataTable
           value={clients}
           selectionMode='single'
@@ -159,13 +155,14 @@ const SenlerPage = () => {
           className={css.table}
           size='small'
           showGridlines
-          rows={10}
           key='id'
           filters={filters}
           globalFilterFields={['client.name']}
           rowGroupMode='subheader'
           groupRowsBy='success'
           rowGroupHeaderTemplate={groupHeaderTemplate}
+          scrollable
+          scrollHeight='calc(100vh - 150px)'
           header={
             <SenlerHeader
               filterChange={handleFilterChange}
@@ -179,7 +176,7 @@ const SenlerPage = () => {
           <Column header='Подписки' body={subscribersTemplate} />
           <Column header='Цена подписки' body={spentPerSubTemplate} />
         </DataTable>
-      )}
+      </TableLoader>
     </Transition>
   );
 };

@@ -12,7 +12,6 @@ import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { TableSkeleton } from '@shared/ui/Skeletons';
 import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
-import logger from 'redux-logger';
 
 interface GuestStatsTableProps {
   client?: Client;
@@ -61,14 +60,16 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     if (senlerStats === undefined) {
       return <Skeleton width='10rem' />;
     }
-    const senler = senlerStats[value.date]?.count_subscribe;
 
-    return senler || '-';
+    return senlerStats[value.date]?.count_subscribe || '-';
   };
 
   const senlerCostBody = (value: PeriodStatistic) => {
     if (senlerStats === undefined) {
       return <Skeleton width='10rem' />;
+    }
+    if (!senlerStats[value.date]?.count_subscribe) {
+      return '-';
     }
     const senler = senlerStats[value.date]?.count_subscribe;
 

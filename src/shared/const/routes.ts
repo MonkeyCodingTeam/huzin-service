@@ -1,3 +1,6 @@
+import { AppRoute } from '@app/providers/RouterProvider';
+import { Role } from '@entities/user';
+
 export enum TARGET_ROUTES {
   Clients = '/target/client',
   Client = '/target/client/:clientId',
@@ -11,13 +14,28 @@ export enum TARGET_ROUTES {
   ClientReport = '/client_report/:clientId/:token',
 }
 
+export enum CONTENT_ROUTES {
+  Stories = '/content/stories',
+}
+
+export enum ADMIN_ROUTES {
+  Reports = '/admin/reports',
+}
+
 enum AUTH_ROUTES {
   Login = '/login',
 }
 
 export const ROUTES = {
   TARGET: TARGET_ROUTES,
+  CONTENT: CONTENT_ROUTES,
+  ADMIN: ADMIN_ROUTES,
   AUTH: AUTH_ROUTES,
 };
 
-export type RouteList = TARGET_ROUTES | AUTH_ROUTES;
+export interface appService {
+  value: AppRoute[];
+  label: string;
+  base: string;
+  access?: Role['slug'][];
+}

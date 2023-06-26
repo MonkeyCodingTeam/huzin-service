@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import css from './MainPageSection.module.scss';
-import { AppRoute } from '@app/providers/RouterProvider/types';
 import classNames from 'classnames';
 import { Divider } from 'primereact/divider';
+import { AppRoute } from '@app/providers/RouterProvider';
 
 interface MainPageSectionProps {
   title: string;

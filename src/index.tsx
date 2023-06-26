@@ -1,4 +1,4 @@
-import React, { StrictMode } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from '@app/App';
 import { RouterProvider } from '@app/providers/RouterProvider';
@@ -8,7 +8,7 @@ import { PrimeLocale } from '@app/providers/Prime';
 import { HelmetProvider } from 'react-helmet-async';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <StrictMode>
+  <React.StrictMode>
     <Provider store={store}>
       <HelmetProvider>
         <RouterProvider>
@@ -18,5 +18,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         </RouterProvider>
       </HelmetProvider>
     </Provider>
-  </StrictMode>,
+  </React.StrictMode>,
 );

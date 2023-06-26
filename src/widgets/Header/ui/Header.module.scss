@@ -1,8 +1,37 @@
 .container {
   position: relative;
+
   overflow: auto;
+  align-items: center;
+
+  width: 100%;
   height: calc(100vh - 64px);
   max-height: calc(100vh - 64px);
+  padding: 1rem 24rem;
+}
+
+@media screen and (max-width: 1280px) {
+  .container {
+    padding: 1rem 18rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .container {
+    padding: 1rem 12rem;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .container {
+    padding: 1rem 4rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0;
+  }
 }
 
 .header {

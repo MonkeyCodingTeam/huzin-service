@@ -5,9 +5,9 @@ import { ClientAPI, CompanyTemplateAPI } from '@shared/lib/api';
 import { DateTime } from 'luxon';
 import { CompanyTemplate, PeriodStatistic } from '@shared/lib/api/target/types';
 import { Column } from 'primereact/column';
-import { TableSkeleton } from '@shared/ui/Skeletons';
 import css from './ClientTable.module.scss';
 import { SelectButton } from 'primereact/selectbutton';
+import { TableLoader } from '@widgets';
 import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
 
 export const ClientTable = () => {
@@ -62,24 +62,21 @@ export const ClientTable = () => {
           onChange={(e) => setSelectedTemplate(e.value)}
           optionLabel='name'
         />
-        {loading ? (
-          <TableSkeleton rows={10} columns={6} style={{ width: '100%' }} />
-        ) : (
+        <TableLoader isLoading={loading}>
           <DataTable
             selectionMode='single'
             value={stats}
             sortField='date'
             sortOrder={-1}
-            scrollable
-            scrollHeight='calc(100vh - 90px)'
             reorderableColumns
             tableStyle={{
               borderCollapse: 'separate',
               alignItems: 'center',
             }}
-            style={{ width: '100%' }}
+            className={css.box__container__table}
             showGridlines
-            rows={10}
+            scrollable
+            scrollHeight='calc(100vh - 120px)'
             key='id'
             globalFilterFields={['name']}
             emptyMessage='Нет данных'
@@ -133,7 +130,7 @@ export const ClientTable = () => {
               body={(stat) => toLocaleStringTemplate(stat.spent / stat.shows, 2)}
             />
           </DataTable>
-        )}
+        </TableLoader>
       </div>
     </div>
   );

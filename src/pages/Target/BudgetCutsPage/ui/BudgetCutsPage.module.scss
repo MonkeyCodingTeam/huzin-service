@@ -5,10 +5,17 @@
   padding: 0 1.5rem;
 }
 
+.nameColumn {
+  overflow: hidden;
+  max-width: 8rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .adjustment {
   display: flex;
-  align-items: start;
   gap: 4px;
+  align-items: start;
 }
 
 .lowBalance {

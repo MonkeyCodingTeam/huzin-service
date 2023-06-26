@@ -4,6 +4,7 @@ import {
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
+  InvoiceUpdatePayload,
   Statistic,
 } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
@@ -14,7 +15,10 @@ const BASE_URL = 'target/client';
 const STAT_URL = 'target/statistic/client';
 
 export const ClientAPI = {
-  getClients: async (payload?: { user_id?: User['id'] }): AxiosPromise<Client[]> => {
+  getClients: async (payload?: {
+    user_id?: User['id'];
+    with?: ('currentInvoice' | 'group')[];
+  }): AxiosPromise<Client[]> => {
     return axiosAppInstance.get(BASE_URL, {
       params: payload,
     });
@@ -43,6 +47,12 @@ export const ClientAPI = {
     axiosAppInstance.get(STAT_URL, {
       params: payload,
     }),
-  toggleWatcher: async (client: Client, user: User) =>
+  toggleWatcher: async (client: Client, user: User): AxiosPromise<boolean> =>
     axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
+  updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
+    axiosAppInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),
+  getCurrentInvoice: async (clientId: Client['id']): AxiosPromise<File> =>
+    axiosAppInstance.get(`target/invoice/client/${clientId}/current`, {
+      responseType: 'blob',
+    }),
 };

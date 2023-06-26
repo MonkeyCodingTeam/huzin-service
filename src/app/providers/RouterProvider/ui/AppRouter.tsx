@@ -1,10 +1,16 @@
 import { Suspense } from 'react';
 import { Route, Routes } from 'react-router';
-import { AppRoutes, ProtectedAppRoutes } from '@app/providers/RouterProvider';
+import {
+  AppRoute,
+  AppRoutes,
+  ContentRoutes,
+  ProtectedAppRoutes,
+  TargetRoutes,
+} from '@app/providers/RouterProvider';
 import { Loader } from '@shared/ui';
 import css from './AppRouter.module.scss';
-import { AppRoute } from '@app/providers/RouterProvider/types';
 import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoutes';
+import { AdminRoutes } from '@app/providers/RouterProvider/lib/AdminRoutes';
 
 export const AppRouter = () => {
   const renderRoutes = (routes: AppRoute[]) => {
@@ -32,6 +38,13 @@ export const AppRouter = () => {
   return (
     <Suspense fallback={<Loader containerClassName={css.loader} />}>
       <Routes>
+        <Route element={<ProtectedRoutes roles={['manager', 'accountant']} />}>
+          {renderRoutes(TargetRoutes)}
+        </Route>
+        <Route element={<ProtectedRoutes roles={['content']} />}>
+          {renderRoutes(ContentRoutes)}
+        </Route>
+        <Route element={<ProtectedRoutes roles={['admin']} />}>{renderRoutes(AdminRoutes)}</Route>
         <Route element={<ProtectedRoutes />}>{renderRoutes(ProtectedAppRoutes)}</Route>
         {renderRoutes(AppRoutes)}
       </Routes>

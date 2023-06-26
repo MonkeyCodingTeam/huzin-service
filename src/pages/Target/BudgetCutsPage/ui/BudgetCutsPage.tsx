@@ -6,20 +6,19 @@ import { DateTime } from 'luxon';
 import { ClientAPI } from '@shared/lib/api';
 import { Link } from '@shared/ui/Link';
 import { FilterMatchMode } from 'primereact/api';
-import { TableSkeleton } from '@shared/ui/Skeletons';
 import { ContextMenu } from 'primereact/contextmenu';
 import { EditClientModal } from '@pages/Target/BudgetCutsPage/ui/EditClientModal';
 import { FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
 import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader';
-import { index } from '@shared/lib/util';
-import { Transition } from '@widgets';
+import { index, redirectToVK } from '@shared/lib/util';
 import { Client } from '@entities/client';
 import { User, UserAPI } from '@entities/user';
 import { DropdownChangeEvent } from 'primereact/dropdown';
 import { useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
 import { Tag } from 'primereact/tag';
+import { TableLoader } from '@widgets';
 
 interface SpentPlans {
   day_plan: number;
@@ -63,23 +62,25 @@ const BudgetCutsPage = () => {
       label: client?.is_mine ? 'Перестать следить' : 'Следить',
       icon: `pi pi-fw ${client?.is_mine ? 'pi-eye-slash' : 'pi-eye'}`,
       command: () => {
-        if (client) {
-          ClientAPI.toggleWatcher(client, user).then(() => {
-            setClients(
-              clients.map((item) => {
-                return item.id === client.id ? { ...item, is_mine: !item.is_mine } : item;
-              }),
-            );
-            toast.current?.show({
-              severity: 'success',
-              detail: 'Сохранено!',
-              life: 2000,
+        if (!client) return;
+
+        ClientAPI.toggleWatcher(client, user).then((res) => {
+          setClients((prevState) => {
+            prevState = prevState.map((item) => {
+              return item.id === client.id ? { ...item, is_mine: res.data } : item;
             });
+
             if (selectedUser?.id) {
-              getClients();
+              return prevState.filter((client) => client.is_mine);
             }
+            return prevState;
           });
-        }
+          toast.current?.show({
+            severity: 'success',
+            detail: 'Сохранено!',
+            life: 2000,
+          });
+        });
       },
     },
     {
@@ -99,7 +100,7 @@ const BudgetCutsPage = () => {
     },
   ];
 
-  const getClients = useCallback(() => {
+  const getClients = () => {
     ClientAPI.getClients({ user_id: selectedUser?.id }).then((res) => {
       setClients(() =>
         res.data.map((client: ClientPlans) => {
@@ -123,7 +124,7 @@ const BudgetCutsPage = () => {
       );
       setLoading(false);
     });
-  }, [selectedUser]);
+  };
 
   useEffect(() => {
     setMenuModal(getContextMenu(selectedClient));
@@ -131,12 +132,9 @@ const BudgetCutsPage = () => {
 
   useEffect(() => {
     UserAPI.getUsers().then((res) => {
-      if (localStorage.getItem('selected-user')) {
-        const selectedUser = res.data.find(
-          (item) => item.id === +localStorage.getItem('selected-user')!,
-        );
-        setSelectedUser(selectedUser);
-      }
+      const localUser = localStorage.getItem('selected-user') || 0;
+      const selectedUser = res.data.find((item) => item.id === +localUser);
+      setSelectedUser(selectedUser);
       setUsers(res.data);
     });
   }, []);
@@ -152,14 +150,6 @@ const BudgetCutsPage = () => {
       clearInterval(interval);
     };
   }, [selectedUser]);
-
-  const redirectToVK = (client?: Client) => {
-    if (!window) {
-      return;
-    }
-    // @ts-ignore
-    window.open(`https://vk.com/ads?act=office&union_id=${client.id}`, '_blank').focus();
-  };
 
   const handleSubmit = useCallback(
     (values: FormikValues) => {
@@ -242,7 +232,8 @@ const BudgetCutsPage = () => {
     );
   };
   const daySpentAlert = (client: ClientPlans) => {
-    return index(client.day_difference || 1);
+    const difference = client.monthday_difference === undefined ? 1 : client.monthday_difference;
+    return index(difference);
   };
 
   const weekSpentBodyTemplate = (client: ClientPlans) => {
@@ -254,7 +245,8 @@ const BudgetCutsPage = () => {
     );
   };
   const weekSpentAlert = (client: ClientPlans) => {
-    return index(client.weekday_difference || 1, { low: 0.15, middle: 0.3, height: 0.5 });
+    const difference = client.weekday_difference === undefined ? 1 : client.weekday_difference;
+    return index(difference, { low: 0.15, middle: 0.3, height: 0.5 });
   };
 
   const monthSpentBodyTemplate = (client: ClientPlans) => {
@@ -266,7 +258,8 @@ const BudgetCutsPage = () => {
     );
   };
   const monthSpentAlert = (client: ClientPlans) => {
-    return index(client.monthday_difference || 1, { low: 0.07, middle: 0.13, height: 0.2 });
+    const difference = client.monthday_difference === undefined ? 1 : client.monthday_difference;
+    return index(difference, { low: 0.07, middle: 0.13, height: 0.2 });
   };
 
   const needSpentBodyTemplate = (client: ClientPlans) => {
@@ -275,10 +268,11 @@ const BudgetCutsPage = () => {
     }
     const dayDifference = daysInMonth - monthday;
 
+    if (dayDifference === 0) {
+      return '-';
+    }
+
     if (client.zero_days) {
-      if (client.zero_days === daysInMonth) {
-        return '-';
-      }
       return Math.trunc(
         (client.month_plan +
           client.budget_adjustment -
@@ -289,10 +283,9 @@ const BudgetCutsPage = () => {
     }
 
     const differencePlan = client.month_plan - client.month_spent;
-    const required = dayDifference ? Math.trunc(differencePlan / dayDifference) : 0;
+    const required = Math.trunc(differencePlan / dayDifference);
 
-    console.log(required, client.day_plan);
-    return ((client.day_plan || 0) + required).toLocaleString();
+    return required.toLocaleString();
   };
 
   const monthPlanBody = (client: ClientPlans) => {
@@ -321,97 +314,93 @@ const BudgetCutsPage = () => {
   };
 
   return (
-    <Transition className={css.container}>
-      {loading ? (
-        <TableSkeleton rows={10} />
-      ) : (
-        <>
-          <Toast ref={toast} />
-          <ContextMenu
-            model={menuModel}
-            ref={contextMenu}
-            onHide={() => setSelectedClients(undefined)}
+    <>
+      <TableLoader isLoading={loading}>
+        <Toast ref={toast} />
+        <ContextMenu
+          model={menuModel}
+          ref={contextMenu}
+          onHide={() => setSelectedClients(undefined)}
+        />
+        <EditClientModal
+          client={editClient}
+          visible={editModalVisible}
+          onHide={() => {
+            setEditModalVisible(false);
+          }}
+          onSubmit={handleSubmit}
+        />
+        <DataTable
+          selectionMode='single'
+          sortField='name'
+          sortOrder={1}
+          scrollable
+          scrollHeight='calc(100vh - 180px)'
+          tableStyle={{
+            borderCollapse: 'separate',
+            alignItems: 'center',
+          }}
+          size='small'
+          value={clients}
+          showGridlines
+          rows={clients?.length || 10}
+          key='id'
+          filters={filters}
+          globalFilterFields={['name']}
+          header={
+            <BudgetCutsHeader
+              dateTime={updateDate}
+              filterChange={handleFilterChange}
+              users={users}
+              selectedUser={selectedUser}
+              onUserChange={handleUserChange}
+            />
+          }
+          onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
+          contextMenuSelection={selectedClient}
+          onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}
+        >
+          <Column
+            body={nameBodyTemplate}
+            header='Проект'
+            field='name'
+            sortable
+            className={css.nameColumn}
           />
-          <EditClientModal
-            client={editClient}
-            visible={editModalVisible}
-            onHide={() => {
-              setEditModalVisible(false);
-            }}
-            onSubmit={handleSubmit}
+          <Column
+            field='balance'
+            sortable
+            body={balanceBodyTemplate}
+            header='Баланс'
+            bodyClassName={balanceBodyStyle}
           />
-          <DataTable
-            selectionMode='single'
-            sortField='name'
-            sortOrder={1}
-            scrollable
-            scrollHeight='calc(100vh - 170px)'
-            tableStyle={{
-              borderCollapse: 'separate',
-              alignItems: 'center',
-            }}
-            size='small'
-            value={clients}
-            showGridlines
-            rows={clients?.length || 10}
-            key='id'
-            filters={filters}
-            globalFilterFields={['name']}
-            header={
-              <BudgetCutsHeader
-                dateTime={updateDate}
-                filterChange={handleFilterChange}
-                users={users}
-                selectedUser={selectedUser}
-                onUserChange={handleUserChange}
-              />
-            }
-            onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
-            contextMenuSelection={selectedClient}
-            onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}
-          >
-            <Column
-              body={nameBodyTemplate}
-              header='Проект'
-              field='name'
-              sortable
-              style={{ maxWidth: '4rem', overflow: 'hidden' }}
-            />
-            <Column
-              field='balance'
-              sortable
-              body={balanceBodyTemplate}
-              header='Баланс'
-              bodyClassName={balanceBodyStyle}
-            />
-            <Column
-              bodyClassName={daySpentAlert}
-              body={daySpentBodyTemplate}
-              sortable
-              field='day_difference'
-              header='Траты: день'
-            />
-            <Column
-              bodyClassName={weekSpentAlert}
-              body={weekSpentBodyTemplate}
-              sortable
-              field='weekday_difference'
-              header='Траты: неделя'
-            />
-            <Column
-              bodyClassName={monthSpentAlert}
-              body={monthSpentBodyTemplate}
-              sortable
-              field='monthday_difference'
-              header='Траты: месяц'
-            />
-            <Column field='month_plan' body={monthPlanBody} header='План' />
-            <Column body={needSpentBodyTemplate} header='Докрут в день' />
-            <Column body={needRequestBodyTemplate} header='Зачислить' />
-          </DataTable>
-        </>
-      )}
-    </Transition>
+          <Column
+            bodyClassName={daySpentAlert}
+            body={daySpentBodyTemplate}
+            sortable
+            field='day_difference'
+            header='Траты: день'
+          />
+          <Column
+            bodyClassName={weekSpentAlert}
+            body={weekSpentBodyTemplate}
+            sortable
+            field='weekday_difference'
+            header='Траты: неделя'
+          />
+          <Column
+            bodyClassName={monthSpentAlert}
+            body={monthSpentBodyTemplate}
+            sortable
+            field='monthday_difference'
+            header='Траты: месяц'
+          />
+          <Column field='month_plan' body={monthPlanBody} header='План' />
+          <Column body={needSpentBodyTemplate} header='Докрут в день' />
+          <Column body={needRequestBodyTemplate} header='Зачислить' />
+        </DataTable>
+      </TableLoader>
+    </>
   );
 };
 
