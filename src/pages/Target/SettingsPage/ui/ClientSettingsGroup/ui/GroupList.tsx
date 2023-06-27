@@ -121,7 +121,7 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
                 as={Input}
                 label='Часовой пояс (от МСК)'
                 name='timezone'
-                placeholder={'Введите город круппы'}
+                placeholder={'Введите город группы'}
                 value={group.timezone}
               />
             </InputGroup>
