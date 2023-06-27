@@ -33,6 +33,7 @@ export const ClientTable = () => {
         company_template_id: selectedTemplate?.id,
       }).then((res) => {
         setStats(groupStatsByPeriod(res.data, 'week'));
+        console.log(res.data);
         setLoading(false);
       });
     } else {
@@ -108,7 +109,7 @@ export const ClientTable = () => {
                 position: 'bottom',
               }}
               body={(stat) =>
-                toLocaleStringTemplate(stat.shows && (stat.clicks / stat.shows) * 100, 2)
+                stat.shows ? toLocaleStringTemplate((stat.clicks / stat.shows) * 100, 2) : '-'
               }
             />
             <Column
@@ -118,7 +119,9 @@ export const ClientTable = () => {
               headerTooltipOptions={{
                 position: 'bottom',
               }}
-              body={(stat) => toLocaleStringTemplate(stat.spent / stat.clicks)}
+              body={(stat) =>
+                stat.clicks ? toLocaleStringTemplate(stat.spent / stat.clicks) : '-'
+              }
             />
             <Column
               header='CPM'

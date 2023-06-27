@@ -111,6 +111,7 @@ const SenlerPage = () => {
     ClientAPI.getAllStatistics({
       date_from,
       date_to,
+
       only_field: ['spent'],
     }).then((res) => {
       console.log(res.data);

@@ -23,13 +23,10 @@ const monthCount = 6;
 export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
   const [stats, setStats] = useState<PeriodStatistic[]>([]);
   const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isStatLoading, setIsStatLoading] = useState(true);
+  const [isSenlerLoading, setIsSenlerLoading] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 10000);
-
     if (!client?.id) return;
 
     GuestAPI.getCompanyStats(client.id, {
@@ -37,9 +34,13 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       date_to: DateTime.now(),
       metrics: ['base', 'uniques'],
       company_template_id: company_template?.id,
-    }).then((res) => {
-      setStats(groupStatsByPeriod(res.data, 'month'));
-    });
+    })
+      .then((res) => {
+        setStats(groupStatsByPeriod(res.data, 'month'));
+      })
+      .finally(() => {
+        setIsStatLoading(false);
+      });
 
     if (!client.group_id) return;
     GuestAPI.getSubscribersCountByPeriod(client.group_id!, {
@@ -47,27 +48,36 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       date_to: DateTime.now(),
       period: 'month',
       company_template_id: company_template?.id,
-    }).then((res) => {
-      setSenlerStats(res.data);
-    });
-
-    return () => {
-      clearTimeout(timeout);
-    };
+    })
+      .then((res) => {
+        setSenlerStats(res.data);
+      })
+      .finally(() => {
+        setIsSenlerLoading(false);
+      });
   }, []);
 
   const senlerCountBody = (value: PeriodStatistic) => {
-    if (senlerStats === undefined) {
+    if (isSenlerLoading) {
       return <Skeleton width='10rem' />;
+    }
+
+    if (senlerStats === undefined) {
+      return '-';
     }
 
     return senlerStats[value.date]?.count_subscribe || '-';
   };
 
   const senlerCostBody = (value: PeriodStatistic) => {
-    if (senlerStats === undefined) {
+    if (isSenlerLoading) {
       return <Skeleton width='10rem' />;
     }
+
+    if (senlerStats === undefined) {
+      return '-';
+    }
+
     if (!senlerStats[value.date]?.count_subscribe) {
       return '-';
     }
@@ -76,7 +86,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return senler ? (value.spent / senler).toFixed(2) : '-';
   };
 
-  return !isLoading ? (
+  return !isStatLoading ? (
     <DataTable value={stats} sortField='month' sortOrder={-1} emptyMessage='Нет данных'>
       <Column
         header='Месяц'
