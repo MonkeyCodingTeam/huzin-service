@@ -10,41 +10,27 @@ import { Column } from 'primereact/column';
 import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
-import { TableSkeleton } from '@shared/ui/Skeletons';
-import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
 
 interface GuestStatsTableProps {
+  stats: PeriodStatistic[];
+  monthCount: number;
   client?: Client;
   company_template?: CompanyTemplate;
 }
 
-const monthCount = 6;
-
-export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
-  const [stats, setStats] = useState<PeriodStatistic[]>([]);
+export const GuestStatsTable: FC<GuestStatsTableProps> = ({
+  client,
+  company_template,
+  stats,
+  monthCount,
+}) => {
   const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
-  const [isStatLoading, setIsStatLoading] = useState(true);
   const [isSenlerLoading, setIsSenlerLoading] = useState(true);
 
   useEffect(() => {
-    if (!client?.id) return;
-
-    GuestAPI.getCompanyStats(client.id, {
-      date_from: DateTime.now().minus({ month: monthCount - 1 }),
-      date_to: DateTime.now(),
-      metrics: ['base', 'uniques'],
-      company_template_id: company_template?.id,
-    })
-      .then((res) => {
-        setStats(groupStatsByPeriod(res.data, 'month'));
-      })
-      .finally(() => {
-        setIsStatLoading(false);
-      });
-
-    if (!client.group_id) return;
+    if (!client?.group_id) return;
     GuestAPI.getSubscribersCountByPeriod(client.group_id!, {
-      date_from: DateTime.now().minus({ month: monthCount - 1 }),
+      date_from: DateTime.now().minus({ month: monthCount }),
       date_to: DateTime.now(),
       period: 'month',
       company_template_id: company_template?.id,
@@ -86,11 +72,11 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return senler ? (value.spent / senler).toFixed(2) : '-';
   };
 
-  return !isStatLoading ? (
-    <DataTable value={stats} sortField='month' sortOrder={-1} emptyMessage='Нет данных'>
+  return (
+    <DataTable value={stats} sortField='date' sortOrder={-1} emptyMessage='Нет данных'>
       <Column
         header='Месяц'
-        field='month'
+        field='date'
         style={{ fontWeight: 'bold' }}
         body={(value) => {
           return DateTime.fromFormat(value.date, 'yyyy-MM').setLocale('ru').toFormat('LLLL');
@@ -114,7 +100,5 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         body={(value) => Math.round(value.clicks).toLocaleString()}
       />
     </DataTable>
-  ) : (
-    <TableSkeleton rows={monthCount} columns={monthCount} />
   );
 };

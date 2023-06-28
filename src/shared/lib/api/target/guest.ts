@@ -9,6 +9,7 @@ import { AxiosPromise } from 'axios';
 import { axiosAppInstance } from '@shared/lib/axios';
 import { Client } from '@entities/client';
 import { Group } from '@entities/group';
+import { Company } from '@entities/company';
 
 const BASE_URL = 'guest-stat';
 const ROUTES = {
@@ -44,4 +45,6 @@ export const GuestAPI = {
       params: payload,
     });
   },
+  getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
+    axiosAppInstance.get(`${BASE_URL}/client/${clientId}/company`),
 };

@@ -1,5 +1,6 @@
 import { Client } from '@entities/client/types';
 import { CompanyTemplate } from '@shared/lib/api/target/types/company';
+import { Company } from '@entities/company';
 
 export interface GetStatisticProps {
   date_to: AppDate;
@@ -20,7 +21,7 @@ export interface ClientsStatisticResponse {
 }
 
 export interface Statistic {
-  id: Client['id'];
+  id: Client['id'] | Company['id'];
   rows?: StatisticResponse[];
   total: Partial<BaseStatistic & UniquesStatistic>;
 }

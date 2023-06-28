@@ -1,22 +1,18 @@
 // import { ClientsStatisticResponse, StatisticResponse } from '@shared/lib/api/target/types';
 //
-import { DateTime } from 'luxon'; //
-import {
-  ClientsStatisticResponse,
-  PeriodStatistic,
-  SummeryFields,
-} from '@shared/lib/api/target/types';
+import {DateTime} from 'luxon'; //
+import {ClientsStatisticResponse, PeriodStatistic, SummeryFields,} from '@shared/lib/api/target/types';
 
 const fields: (keyof SummeryFields)[] = ['spent', 'clicks', 'shows'];
 
 export const groupStatsByPeriod = (
-  stats: ClientsStatisticResponse,
+  stats?: ClientsStatisticResponse,
   period: 'day' | 'week' | 'month' = 'month',
 ): PeriodStatistic[] => {
   const result: Record<string, PeriodStatistic> = {};
   const periodFormat = period === 'month' ? 'yyyy-MM' : 'yyyy-MM-dd';
 
-  if (!stats.items) {
+  if (!stats || !stats.items) {
     return [];
   }
   stats.items.forEach((item) => {
