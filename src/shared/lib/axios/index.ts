@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const VkApiVersion = 5.131;
 
+const BASE_URL = `${__APP_API_URL__}/api`;
+
 export const axiosVkInstance = axios.create({
   baseURL: __VK_API_URL__,
   headers: {
@@ -13,7 +15,17 @@ export const axiosVkInstance = axios.create({
 });
 
 export const axiosAppInstance = axios.create({
-  baseURL: `${__APP_API_URL__}/api`,
+  baseURL: BASE_URL,
+  withCredentials: true,
+});
+
+export const axiosTargetInstance = axios.create({
+  baseURL: `${BASE_URL}/target`,
+  withCredentials: true,
+});
+
+export const axiosContentInstance = axios.create({
+  baseURL: `${BASE_URL}/content`,
   withCredentials: true,
 });
 

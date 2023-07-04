@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AuthThunk } from '@processes/auth';
-import { User } from '@entities/user';
+import { UserAPI } from '@entities/user';
 
-export const emptyUserState: User = {
+export const emptyUserState: UserAPI = {
   id: 0,
   name: '',
   login: '',
@@ -16,7 +16,7 @@ export const userModel = createSlice({
   initialState: emptyUserState,
   name: '@@USER',
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (state, action: PayloadAction<UserAPI>) => {
       return action.payload;
     },
   },

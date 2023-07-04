@@ -1,0 +1,41 @@
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  align-items: center;
+
+  &__header {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+
+    &__title {
+      overflow: hidden;
+      max-width: 10rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__linked {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+  }
+
+  &__submit {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}
+
+.upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  background-color: transparent;
+}

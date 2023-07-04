@@ -28,6 +28,8 @@ const StoriesPage = () => {
     }
   };
 
+  if (!group) return;
+
   return (
     <div className={css.container}>
       <ListBox
@@ -44,11 +46,7 @@ const StoriesPage = () => {
           <span className={css.stories__header__title}>{group?.name}</span>
           <div className={css.stories__header__tools}>
             <Button label='Добавить сторис' severity='success' onClick={() => setVisible(true)} />
-            <AddStoriesDialog
-              visible={visible}
-              onHide={() => setVisible(false)}
-              title={group?.name}
-            />
+            <AddStoriesDialog visible={visible} onHide={() => setVisible(false)} group={group} />
           </div>
         </div>
         <div className={css.stories__block}>

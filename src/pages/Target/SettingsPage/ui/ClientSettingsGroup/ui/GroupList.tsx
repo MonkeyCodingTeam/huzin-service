@@ -2,7 +2,7 @@ import { FC, MouseEvent, useCallback, useRef } from 'react';
 import { Button } from 'primereact/button';
 import css from './ClientSettingsGroup.module.scss';
 import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
-import { GroupApi } from '@shared/lib/api/target/group';
+import { GroupApi } from '@entities/group/api/group';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { Field, Form, Formik, FormikValues } from 'formik';

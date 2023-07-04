@@ -1,1 +1,1 @@
-export * from './userApi';
+export * from './user';

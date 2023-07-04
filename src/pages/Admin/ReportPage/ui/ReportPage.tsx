@@ -4,7 +4,7 @@ import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { AdminAPI } from '@shared/lib/api/admin';
 import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader';
-import { User, UserAPI } from '@entities/user';
+import { UserAPI } from '@entities/user';
 import { DropdownChangeEvent } from 'primereact/dropdown';
 import { FilterMatchMode } from 'primereact/api';
 import { Badge } from 'primereact/badge';
@@ -13,8 +13,8 @@ import { DateTime } from 'luxon';
 const ReportPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [clientsFiltered, setClientsFiltered] = useState<Client[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [selectedUser, setSelectedUser] = useState<User>();
+  const [users, setUsers] = useState<UserAPI[]>([]);
+  const [selectedUser, setSelectedUser] = useState<UserAPI>();
   const [filters, setFilters] = useState<
     Record<string, { value: string; matchMode: FilterMatchMode }>
   >({
@@ -53,7 +53,7 @@ const ReportPage = () => {
   const userTemplate = (client: Client) => {
     return (
       <>
-        {client.users?.map((user: User) => (
+        {client.users?.map((user: UserAPI) => (
           <p key={user.id}>{user.name}</p>
         ))}
       </>

@@ -1,58 +1,58 @@
-import { axiosAppInstance } from '@shared/lib/axios';
+import { axiosTargetInstance } from '@shared/lib/axios';
 import { AxiosPromise } from 'axios';
 import {
+  Client,
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
   InvoiceUpdatePayload,
   Statistic,
-} from '@shared/lib/api/target/types';
-import { Client } from '@entities/client';
-import { User } from '@entities/user';
-import { Company } from '@entities/company';
+} from '@entities/client/types';
+import { UserAPI } from '@entities/user';
+import { Company } from '@entities/company/types';
 
-const BASE_URL = 'target/client';
-const STAT_URL = 'target/statistic/client';
+const BASE_URL = 'client';
+const STAT_URL = 'statistic/client';
 
 export const ClientAPI = {
   getClients: async (payload?: {
-    user_id?: User['id'];
+    user_id?: UserAPI['id'];
     with?: ('currentInvoice' | 'group')[];
   }): AxiosPromise<Client[]> => {
-    return axiosAppInstance.get(BASE_URL, {
+    return axiosTargetInstance.get(BASE_URL, {
       params: payload,
     });
   },
   getClient: async (clientId: Client['id']): AxiosPromise<Client> => {
-    return axiosAppInstance.get(`${BASE_URL}/${clientId}`);
+    return axiosTargetInstance.get(`${BASE_URL}/${clientId}`);
   },
   getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
-    axiosAppInstance.get(`${BASE_URL}/${clientId}/company`),
+    axiosTargetInstance.get(`${BASE_URL}/${clientId}/company`),
   updateClient: async (
     id: Client['id'],
     payload: Partial<Omit<Client, 'id' | 'created_at' | 'updated_at'>>,
   ): AxiosPromise<Client> => {
-    return axiosAppInstance.patch(`${BASE_URL}/${id}`, payload);
+    return axiosTargetInstance.patch(`${BASE_URL}/${id}`, payload);
   },
   getStatistics: async (
     id: Client['id'],
     payload: GetStatisticByCompaniesProps,
   ): AxiosPromise<ClientsStatisticResponse> => {
     const template = payload.company_template_id ? `/template/${payload.company_template_id}` : '';
-    return axiosAppInstance.get(`${STAT_URL}/${id}${template}`, {
+    return axiosTargetInstance.get(`${STAT_URL}/${id}${template}`, {
       params: payload,
     });
   },
   getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<Statistic[]> =>
-    axiosAppInstance.get(STAT_URL, {
+    axiosTargetInstance.get(STAT_URL, {
       params: payload,
     }),
-  toggleWatcher: async (client: Client, user: User): AxiosPromise<boolean> =>
-    axiosAppInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
+  toggleWatcher: async (client: Client, user: UserAPI): AxiosPromise<boolean> =>
+    axiosTargetInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
   updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
-    axiosAppInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),
+    axiosTargetInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),
   getCurrentInvoice: async (clientId: Client['id']): AxiosPromise<File> =>
-    axiosAppInstance.get(`target/invoice/client/${clientId}/current`, {
+    axiosTargetInstance.get(`target/invoice/client/${clientId}/current`, {
       responseType: 'blob',
     }),
 };

@@ -1,13 +1,11 @@
 import {
-  ClientsStatisticResponse,
   CompanyTemplate,
-  GetStatisticByCompaniesProps,
   GetSubscribersCountPriodRequest,
   GetSubscribersCountResponse,
 } from '@shared/lib/api/target/types';
 import { AxiosPromise } from 'axios';
-import { axiosAppInstance } from '@shared/lib/axios';
-import { Client } from '@entities/client';
+import { axiosTargetInstance } from '@shared/lib/axios';
+import { Client, ClientsStatisticResponse, GetStatisticByCompaniesProps } from '@entities/client';
 import { Group } from '@entities/group';
 import { Company } from '@entities/company';
 
@@ -24,15 +22,15 @@ export const GuestAPI = {
     const route = `${ROUTES.CLIENT}/${clientId}/stats${
       payload.company_template_id ? `/${payload.company_template_id}` : ''
     }`;
-    return axiosAppInstance.get(route, {
+    return axiosTargetInstance.get(route, {
       params: payload,
     });
   },
   getClient: async (clientId: Client['id']): AxiosPromise<Client> => {
-    return axiosAppInstance.get(`${ROUTES.CLIENT}/${clientId}`);
+    return axiosTargetInstance.get(`${ROUTES.CLIENT}/${clientId}`);
   },
   getCompanyTemlpates: async (): AxiosPromise<CompanyTemplate[]> => {
-    return axiosAppInstance.get(`${BASE_URL}/company-template`);
+    return axiosTargetInstance.get(`${BASE_URL}/company-template`);
   },
   getSubscribersCountByPeriod: async (
     groupId: Group['id'],
@@ -41,10 +39,10 @@ export const GuestAPI = {
     const route = `${BASE_URL}/subscribers_count/${groupId}/period${
       payload.company_template_id ? `/${payload.company_template_id}` : ''
     }`;
-    return axiosAppInstance.get(route, {
+    return axiosTargetInstance.get(route, {
       params: payload,
     });
   },
   getCompanies: async (clientId: Client['id']): AxiosPromise<Company[]> =>
-    axiosAppInstance.get(`${BASE_URL}/client/${clientId}/company`),
+    axiosTargetInstance.get(`${BASE_URL}/client/${clientId}/company`),
 };
