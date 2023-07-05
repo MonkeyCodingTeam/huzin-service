@@ -2,7 +2,7 @@ import { Transition } from '@widgets';
 import css from './SettingsPage.module.scss';
 import { Outlet, useNavigate } from 'react-router';
 import { TabPanel, TabView, TabViewTabChangeEvent } from 'primereact/tabview';
-import { ROUTES } from '@shared/const/routes';
+import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import { useEffect, useState } from 'react';
 
 const TabRoutes = [ROUTES.TARGET.SettingsClient, ROUTES.TARGET.SettingsCompanies];

@@ -1,15 +1,12 @@
-import { Client } from '@entities/client';
-import {
-  CompanyTemplate,
-  GetSubscribersCountResponse,
-  PeriodStatistic,
-} from '@shared/lib/api/target/types';
+import { Client, PeriodStatistic } from '@entities/client';
 import { FC, useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
 import { GuestAPI } from '@shared/lib/api/target/guest';
+import { GetSubscribersCountResponse } from '@entities/group';
+import { CompanyTemplate } from '@shared/lib/api/target/types';
 
 interface GuestStatsTableProps {
   stats: PeriodStatistic[];

@@ -1,8 +1,7 @@
 import { TableSkeleton } from '@shared/ui/Skeletons';
-import React from 'react';
-import { ROUTES } from '@shared/const/routes';
+import type React from 'react';
+import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
 import { PrimeIcons } from 'primereact/api';
-import { AppRoute } from '@app/providers/RouterProvider';
 import { ClientsPage, ClientTable } from '@pages/Target/ClientsPage';
 import { SenlerPage } from '@pages/Target/SenlerPage';
 import { BudgetCutsPage } from '@pages/Target/BudgetCutsPage';

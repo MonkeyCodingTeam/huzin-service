@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react';
-import { Navigate, Outlet, RouteProps, useNavigate } from 'react-router';
+import { type FC, useEffect } from 'react';
+import { Navigate, Outlet, type RouteProps, useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
-import { ROUTES } from '@shared/const/routes';
+import { ROUTES } from '@app/providers/RouterProvider';
 import { AuthThunk } from '@processes/auth';
-import { Role } from '@entities/user';
+import type { Role } from '@entities/user';
 
 export const ProtectedRoutes: FC<RouteProps & { roles?: Role['slug'][] }> = ({ roles = [] }) => {
   const user = useAppSelector((state) => state.user);

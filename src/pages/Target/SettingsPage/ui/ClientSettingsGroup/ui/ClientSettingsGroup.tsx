@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
-import { ClientGroupAPI } from '@entities/group/api/group';
+import { ClientGroupAPI, Group } from '@entities/group';
 import css from './ClientSettingsGroup.module.scss';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
-import { Group } from '@entities/group';
 import { Client } from '@entities/client';
 import { GroupList } from './GroupList';
 

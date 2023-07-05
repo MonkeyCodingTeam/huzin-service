@@ -1,5 +1,5 @@
-import { AppRoute } from '@app/providers/RouterProvider';
-import { Role } from '@entities/user';
+import type { AppRoute } from '@app/providers/RouterProvider';
+import type { Role } from '@entities/user';
 
 export enum TARGET_ROUTES {
   Clients = '/target/client',

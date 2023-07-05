@@ -1,7 +1,7 @@
 import { SignInData } from '@processes/auth';
 import { axiosAppInstance, axiosInstance } from '@shared/lib/axios';
 import { AxiosPromise } from 'axios';
-import { emptyUserState, UserAPI } from '@entities/user';
+import { emptyUserState, User } from '@entities/user';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const Routes = {
@@ -19,7 +19,7 @@ export const AuthAPI = {
       }),
     ),
   logout: (): AxiosPromise => axiosInstance.post(Routes.LOGOUT),
-  getUser: (): AxiosPromise<UserAPI> => axiosAppInstance.get(Routes.GET_USER),
+  getUser: (): AxiosPromise<User> => axiosAppInstance.get(Routes.GET_USER),
 };
 
 export const AuthThunk = {

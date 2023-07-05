@@ -16,7 +16,7 @@ import { getDownloadObject } from '@shared/lib/yandex';
 import { Messages } from 'primereact/messages';
 import { DateTime } from 'luxon';
 import { GroupStoryAPI } from '@entities/story/api/groupStory';
-import { Group } from '@entities/group/types';
+import { Group } from '@entities/group';
 
 interface AddStoriesDialogProps {
   visible: boolean;

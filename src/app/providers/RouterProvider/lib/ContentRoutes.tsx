@@ -1,7 +1,6 @@
-import { ROUTES } from '@shared/const/routes';
+import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
 import { PrimeIcons } from 'primereact/api';
-import React from 'react';
-import { AppRoute } from '@app/providers/RouterProvider';
+import type React from 'react';
 import { StoriesPage } from '@pages/Content/StoriesPage';
 
 export const ContentRoutes: AppRoute[] = [

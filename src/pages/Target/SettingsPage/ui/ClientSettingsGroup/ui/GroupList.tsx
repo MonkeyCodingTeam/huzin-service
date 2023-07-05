@@ -2,12 +2,11 @@ import { FC, MouseEvent, useCallback, useRef } from 'react';
 import { Button } from 'primereact/button';
 import css from './ClientSettingsGroup.module.scss';
 import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
-import { GroupApi } from '@entities/group/api/group';
+import { Group, GroupApi } from '@entities/group';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
-import { Group } from '@entities/group';
 
 interface GroupListProps {
   group: Group;

@@ -1,12 +1,12 @@
-import {
-  CompanyTemplate,
-  GetSubscribersCountPriodRequest,
-  GetSubscribersCountResponse,
-} from '@shared/lib/api/target/types';
+import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { AxiosPromise } from 'axios';
 import { axiosTargetInstance } from '@shared/lib/axios';
 import { Client, ClientsStatisticResponse, GetStatisticByCompaniesProps } from '@entities/client';
-import { Group } from '@entities/group';
+import {
+  GetSubscribersCountPriodRequest,
+  GetSubscribersCountResponse,
+  Group,
+} from '@entities/group';
 import { Company } from '@entities/company';
 
 const BASE_URL = 'guest-stat';

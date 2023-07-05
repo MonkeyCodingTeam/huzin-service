@@ -3,13 +3,13 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { DateTime } from 'luxon';
 import { ChangeEvent, FC } from 'react';
-import { UserAPI } from '@entities/user';
+import { User } from '@entities/user/types';
 
 interface BudgetCutsHeaderProps {
-  users: UserAPI[];
+  users: User[];
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onUserChange: (event: DropdownChangeEvent) => void;
-  selectedUser?: UserAPI;
+  selectedUser?: User;
   dateTime?: DateTime;
 }
 

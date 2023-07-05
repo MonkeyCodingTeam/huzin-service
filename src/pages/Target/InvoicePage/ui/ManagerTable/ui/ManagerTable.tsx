@@ -1,10 +1,9 @@
-import { Client } from '@entities/client';
+import { Client } from '@entities/client/types';
 import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { DropdownChangeEvent } from 'primereact/dropdown';
-import { UserAPI } from '@entities/user';
+import { User } from '@entities/user/types';
 import { FilterMatchMode } from 'primereact/api';
 import { ContextMenu } from 'primereact/contextmenu';
-import { ClientAPI } from '@shared/lib/api';
 import { redirectToVK } from '@shared/lib/util';
 import { MenuItem } from 'primereact/menuitem';
 import { TableLoader } from '@widgets';
@@ -14,15 +13,17 @@ import { Column } from 'primereact/column';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { Checkbox } from 'primereact/checkbox';
 import { type Toast } from 'primereact/toast';
+import { UserAPI } from '@entities/user/api';
+import { ClientAPI } from '@entities/client';
 
 interface ManagerTableProps {
-  user: UserAPI;
+  user: User;
   toast: RefObject<Toast>;
 }
 
 export const ManagerTable: FC<ManagerTableProps> = ({ user, toast }) => {
-  const [users, setUsers] = useState<UserAPI[]>([]);
-  const [selectedUser, setSelectedUser] = useState<UserAPI>();
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User>();
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClients] = useState<Client>();

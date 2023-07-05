@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { ClientAPI } from '@shared/lib/api';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import css from './ClientsList.module.scss';
-import { Client } from '@entities/client';
+import { Client, ClientAPI } from '@entities/client';
 
 interface ClientsListProps {
   client?: Client;

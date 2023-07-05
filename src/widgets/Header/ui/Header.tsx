@@ -9,11 +9,15 @@ import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
 import { Menu } from 'primereact/menu';
 import { useNavigate } from 'react-router';
-import { type appService, ROUTES } from '@shared/const/routes';
+import {
+  AdminRoutes,
+  type appService,
+  ContentRoutes,
+  ROUTES,
+  TargetRoutes,
+} from '@app/providers/RouterProvider';
 import { AuthThunk } from '@processes/auth';
 import { Link } from 'react-router-dom';
-import { ContentRoutes, TargetRoutes } from '@app/providers/RouterProvider';
-import { AdminRoutes } from '@app/providers/RouterProvider/lib/AdminRoutes';
 
 export const Header: FC<{ children: ReactElement }> = ({ children }) => {
   const appServices: appService[] = [

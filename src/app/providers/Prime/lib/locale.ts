@@ -1,10 +1,10 @@
-import { LocaleLangType, LocaleType } from '@app/providers/Prime/types';
+import type { LocaleLangType, LocaleType } from '@app/providers/Prime/types';
 
 export const getLocale = (locale: LocaleLangType): LocaleType => {
-  return locales[locale];
+  return localeList[locale];
 };
 
-const locales: Record<LocaleLangType, LocaleType> = {
+const localeList: Record<LocaleLangType, LocaleType> = {
   ru: {
     locale: 'ru',
     options: {

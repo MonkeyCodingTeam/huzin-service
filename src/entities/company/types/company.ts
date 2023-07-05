@@ -1,4 +1,4 @@
-import { Client } from '@entities/client/types';
+import type { Client } from '@entities/client';
 
 export interface Company extends Model {
   name: string;

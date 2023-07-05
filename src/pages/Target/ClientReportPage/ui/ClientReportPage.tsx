@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import { ClientsStatisticResponse, CompanyTemplate } from '@shared/lib/api/target/types';
+import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { setCookie } from '@shared/lib/util';
-import { Client } from '@entities/client';
+import { Client, ClientsStatisticResponse } from '@entities/client/types';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { GuestStatsTable } from '@pages/Target/ClientReportPage/ui/GuestStatsTable';
 import { Loader } from '@shared/ui';

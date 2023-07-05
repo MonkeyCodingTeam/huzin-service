@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Group } from '@entities/group';
-import { GroupApi } from '@shared/lib/api';
+import { emptyGroupState, Group, GroupApi } from '@entities/group';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
-import { ROUTES } from '@shared/const/routes';
+import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import { useNavigate } from 'react-router';
 import { Button } from 'primereact/button';
 import css from './StoriesPage.module.scss';
@@ -10,7 +9,7 @@ import { AddStoriesDialog } from './AddStoriesDialog';
 
 const StoriesPage = () => {
   const [groups, setGroups] = useState<Group[]>([]);
-  const [group, setGroup] = useState<Group>();
+  const [group, setGroup] = useState<Group>(emptyGroupState);
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -27,8 +26,6 @@ const StoriesPage = () => {
       navigate(`${ROUTES.CONTENT.Stories}`);
     }
   };
-
-  if (!group) return;
 
   return (
     <div className={css.container}>

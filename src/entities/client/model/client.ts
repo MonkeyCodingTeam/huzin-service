@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Client } from '@entities/client/types';
+import { Client } from '@entities/client';
 
 export const emptyClientState: Client = {
   id: 0,

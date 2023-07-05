@@ -1,8 +1,8 @@
-import React from 'react';
+import type React from 'react';
 import { StubPage } from '@pages/StubPage';
 import { MainPage } from '@pages/MainPage';
 import { ClientReportPage } from '@pages/Target/ClientReportPage';
-import { AppRoute, AuthRoutes } from '@app/providers/RouterProvider';
+import { type AppRoute, AuthRoutes } from '@app/providers/RouterProvider';
 
 export const ProtectedAppRoutes: AppRoute[] = [
   {

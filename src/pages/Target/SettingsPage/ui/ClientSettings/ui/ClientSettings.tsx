@@ -1,20 +1,18 @@
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
-import { selectClient } from '@entities/client/model';
+import { Client, ClientAPI, selectClient } from '@entities/client';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { ROUTES } from '@shared/const/routes';
-import { ClientAPI } from '@shared/lib/api';
+import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
 import { Link, Loader } from '@shared/ui';
-import { Client } from '@entities/client';
-import { ClientSettingsGroup } from '../../ClientSettingsGroup';
 import { Tag } from 'primereact/tag';
 import { PrimeIcons } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
+import { ClientSettingsGroup } from '@pages/Target/SettingsPage';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -100,7 +98,7 @@ export const ClientSettings = () => {
                 <ClientSettingsGroup client={selectedClient} />
               </div>
               <Divider id='telegram' align='left'>
-                <a href='#telegram' className={css.settings__list__anchor}>
+                <a href='#telegram' className={css.settings__list_model_anchor}>
                   # Telegram
                 </a>
               </Divider>

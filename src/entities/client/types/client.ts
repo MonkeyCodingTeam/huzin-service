@@ -1,7 +1,7 @@
-import { UserAPI } from '@entities/user';
-import { Group } from '@entities/group/types';
+import { User } from '@entities/user';
+import { Group } from '@entities/group';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
-import { Company } from '@entities/company/types';
+import { Company } from '@entities/company';
 
 export interface Client extends Model {
   name: string;
@@ -28,7 +28,7 @@ export interface Client extends Model {
   is_mine?: boolean;
 
   current_invoice?: Invoice;
-  users?: UserAPI[];
+  users?: User[];
   group?: Group;
 }
 

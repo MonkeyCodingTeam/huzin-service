@@ -1,14 +1,16 @@
 import { DataTable } from 'primereact/datatable';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { ClientAPI, CompanyTemplateAPI } from '@shared/lib/api';
+import { CompanyTemplateAPI } from '@shared/lib/api';
 import { DateTime } from 'luxon';
-import { CompanyTemplate, PeriodStatistic } from '@shared/lib/api/target/types';
 import { Column } from 'primereact/column';
 import css from './ClientTable.module.scss';
 import { SelectButton } from 'primereact/selectbutton';
 import { TableLoader } from '@widgets';
 import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
+import { PeriodStatistic } from '@entities/client/types';
+import { CompanyTemplate } from '@shared/lib/api/target/types';
+import { ClientAPI } from '@entities/client';
 
 export const ClientTable = () => {
   const selectedClient = useSelector((state: RootState) => state.selectedClient);

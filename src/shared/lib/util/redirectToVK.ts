@@ -1,4 +1,4 @@
-import { Client } from '@entities/client';
+import { Client } from '@entities/client/types';
 
 export const redirectToVK = (client?: Client) => {
   if (!window) {

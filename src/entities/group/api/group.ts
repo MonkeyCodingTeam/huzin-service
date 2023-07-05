@@ -1,16 +1,16 @@
-import {
+import type { AxiosPromise } from 'axios';
+import { axiosAppInstance, axiosTargetInstance } from '@shared/lib/axios';
+import type { Client } from '@entities/client';
+import type {
   GetAllSubscribersCountResponse,
   GetSubscribersCountPriodRequest,
   GetSubscribersCountRequest,
   GetSubscribersCountResponse,
+  Group,
   GroupCreate,
   GroupGetByProps,
   GroupGetByResponse,
-} from '@shared/lib/api/target/types/group';
-import { AxiosPromise } from 'axios';
-import { axiosAppInstance, axiosTargetInstance } from '@shared/lib/axios';
-import { Client } from '@entities/client/types';
-import { Group } from '@entities/group/types';
+} from '@entities/group';
 
 const VKAPI_GROUP = 'vk_method/groups';
 const ROUTE = {

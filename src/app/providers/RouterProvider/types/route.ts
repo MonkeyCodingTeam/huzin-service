@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { PrimeIconsOptions } from 'primereact/api';
-import { ValueOf } from 'synckit';
-import { Role } from '@entities/user';
+import type { ReactNode } from 'react';
+import type { PrimeIconsOptions } from 'primereact/api';
+import type { ValueOf } from 'synckit';
+import type { Role } from '@entities/user';
 
 export interface AppRoute {
   element: ReactNode;

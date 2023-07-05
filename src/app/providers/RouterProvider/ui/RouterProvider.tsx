@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
 interface WithRouterProps {
   children: ReactNode;

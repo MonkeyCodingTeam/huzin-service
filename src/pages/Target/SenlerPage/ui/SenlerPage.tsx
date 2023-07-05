@@ -4,14 +4,13 @@ import { Column } from 'primereact/column';
 import css from './SenlerPage.module.scss';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { FilterMatchMode } from 'primereact/api';
-import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/ui/SenlerHeader';
+import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader';
 import { DateTime } from 'luxon';
-import { ClientAPI, ClientGroupAPI } from '@shared/lib/api';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import classNames from 'classnames';
-import { Client } from '@entities/client';
-import { GetAllSubscribersCountResponse, Statistic } from '@shared/lib/api/target/types';
+import { Client, ClientAPI, Statistic } from '@entities/client';
+import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group';
 
 const SenlerPage = () => {
   const [clients, setClients] = useState<Client[]>([]);

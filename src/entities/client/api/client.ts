@@ -1,22 +1,22 @@
 import { axiosTargetInstance } from '@shared/lib/axios';
-import { AxiosPromise } from 'axios';
-import {
+import type { AxiosPromise } from 'axios';
+import type {
   Client,
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
   InvoiceUpdatePayload,
   Statistic,
-} from '@entities/client/types';
-import { UserAPI } from '@entities/user';
-import { Company } from '@entities/company/types';
+} from '@entities/client';
+import { User } from '@entities/user';
+import { Company } from '@entities/company';
 
 const BASE_URL = 'client';
 const STAT_URL = 'statistic/client';
 
 export const ClientAPI = {
   getClients: async (payload?: {
-    user_id?: UserAPI['id'];
+    user_id?: User['id'];
     with?: ('currentInvoice' | 'group')[];
   }): AxiosPromise<Client[]> => {
     return axiosTargetInstance.get(BASE_URL, {
@@ -47,7 +47,7 @@ export const ClientAPI = {
     axiosTargetInstance.get(STAT_URL, {
       params: payload,
     }),
-  toggleWatcher: async (client: Client, user: UserAPI): AxiosPromise<boolean> =>
+  toggleWatcher: async (client: Client, user: User): AxiosPromise<boolean> =>
     axiosTargetInstance.patch(`${BASE_URL}/${client.id}/watcher/${user.id}`),
   updateInvoice: async (client: Client, payload: InvoiceUpdatePayload): AxiosPromise<Client> =>
     axiosTargetInstance.patch(`${BASE_URL}/${client.id}/recommendation`, payload),

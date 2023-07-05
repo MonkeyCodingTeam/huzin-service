@@ -1,16 +1,16 @@
-import { Suspense } from 'react';
-import { Route, Routes } from 'react-router';
 import {
-  AppRoute,
+  AdminRoutes,
+  type AppRoute,
   AppRoutes,
   ContentRoutes,
   ProtectedAppRoutes,
+  ProtectedRoutes,
   TargetRoutes,
 } from '@app/providers/RouterProvider';
+import { Suspense } from 'react';
+import { Route, Routes } from 'react-router';
 import { Loader } from '@shared/ui';
 import css from './AppRouter.module.scss';
-import { ProtectedRoutes } from '@app/providers/RouterProvider/ui/ProtectedRoutes';
-import { AdminRoutes } from '@app/providers/RouterProvider/lib/AdminRoutes';
 
 export const AppRouter = () => {
   const renderRoutes = (routes: AppRoute[]) => {

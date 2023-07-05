@@ -1,4 +1,4 @@
-import { Group } from '@entities/group/types';
+import type { Group } from '@entities/group';
 
 export const emptyGroupState: Group = {
   city: '',

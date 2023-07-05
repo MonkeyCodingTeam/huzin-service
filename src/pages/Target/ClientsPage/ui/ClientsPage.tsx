@@ -3,12 +3,10 @@ import css from './ClientsPage.module.scss';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
-import { ROUTES } from '@shared/const/routes';
+import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import { Transition } from '@widgets';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
-import { selectClient } from '@entities/client/model';
-import { Client } from '@entities/client';
-import { ClientAPI } from '@shared/lib/api';
+import { Client, ClientAPI, selectClient } from '@entities/client';
 
 const ClientsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);

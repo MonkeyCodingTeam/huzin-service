@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
-import { Client } from '@entities/client/types';
+import { Client } from '@entities/client';
 
 export interface Group extends Model {
   name: string;

@@ -1,7 +1,7 @@
 // import { ClientsStatisticResponse, StatisticResponse } from '@shared/lib/api/target/types';
 //
+import {ClientsStatisticResponse, PeriodStatistic, SummeryFields} from '@entities/client/types';
 import {DateTime} from 'luxon'; //
-import {ClientsStatisticResponse, PeriodStatistic, SummeryFields,} from '@shared/lib/api/target/types';
 
 const fields: (keyof SummeryFields)[] = ['spent', 'clicks', 'shows'];
 

@@ -1,8 +1,8 @@
 import { TableLoader } from '@widgets';
-import { Client, Invoice } from '@entities/client';
+import { Client, Invoice } from '@entities/client/types';
 import { DataTable, DataTableDataSelectableEvent } from 'primereact/datatable';
 import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
-import { ClientAPI, InvoiceApi } from '@shared/lib/api';
+import { InvoiceApi } from '@shared/lib/api';
 import { Column } from 'primereact/column';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
@@ -20,6 +20,7 @@ import { InputText } from 'primereact/inputtext';
 import { FloatInput } from '@shared/ui';
 import { InputTextarea } from 'primereact/inputtextarea';
 import classNames from 'classnames';
+import { ClientAPI } from '@entities/client';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;

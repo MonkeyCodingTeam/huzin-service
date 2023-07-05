@@ -1,8 +1,6 @@
 import css from './MainPage.module.scss';
 import { MainPageSection } from '@pages/MainPage/ui/MainPageSection';
-import { TargetRoutes } from '@app/providers/RouterProvider/lib/TargetRoutes';
-import { AppRoute, ContentRoutes } from '@app/providers/RouterProvider';
-import { AdminRoutes } from '@app/providers/RouterProvider/lib/AdminRoutes';
+import { AdminRoutes, AppRoute, ContentRoutes, TargetRoutes } from '@app/providers/RouterProvider';
 import { useEffect, useState } from 'react';
 import { useAppSelector } from '@shared/lib/redux';
 import { Role } from '@entities/user';
