@@ -31,7 +31,7 @@ export const selectedClient = createSlice({
     selectClient(state, action) {
       return action.payload;
     },
-    forgetClient(state, action) {
+    forgetClient() {
       return emptyClientState;
     },
   },

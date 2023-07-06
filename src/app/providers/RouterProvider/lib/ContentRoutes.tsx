@@ -9,5 +9,11 @@ export const ContentRoutes: AppRoute[] = [
     icon: PrimeIcons.VIDEO,
     element: <StoriesPage />,
     path: ROUTES.CONTENT.Stories,
+    children: [
+      {
+        path: ROUTES.CONTENT.StoriesGroup,
+        element: <StoriesPage />,
+      },
+    ],
   },
 ];

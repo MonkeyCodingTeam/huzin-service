@@ -16,6 +16,7 @@ export enum TARGET_ROUTES {
 
 export enum CONTENT_ROUTES {
   Stories = '/content/stories',
+  StoriesGroup = '/content/stories/group/:groupId',
 }
 
 export enum ADMIN_ROUTES {

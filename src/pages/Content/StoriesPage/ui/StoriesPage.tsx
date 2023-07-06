@@ -1,36 +1,71 @@
 import { useEffect, useState } from 'react';
-import { emptyGroupState, Group, GroupApi } from '@entities/group';
+import { Group, GroupApi, selectGroup } from '@entities/group';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { ROUTES } from '@app/providers/RouterProvider/const/routes';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Button } from 'primereact/button';
 import css from './StoriesPage.module.scss';
 import { AddStoriesDialog } from './AddStoriesDialog';
+import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
+import { GroupStoryAPI } from '@entities/story/api/groupStory';
+import { Story } from '@entities/story';
+import { StoryCard } from '@pages/Content/StoriesPage/ui/StoryCard';
 
 const StoriesPage = () => {
+  const selectedGroup = useAppSelector((state: RootState) => state.selectedGroup);
   const [groups, setGroups] = useState<Group[]>([]);
-  const [group, setGroup] = useState<Group>(emptyGroupState);
-  const [visible, setVisible] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [stories, setStories] = useState<Story[]>([]);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const params = useParams<{ groupId: string }>();
 
   useEffect(() => {
     GroupApi.getAll().then((res) => {
       setGroups(res.data);
-      setGroup(res.data[0]);
+      if (!res.data.length) {
+        return;
+      }
+
+      if (selectedGroup.id) {
+        return navigate(`${ROUTES.CONTENT.Stories}/group/${selectedGroup.id}`);
+      }
+
+      const { groupId = res.data[0].id } = params;
+      const group = res.data.find((group) => group.id === +groupId) || res.data[0];
+
+      dispatch(selectGroup(group));
+      navigate(`${ROUTES.CONTENT.Stories}/group/${group.id}`);
     });
   }, []);
 
+  useEffect(() => {
+    navigate(`${ROUTES.CONTENT.Stories}/group/${selectedGroup.id}`);
+  }, [selectedGroup, navigate]);
+
+  useEffect(() => {
+    GroupStoryAPI.getAll(selectedGroup.id).then((res) => {
+      setStories(res.data);
+    });
+  }, [selectedGroup.id]);
+
   const handleGroupChange = (e: ListBoxChangeEvent) => {
     if (e.value) {
-      setGroup(e.value);
-      navigate(`${ROUTES.CONTENT.Stories}`);
+      dispatch(selectGroup(e.value));
     }
+  };
+
+  const handleSubmit = () => {
+    setOpenModal(false);
+    GroupStoryAPI.getAll(selectedGroup.id).then((res) => {
+      setStories(res.data);
+    });
   };
 
   return (
     <div className={css.container}>
       <ListBox
-        value={group}
+        value={selectedGroup}
         listStyle={{ height: 'calc(100% - 47px)' }}
         filter
         filterPlaceholder='Поиск'
@@ -40,21 +75,23 @@ const StoriesPage = () => {
       />
       <div className={css.stories}>
         <div className={css.stories__header}>
-          <span className={css.stories__header__title}>{group?.name}</span>
+          <span className={css.stories__header__title}>{selectedGroup?.name}</span>
           <div className={css.stories__header__tools}>
-            <Button label='Добавить сторис' severity='success' onClick={() => setVisible(true)} />
-            <AddStoriesDialog visible={visible} onHide={() => setVisible(false)} group={group} />
+            <Button label='Добавить сторис' severity='success' onClick={() => setOpenModal(true)} />
+            <AddStoriesDialog
+              visible={openModal}
+              onHide={() => {
+                setOpenModal(false);
+              }}
+              onSubmit={handleSubmit}
+              group={selectedGroup}
+            />
           </div>
         </div>
         <div className={css.stories__block}>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
-          <p>test</p>
+          {stories.map((story, index) => (
+            <StoryCard key={index} story={story} />
+          ))}
         </div>
       </div>
     </div>

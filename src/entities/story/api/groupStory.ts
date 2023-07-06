@@ -1,6 +1,10 @@
 import { axiosContentInstance } from '@shared/lib/axios';
+import { AxiosPromise } from 'axios';
+import { Story } from '@entities/story';
 
 export const GroupStoryAPI = {
-  store: async (groupId: number, payload: FormData) =>
+  getAll: async (groupId: number): AxiosPromise<Story[]> =>
+    axiosContentInstance.get(`group/${groupId}/story`),
+  create: async (groupId: number, payload: FormData): AxiosPromise<Story> =>
     axiosContentInstance.post(`group/${groupId}/story`, payload),
 };

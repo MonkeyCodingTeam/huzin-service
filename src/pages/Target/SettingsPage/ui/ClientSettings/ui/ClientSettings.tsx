@@ -18,8 +18,8 @@ export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const selectedClient = useAppSelector((state: RootState) => state.selectedClient);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const params = useParams<{ clientId: string }>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     ClientAPI.getClients().then((res) => {
@@ -40,10 +40,13 @@ export const ClientSettings = () => {
     });
   }, []);
 
+  useEffect(() => {
+    navigate(`${ROUTES.TARGET.Settings}/client/${selectedClient.id}`);
+  }, [selectedClient, navigate]);
+
   const handleClientChange = (e: ListBoxChangeEvent) => {
     if (e.value) {
-      dispatch(selectClient(clients.find((client) => client.id === e.value)));
-      navigate(`${ROUTES.TARGET.Settings}/client/${e.value}`);
+      dispatch(selectClient(e.value));
     }
   };
 
