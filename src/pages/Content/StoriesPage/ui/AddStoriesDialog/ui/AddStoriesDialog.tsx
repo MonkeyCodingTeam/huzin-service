@@ -140,7 +140,6 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
     const { file } = story;
 
     if (!file) return;
-
     const url = window.URL.createObjectURL(file);
 
     return (
