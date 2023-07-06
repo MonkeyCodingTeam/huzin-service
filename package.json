@@ -10,9 +10,8 @@
     "format": "prettier --write .",
     "proxy": "lcp --proxyUrl https://api.vk.com",
     "lint": "npm run lint:eslint && npm run lint:stylelint",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint . --fix",
     "lint:stylelint": "stylelint \"**/*.scss\"",
-    "test": "jest",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -60,7 +59,7 @@
     "eslint-plugin-promise": "6.1.1",
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
-    "husky": "^8.0.3",
+    "husky": "^8.0.0",
     "postcss": "8.4.21",
     "prettier": "2.8.4",
     "react-redux": "8.0.5",
