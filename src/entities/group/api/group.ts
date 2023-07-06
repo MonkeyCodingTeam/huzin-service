@@ -21,7 +21,7 @@ export const ClientGroupAPI = {
   get: async (clientId: Client['id']): AxiosPromise<Group> =>
     axiosTargetInstance.get(`client/${clientId}/group`),
   getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetByResponse[]> =>
-    axiosTargetInstance.post(ROUTE.getById, {
+    axiosAppInstance.post(ROUTE.getById, {
       ...payload,
       fields: payload.fields?.join(','),
     }),
