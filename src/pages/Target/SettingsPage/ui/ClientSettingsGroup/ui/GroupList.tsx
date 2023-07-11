@@ -59,7 +59,6 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
 
   const saveGroupChange = (values: FormikValues, group: Group) => {
     GroupApi.update(group.id, values).then((res) => {
-      console.log(res.data);
       toast.current!.show({
         severity: 'success',
         detail: 'Сохранено!',
@@ -73,7 +72,7 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
       <Toast ref={toast} />
       <ConfirmPopup />
       <Formik
-        initialValues={{ senler_token: group.senler_token || '' }}
+        initialValues={{ city: '', ...group }}
         onSubmit={(e, formikHelpers) => {
           saveGroupChange(e, group);
           e.senler_token = '';
@@ -109,19 +108,12 @@ export const GroupList: FC<GroupListProps> = ({ group, onDelete }) => {
               />
             </div>
             <InputGroup>
-              <Field
-                as={Input}
-                label='Город'
-                name='city'
-                placeholder={'Введите город круппы'}
-                value={group.city}
-              />
+              <Field as={Input} label='Город' name='city' placeholder={'Введите город круппы'} />
               <Field
                 as={Input}
                 label='Часовой пояс (от МСК)'
                 name='timezone'
                 placeholder={'Введите город группы'}
-                value={group.timezone}
               />
             </InputGroup>
             <InputGroup>

@@ -45,8 +45,11 @@ export const ClientSettings = () => {
   }, [selectedClient, navigate]);
 
   const handleClientChange = (e: ListBoxChangeEvent) => {
-    if (e.value) {
-      dispatch(selectClient(e.value));
+    {
+      const client = clients.find((item) => item.id === e.value);
+      if (client) {
+        dispatch(selectClient(client));
+      }
     }
   };
 

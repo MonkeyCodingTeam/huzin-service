@@ -7,4 +7,6 @@ export const GroupStoryAPI = {
     axiosContentInstance.get(`group/${groupId}/story`),
   create: async (groupId: number, payload: FormData): AxiosPromise<Story> =>
     axiosContentInstance.post(`group/${groupId}/story`, payload),
+  delete: async (storyId: Story['id']): AxiosPromise<Story> =>
+    axiosContentInstance.delete(`story/${storyId}`),
 };

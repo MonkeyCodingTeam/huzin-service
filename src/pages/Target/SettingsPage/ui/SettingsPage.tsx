@@ -1,36 +1,23 @@
-import { Transition } from '@widgets';
-import css from './SettingsPage.module.scss';
-import { Outlet, useNavigate } from 'react-router';
-import { TabPanel, TabView, TabViewTabChangeEvent } from 'primereact/tabview';
 import { ROUTES } from '@app/providers/RouterProvider/const/routes';
-import { useEffect, useState } from 'react';
+import { SettingsTab } from '@widgets/SettingsTab/ui/SettingsTab';
 
 const TabRoutes = [ROUTES.TARGET.SettingsClient, ROUTES.TARGET.SettingsCompanies];
 
-export const SettingsPage = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const navigate = useNavigate();
-  const handleTabChange = (e: TabViewTabChangeEvent) => {
-    setActiveTab(e.index);
-  };
-
-  useEffect(() => {
-    navigate(TabRoutes[activeTab]);
-  }, [activeTab]);
-
+const SettingsPage = () => {
   return (
-    <Transition className={css.container}>
-      <div className={css.container__block}>
-        <TabView
-          activeIndex={activeTab}
-          panelContainerClassName={css.container__block__nav}
-          onTabChange={handleTabChange}
-        >
-          <TabPanel header='Проекты' />
-          <TabPanel header='Компании' />
-        </TabView>
-        <Outlet />
-      </div>
-    </Transition>
+    <SettingsTab
+      tabs={[
+        {
+          name: 'Клиенты',
+          path: ROUTES.TARGET.SettingsClient,
+        },
+        {
+          name: 'Компании',
+          path: ROUTES.TARGET.SettingsCompanies,
+        },
+      ]}
+    />
   );
 };
+
+export default SettingsPage;

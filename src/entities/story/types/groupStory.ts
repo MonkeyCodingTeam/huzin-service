@@ -16,4 +16,6 @@ export interface Story {
   content: Content;
   date: string;
   locale_date: string;
+  is_published: boolean;
+  error: boolean;
 }

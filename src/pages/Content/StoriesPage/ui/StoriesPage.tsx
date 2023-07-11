@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { Group, GroupApi, selectGroup } from '@entities/group';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { ROUTES } from '@app/providers/RouterProvider/const/routes';
@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { GroupStoryAPI } from '@entities/story/api/groupStory';
 import { Story } from '@entities/story';
 import { StoryCard } from '@pages/Content/StoriesPage/ui/StoryCard';
+import { Toast } from 'primereact/toast';
+import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
 
 const StoriesPage = () => {
   const selectedGroup = useAppSelector((state: RootState) => state.selectedGroup);
@@ -19,6 +21,23 @@ const StoriesPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const params = useParams<{ groupId: string }>();
+  const toast = useRef<Toast>(null);
+
+  const deleteStory = (story: Story) => {
+    GroupStoryAPI.delete(story.id).then((res) => {
+      setStories(stories.filter((story) => story.id !== res.data.id));
+    });
+  };
+
+  const confirmRemove = (e: MouseEvent<HTMLElement>, story: Story) => {
+    confirmPopup({
+      target: e.currentTarget,
+      message: 'Хотите удалить сторис?',
+      accept: () => deleteStory(story),
+      acceptLabel: 'Да',
+      rejectLabel: 'Отмена',
+    });
+  };
 
   useEffect(() => {
     GroupApi.getAll().then((res) => {
@@ -44,6 +63,8 @@ const StoriesPage = () => {
   }, [selectedGroup, navigate]);
 
   useEffect(() => {
+    if (!selectedGroup.id) return;
+
     GroupStoryAPI.getAll(selectedGroup.id).then((res) => {
       setStories(res.data);
     });
@@ -64,6 +85,8 @@ const StoriesPage = () => {
 
   return (
     <div className={css.container}>
+      <Toast ref={toast} />
+      <ConfirmPopup />
       <ListBox
         value={selectedGroup}
         listStyle={{ height: 'calc(100% - 47px)' }}
@@ -78,22 +101,29 @@ const StoriesPage = () => {
           <span className={css.stories__header__title}>{selectedGroup?.name}</span>
           <div className={css.stories__header__tools}>
             <Button label='Добавить сторис' severity='success' onClick={() => setOpenModal(true)} />
-            <AddStoriesDialog
-              visible={openModal}
-              onHide={() => {
-                setOpenModal(false);
-              }}
-              onSubmit={handleSubmit}
-              group={selectedGroup}
-            />
+            <a href={`https://vk.com/public${selectedGroup.id}?act=stories`} target='_blank' rel="noreferrer">
+              Сторис группы
+            </a>
           </div>
         </div>
         <div className={css.stories__block}>
           {stories.map((story, index) => (
-            <StoryCard key={index} story={story} />
+            <StoryCard
+              key={`story_${story.id}_${index}`}
+              story={story}
+              removeStory={confirmRemove}
+            />
           ))}
         </div>
       </div>
+      <AddStoriesDialog
+        visible={openModal}
+        onHide={() => {
+          setOpenModal(false);
+        }}
+        onSubmit={handleSubmit}
+        group={selectedGroup}
+      />
     </div>
   );
 };

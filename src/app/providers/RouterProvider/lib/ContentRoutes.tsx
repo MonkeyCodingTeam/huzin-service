@@ -1,7 +1,8 @@
 import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
+import { SettingsPage } from '@pages/Content/SettingsPage';
+import { StoriesPage } from '@pages/Content/StoriesPage';
 import { PrimeIcons } from 'primereact/api';
 import type React from 'react';
-import { StoriesPage } from '@pages/Content/StoriesPage';
 
 export const ContentRoutes: AppRoute[] = [
   {
@@ -15,5 +16,11 @@ export const ContentRoutes: AppRoute[] = [
         element: <StoriesPage />,
       },
     ],
+  },
+  {
+    name: 'Настройки',
+    icon: PrimeIcons.COG,
+    element: <SettingsPage />,
+    path: ROUTES.CONTENT.Settings,
   },
 ];

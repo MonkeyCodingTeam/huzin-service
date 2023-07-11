@@ -28,8 +28,7 @@ interface AddStoriesDialogProps {
 }
 
 interface storiesProps {
-  date?: string | Date | Date[] | null;
-  time: string | null;
+  publish_date: DateTime;
   with_linked: boolean;
   link?: string;
   file?: File;
@@ -46,9 +45,8 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [story, setStory] = useState<storiesProps>({
     with_linked: true,
-    time: '00:00',
+    publish_date: DateTime.now(),
   });
-  const [publishDate, setPublishDate] = useState<DateTime>(DateTime.now);
   const [isFullFilled, setIsFullFilled] = useState(false);
   const [error, setError] = useState<string>();
 
@@ -58,20 +56,8 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
 
   useEffect(() => {
     setError(undefined);
-    const { time, date, file } = story;
-    if (!time?.match(/^(([0-1]?[0-9])|(2[0-3])):[0-5]?[0-9]$/)) {
-      setError('Проверьте введёное время');
-      setIsFullFilled(false);
-    } else {
-      setIsFullFilled(!!date && !!time && !!file);
-      const splitTime = time!.split(':');
-      setPublishDate(
-        DateTime.fromJSDate(date as Date).set({
-          hour: +splitTime[0] - (group.timezone || 0),
-          minute: +splitTime[1],
-        }),
-      );
-    }
+    const { publish_date, file } = story;
+    setIsFullFilled(!!publish_date && !!file);
   }, [story]);
 
   useEffect(() => {
@@ -105,7 +91,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
         .catch((err) => {
           console.log('file error');
           setIsFileLoading(false);
-          setError('Ошибка загрузки, проверьте ссылку');
+          refMessages.current?.show({ severity: 'error', content: 'Не удалось загрузить файл' });
         });
     }, 2000);
 
@@ -163,36 +149,44 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const handleTimeChange = (e: InputMaskChangeEvent) => {
     const splitedTime = e.value?.split(':') || '00:00';
 
-    if (+splitedTime[0] > 23) {
-      e.target.value = `23:${splitedTime[1]}`;
-    }
-    if (+splitedTime[1] > 59) {
-      e.target.value = `${splitedTime[0]}:59`;
-    }
-
     setStory((prevState) => ({
       ...prevState,
-      time: e.target.value || '00:00',
+      publish_date: prevState.publish_date.set({
+        hour: +splitedTime[0] % 24,
+        minute: +splitedTime[1] % 60,
+      }),
     }));
   };
 
   const submit = () => {
-    const { date, time, file, with_linked, link } = story;
-    if (!time || !file || !date) return;
+    const { publish_date, file, with_linked, link } = story;
+    if (!file || !publish_date) return;
 
     const formData = new FormData();
 
     formData.append('content', file, file.name);
-    formData.append('date', publishDate.toString());
+    formData.append('date', publish_date.minus({ hour: group.timezone }).toString());
     formData.append('with_linked', `${+with_linked}`);
 
     if (link) {
       formData.append('link', link);
     }
 
-    GroupStoryAPI.create(group.id, formData).then((res) => {
-      onSubmit();
-    });
+    GroupStoryAPI.create(group.id, formData)
+      .then((res) => {
+        onSubmit();
+      })
+      .catch(({ response }) => {
+        const errors: Record<string, []> = response.data.errors;
+        Object.keys(errors).forEach((error) => {
+          if (error === 'date') {
+            refMessages.current?.show({
+              severity: 'error',
+              content: 'Проверьте дату публикации по МСК',
+            });
+          }
+        });
+      });
   };
 
   const itemTemplate = (inFile: object, options: ItemTemplateOptions) => {
@@ -213,20 +207,22 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
           />
         </div>
         {ContentPreview}
-        {publishDate && (
-          <span>
-            Опубликуется по МСК: <b>{publishDate.toFormat('dd.LL HH:mm')}</b>
-          </span>
-        )}
+        <span>
+          Опубликуется по МСК:{' '}
+          <b>{story.publish_date.minus({ hour: group.timezone }).toFormat('dd.LL HH:mm')}</b>
+        </span>
         <div className='p-inputgroup' style={{ width: 'auto' }}>
           <Calendar
-            value={story?.date}
+            value={story.publish_date.toJSDate()}
             minDate={new Date()}
             dateFormat='dd.mm.yy'
             onChange={(e: CalendarChangeEvent) =>
               setStory((prevState) => ({
                 ...prevState,
-                date: e.value,
+                publish_date: DateTime.fromJSDate(e.value as Date).set({
+                  hour: prevState.publish_date.hour,
+                  minute: prevState.publish_date.minute,
+                }),
               }))
             }
             placeholder='Дата публикации'
@@ -236,7 +232,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
             required
           />
           <InputMask
-            value={story?.time || ''}
+            value={story.publish_date.toFormat('HH:mm')}
             onChange={handleTimeChange}
             placeholder='Время'
             mask='99:99'
