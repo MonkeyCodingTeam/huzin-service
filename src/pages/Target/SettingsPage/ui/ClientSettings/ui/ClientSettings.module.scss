@@ -1,5 +1,11 @@
 .clientList {
   width: 20rem;
+
+  &__item {
+    display: flex;
+    gap: .3rem;
+    align-items: center;
+  }
 }
 
 .container {

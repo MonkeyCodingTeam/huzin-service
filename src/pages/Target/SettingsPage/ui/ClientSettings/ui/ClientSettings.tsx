@@ -54,19 +54,41 @@ export const ClientSettings = () => {
   };
 
   const clientListTemplate = (data: Client) => {
-    if (data.has_telegram) {
-      return (
-        <span>
-          {data.name}{' '}
-          <i
-            title='Есть чат'
-            className={PrimeIcons.TELEGRAM}
-            style={{ color: 'var(--primary-color)' }}
-          />
-        </span>
-      );
+    return (
+      <div className={css.clientList__item}>
+        {hasGroup(data)}
+        <span>{data.name}</span>
+        {hasTelegram(data)}
+      </div>
+    );
+  };
+
+  const hasTelegram = (cleint: Client) => {
+    if (!cleint.has_telegram) {
+      return;
     }
-    return data.name;
+
+    return (
+      <i
+        title='Есть чат'
+        className={PrimeIcons.TELEGRAM}
+        style={{ color: 'var(--primary-color)' }}
+      />
+    );
+  };
+
+  const hasGroup = (cleint: Client) => {
+    if (cleint.group_id) {
+      return;
+    }
+
+    return (
+      <i
+        title='Нет группы'
+        className={PrimeIcons.EXCLAMATION_TRIANGLE}
+        style={{ color: 'var(--warning-color)' }}
+      />
+    );
   };
 
   return (
