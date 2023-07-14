@@ -13,19 +13,33 @@ interface GroupSettingsProps {
 }
 
 export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave }) => {
-  const confirmRemove = useCallback((e: MouseEvent<HTMLButtonElement>, group: Group) => {
-    confirmPopup({
-      target: e.currentTarget,
-      message: 'Хотите удалить группу?',
-      accept: () => onDelete(group.id),
-      acceptLabel: 'Да',
-      rejectLabel: 'Отмена',
-    });
-  }, []);
+  const confirmRemove = useCallback(
+    (e: MouseEvent<HTMLButtonElement>, group: Group) => {
+      confirmPopup({
+        target: e.currentTarget,
+        message: 'Хотите удалить группу?',
+        accept: () => onDelete(group.id),
+        acceptLabel: 'Да',
+        rejectLabel: 'Отмена',
+      });
+    },
+    [onDelete],
+  );
 
   return (
     <div className={css.groupItem}>
-      <span className={css.groupItem__title}>{group.name}</span>
+      <div className={css.groupItem__header}>
+        <span className={css.groupItem__header__title}>{group.name}</span>
+        <Button
+          type='button'
+          icon='pi pi-trash'
+          area-label='Удалить'
+          severity='danger'
+          title='Удалить группу'
+          outlined
+          onClick={(event) => confirmRemove(event, group)}
+        />
+      </div>
       <Formik initialValues={{ ...emptyGroupState, ...group }} onSubmit={onSave} key={group.id}>
         <Form className={css.groupItem__form}>
           <InputGroup>

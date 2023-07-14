@@ -48,7 +48,10 @@ export const GroupSettings = () => {
   };
 
   const handleGroupDelete = (groupId: Group['id']) => {
-    console.log(groupId);
+    GroupApi.delete(groupId).then(({ data }) => {
+      dispatch(selectGroup(groups[0]));
+      setGroups((prevState) => prevState.filter((group) => group.id !== data.id));
+    });
   };
 
   const handleSubmit = (value: FormikValues, helpers: FormikHelpers<{ link: string }>) => {

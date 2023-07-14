@@ -1,5 +1,5 @@
-import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
 import { GroupSettings, SettingsPage, TagSettings } from '@pages/Content/SettingsPage';
+import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
 import { StoriesPage } from '@pages/Content/StoriesPage';
 import { PrimeIcons } from 'primereact/api';
 import type React from 'react';
