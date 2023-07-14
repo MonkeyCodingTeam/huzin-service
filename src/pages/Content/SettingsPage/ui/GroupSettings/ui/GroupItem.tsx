@@ -1,29 +1,18 @@
-import { emptyGroupState, Group, GroupApi } from '@entities/group';
-import { FC, MouseEvent, useCallback, useRef } from 'react';
+import { emptyGroupState, Group } from '@entities/group';
+import { FC, MouseEvent, useCallback } from 'react';
 import { Input, InputGroup } from '@shared/ui';
-import { Field, Form, Formik, FormikValues } from 'formik';
-import { Toast } from 'primereact/toast';
-import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
+import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
+import { confirmPopup } from 'primereact/confirmpopup';
 import css from './GroupSettings.module.scss';
+import { Button } from 'primereact/button';
 
 interface GroupSettingsProps {
   group: Group;
   onDelete: (groupId: Group['id']) => void;
+  onSave: (values: FormikValues, helpers?: FormikHelpers<Group>) => void;
 }
 
-export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete }) => {
-  const toast = useRef<Toast>(null);
-
-  const saveGroupChange = (values: FormikValues, group: Group) => {
-    GroupApi.update(group.id, values).then((res) => {
-      toast.current!.show({
-        severity: 'success',
-        detail: 'Сохранено!',
-        life: 2000,
-      });
-    });
-  };
-
+export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave }) => {
   const confirmRemove = useCallback((e: MouseEvent<HTMLButtonElement>, group: Group) => {
     confirmPopup({
       target: e.currentTarget,
@@ -37,15 +26,8 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete }) => {
   return (
     <div className={css.groupItem}>
       <span className={css.groupItem__title}>{group.name}</span>
-      <Formik
-        initialValues={{ ...emptyGroupState, ...group }}
-        onSubmit={(e, formikHelpers) => {
-          saveGroupChange(e, group);
-          e.senler_token = '';
-        }}
-        key={group.id}
-      >
-        <Form>
+      <Formik initialValues={{ ...emptyGroupState, ...group }} onSubmit={onSave} key={group.id}>
+        <Form className={css.groupItem__form}>
           <InputGroup>
             <Field
               as={Input}
@@ -54,10 +36,9 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete }) => {
               placeholder={'Введите город группы'}
             />
           </InputGroup>
+          <Button className={css.groupItem__form__button} label='Сохранить' />
         </Form>
       </Formik>
-      <Toast ref={toast} />
-      <ConfirmPopup />
     </div>
   );
 };

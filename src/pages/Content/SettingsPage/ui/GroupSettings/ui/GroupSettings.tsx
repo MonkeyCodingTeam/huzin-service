@@ -1,15 +1,16 @@
 import { Group, GroupApi, selectGroup } from '@entities/group';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { useNavigate, useParams } from 'react-router';
-import { selectClient } from '@entities/client';
 import { ROUTES } from '@app/providers/RouterProvider';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { GroupItem } from '@pages/Content/SettingsPage/ui/GroupSettings';
-import { Field, Form, Formik, FormikValues } from 'formik';
+import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import css from './GroupSettings.module.scss';
+import { ConfirmPopup } from 'primereact/confirmpopup';
+import { Toast } from 'primereact/toast';
 
 export const GroupSettings = () => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -17,6 +18,7 @@ export const GroupSettings = () => {
   const dispatch = useAppDispatch();
   const { groupId } = useParams<{ groupId: string }>();
   const navigate = useNavigate();
+  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     GroupApi.getAll().then((res) => {
@@ -38,9 +40,9 @@ export const GroupSettings = () => {
 
   const handleGroupChange = (e: ListBoxChangeEvent) => {
     {
-      const client = groups.find((item) => item.id === e.value);
-      if (client) {
-        dispatch(selectClient(client));
+      const group = groups.find((item) => item.id === e.value);
+      if (group) {
+        dispatch(selectGroup(group));
       }
     }
   };
@@ -49,7 +51,7 @@ export const GroupSettings = () => {
     console.log(groupId);
   };
 
-  const handleSubmit = (value: FormikValues) => {
+  const handleSubmit = (value: FormikValues, helpers: FormikHelpers<{ link: string }>) => {
     const screenName = value.link.match(/vk.com\/(?<screen_name>[\w_.]+)/)?.groups?.screen_name;
 
     if (screenName) {
@@ -69,18 +71,43 @@ export const GroupSettings = () => {
         };
 
         GroupApi.create(group).then((res) => {
+          const newGroup = res.data;
           setGroups((prevState) => {
-            prevState.push(res.data);
+            if (!prevState.find((item) => item.id === newGroup.id)) {
+              prevState.push(newGroup);
+              prevState.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+            }
             dispatch(selectGroup(res.data));
-            return prevState.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+            return prevState;
           });
+          helpers.setValues({ link: '' });
         });
       });
     }
   };
 
+  const handleSaveGroup = (values: FormikValues) => {
+    GroupApi.update(selectedGroup.id, values).then(({ data }) => {
+      setGroups((prevState) =>
+        prevState.map((group) => {
+          if (group.id === data.id) {
+            return data;
+          }
+          return group;
+        }),
+      );
+      toast.current!.show({
+        severity: 'success',
+        detail: 'Сохранено!',
+        life: 2000,
+      });
+    });
+  };
+
   return (
     <div className={css.container}>
+      <Toast ref={toast} />
+      <ConfirmPopup />
       <div className={css.container__left}>
         <Formik initialValues={{ link: '' }} onSubmit={handleSubmit}>
           <Form className='p-inputgroup'>
@@ -94,8 +121,8 @@ export const GroupSettings = () => {
           </Form>
         </Formik>
         <ListBox
-          listStyle={{ height: 'calc(100% - 58px)', overflow: 'auto' }}
-          style={{ height: 'calc(100% - 10px)' }}
+          listStyle={{ height: 'calc(100% - 48px)', overflow: 'auto' }}
+          style={{ height: 'calc(100% - 48px)' }}
           value={selectedGroup.id}
           filter
           filterPlaceholder='Поиск'
@@ -107,7 +134,7 @@ export const GroupSettings = () => {
       </div>
       <div className={css.container__right}>
         {selectedGroup.id ? (
-          <GroupItem group={selectedGroup} onDelete={handleGroupDelete} />
+          <GroupItem group={selectedGroup} onDelete={handleGroupDelete} onSave={handleSaveGroup} />
         ) : (
           'Нет группы'
         )}

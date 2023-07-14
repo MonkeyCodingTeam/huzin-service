@@ -37,7 +37,9 @@ export const SettingsTab: FC<SettingsTabProps> = ({ tabs }) => {
             <TabPanel key={`tab_panel_${index}`} header={tab.name} />
           ))}
         </TabView>
-        <Outlet />
+        <div className={css.container__block__content}>
+          <Outlet />
+        </div>
       </div>
     </Transition>
   );

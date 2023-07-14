@@ -55,8 +55,15 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const refMessages = useRef<Messages>(null);
 
   useEffect(() => {
-    setError(undefined);
+    setStory((prevState) => ({
+      ...prevState,
+      publish_date: prevState.publish_date.set({ hour: DateTime.now().hour + group.timezone }),
+    }));
+  }, [group]);
+
+  useEffect(() => {
     const { publish_date, file } = story;
+    setError(undefined);
     setIsFullFilled(!!publish_date && !!file);
   }, [story]);
 
@@ -148,6 +155,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
 
   const handleTimeChange = (e: InputMaskChangeEvent) => {
     const splitedTime = e.value?.split(':') || '00:00';
+    console.log('time changed');
 
     setStory((prevState) => ({
       ...prevState,

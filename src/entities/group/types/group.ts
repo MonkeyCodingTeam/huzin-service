@@ -8,7 +8,7 @@ export interface Group extends Model {
   site?: string;
   screen_name: string;
   city?: string;
-  timezone?: number;
+  timezone: number;
   photo?: string;
   senler_token_protected?: string;
   senler_token?: string;
@@ -100,7 +100,7 @@ export interface GroupGetByResponse extends Partial<GroupOptionalProps> {
   photo_200: string;
 }
 
-export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_token'> &
+export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_token' | 'timezone'> &
   Partial<Pick<GroupPlace, 'latitude' | 'longitude'>>;
 
 export interface GetSubscribersCountRequest {

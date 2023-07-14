@@ -1,10 +1,8 @@
 import { type AppRoute, ROUTES } from '@app/providers/RouterProvider';
-import { SettingsPage } from '@pages/Content/SettingsPage';
+import { GroupSettings, SettingsPage, TagSettings } from '@pages/Content/SettingsPage';
 import { StoriesPage } from '@pages/Content/StoriesPage';
 import { PrimeIcons } from 'primereact/api';
 import type React from 'react';
-import { TagSettings } from '@pages/Content/SettingsPage/ui/TagSettings/ui/TagSettings';
-import { GroupSettings } from '@pages/Content/SettingsPage/ui/GroupSettings';
 
 export const ContentRoutes: AppRoute[] = [
   {

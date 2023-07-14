@@ -16,6 +16,10 @@
         padding: 4px 1rem;
       }
     }
+
+    &__content {
+      height: calc(100% - 58px);
+    }
   }
 }
 
