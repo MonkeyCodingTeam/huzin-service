@@ -25,8 +25,8 @@
 
   &__header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
     &__title {
       font-size: var(--large-font-size);
