@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  gap: 1rem;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-width: 20rem;
+  }
+
+  &__right {
+    background-color: var(--light-color);
+    border-radius: 1rem;
+  }
+}
+
+.groupItem {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+
+  &__title {
+    font-size: var(--large-font-size);
+  }
+}

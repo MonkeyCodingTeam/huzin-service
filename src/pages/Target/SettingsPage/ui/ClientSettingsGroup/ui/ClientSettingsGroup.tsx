@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { ClientGroupAPI, Group } from '@entities/group';
+import { ClientGroupAPI, Group, GroupApi } from '@entities/group';
 import css from './ClientSettingsGroup.module.scss';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
@@ -21,7 +21,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
     setLoadingGroup(true);
 
     if (screenName) {
-      ClientGroupAPI.getBy({
+      GroupApi.getBy({
         group_id: screenName,
         fields: ['city', 'site'],
       }).then((res) => {

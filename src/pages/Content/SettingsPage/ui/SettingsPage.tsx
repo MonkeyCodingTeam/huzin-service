@@ -1,15 +1,16 @@
 import { SettingsTab } from '@widgets/SettingsTab/ui/SettingsTab';
+import { ROUTES } from '@app/providers/RouterProvider';
 
 const SettingsPage = () => {
   return (
     <SettingsTab
       tabs={[
         {
-          path: '',
+          path: ROUTES.CONTENT.GroupSettings,
           name: 'Группы',
         },
         {
-          path: '',
+          path: ROUTES.CONTENT.TagsSettings,
           name: 'Теги',
         },
       ]}

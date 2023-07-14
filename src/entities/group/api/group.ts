@@ -20,11 +20,6 @@ const ROUTE = {
 export const ClientGroupAPI = {
   get: async (clientId: Client['id']): AxiosPromise<Group> =>
     axiosTargetInstance.get(`client/${clientId}/group`),
-  getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetByResponse[]> =>
-    axiosAppInstance.post(ROUTE.getById, {
-      ...payload,
-      fields: payload.fields?.join(','),
-    }),
   create: async (clientId: Client['id'], payload: GroupCreate): AxiosPromise<Group> =>
     axiosTargetInstance.post(`client/${clientId}/group`, payload),
   delete: async (client: Client): AxiosPromise<Group> =>
@@ -55,6 +50,15 @@ export const GroupApi = {
   getAll: async (): AxiosPromise<Group[]> => axiosAppInstance.get('group'),
   get: async (groupId: Group['id']): AxiosPromise<Group> =>
     axiosAppInstance.get(`group/${groupId}`),
+  getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetByResponse[]> =>
+    axiosAppInstance.post(ROUTE.getById, {
+      ...payload,
+      fields: payload.fields?.join(','),
+    }),
   update: async (groupId: Group['id'], payload: Partial<Group>): AxiosPromise<Group> =>
     axiosAppInstance.patch(`group/${groupId}`, payload),
+  delete: async (groupId: Group['id']): AxiosPromise<Group> =>
+    axiosAppInstance.delete(`group/${groupId}`),
+  create: async (payload: GroupCreate): AxiosPromise<Group> =>
+    axiosAppInstance.post('group', payload),
 };
