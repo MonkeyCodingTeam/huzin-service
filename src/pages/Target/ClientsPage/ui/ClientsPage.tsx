@@ -3,10 +3,11 @@ import css from './ClientsPage.module.scss';
 import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useParams } from 'react-router';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
-import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import { Transition } from '@widgets';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
-import { Client, ClientAPI, selectClient } from '@entities/client';
+import { selectClient } from '@entities/client/model';
+import { Client, ClientAPI } from '@entities/client';
+import { ROUTES } from '@app/providers/RouterProvider';
 
 const ClientsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -18,19 +19,20 @@ const ClientsPage = () => {
   const getClients = () => {
     ClientAPI.getClients().then((res) => {
       setClients(res.data);
-      if (!res.data.length) {
-        return;
+
+      const client = selectedClient.id
+        ? selectedClient
+        : res.data.find((client) => client.id === (+params.clientId! || res.data[0].id));
+
+      if (!selectedClient.id) {
+        if (client) {
+          dispatch(selectClient(client));
+        } else {
+          dispatch(selectClient(res.data[0]));
+        }
       }
 
-      if (selectedClient.id) {
-        return navigate(`${ROUTES.TARGET.Clients}/${selectedClient.id}`);
-      }
-
-      const { clientId = res.data[0].id } = params;
-      const client = res.data.find((client) => client.id === +clientId) || res.data[0];
-
-      dispatch(selectClient(client));
-      navigate(`${ROUTES.TARGET.Clients}/${client.id}`);
+      navigate(`${ROUTES.TARGET.Clients}/${client ? client.id : res.data[0].id}`);
     });
   };
 

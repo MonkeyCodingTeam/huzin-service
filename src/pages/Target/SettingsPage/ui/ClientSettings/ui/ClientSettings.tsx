@@ -1,25 +1,26 @@
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
-import { Client, ClientAPI, selectClient } from '@entities/client';
+import { selectClient } from '@entities/client/model';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { ROUTES } from '@app/providers/RouterProvider/const/routes';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
 import { Link, Loader } from '@shared/ui';
+import { Client, ClientAPI } from '@entities/client';
+import { ClientSettingsGroup } from '../../ClientSettingsGroup';
 import { Tag } from 'primereact/tag';
 import { PrimeIcons } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
-import { ClientSettingsGroup } from '@pages/Target/SettingsPage';
+import { ROUTES } from '@app/providers/RouterProvider';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const selectedClient = useAppSelector((state: RootState) => state.selectedClient);
   const dispatch = useAppDispatch();
-  const params = useParams<{ clientId: string }>();
   const navigate = useNavigate();
+  const params = useParams<{ clientId: string }>();
 
   useEffect(() => {
     ClientAPI.getClients().then((res) => {
@@ -40,16 +41,10 @@ export const ClientSettings = () => {
     });
   }, []);
 
-  useEffect(() => {
-    navigate(`${ROUTES.TARGET.Settings}/client/${selectedClient.id}`);
-  }, [selectedClient, navigate]);
-
   const handleClientChange = (e: ListBoxChangeEvent) => {
-    {
-      const client = clients.find((item) => item.id === e.value);
-      if (client) {
-        dispatch(selectClient(client));
-      }
+    if (e.value) {
+      dispatch(selectClient(clients.find((client) => client.id === e.value)));
+      navigate(`${ROUTES.TARGET.Settings}/client/${e.value}`);
     }
   };
 
@@ -91,12 +86,12 @@ export const ClientSettings = () => {
     );
   };
 
+  // @ts-ignore
   return (
     <div className={css.container}>
       <ListBox
         className={css.clientList}
-        listStyle={{ height: 'calc(100% - 58px)', overflow: 'auto' }}
-        style={{ height: 'calc(100% - 10px)' }}
+        listStyle={{ height: 'calc(100% - 61px)' }}
         value={selectedClient.id}
         filter
         filterPlaceholder='Поиск'
@@ -118,15 +113,15 @@ export const ClientSettings = () => {
                 <p>Ссылка на отчёт</p>
               </Link>
               <div>
-                <Divider style={{ marginTop: 0 }} id='group' align='left'>
-                  <a className={css.settings__list__anchor} href='#group'>
-                    # Группа
+                <Divider style={{ marginTop: 0 }} id='main' align='left'>
+                  <a className={css.settings__list__anchor} href='#main'>
+                    # Группы
                   </a>
                 </Divider>
                 <ClientSettingsGroup client={selectedClient} />
               </div>
               <Divider id='telegram' align='left'>
-                <a href='#telegram' className={css.settings__list_model_anchor}>
+                <a href='#telegram' className={css.settings__list__anchor}>
                   # Telegram
                 </a>
               </Divider>
@@ -154,8 +149,8 @@ export const ClientSettings = () => {
         </div>
         <Divider layout='vertical' />
         <div className={css.settings__panel}>
-          <a href='#group' className={css.settings__panel__anchor}>
-            # Группа
+          <a href='#main' className={css.settings__panel__anchor}>
+            # Группы
           </a>
           <a href='#telegram' className={css.settings__panel__anchor}>
             # Telegram

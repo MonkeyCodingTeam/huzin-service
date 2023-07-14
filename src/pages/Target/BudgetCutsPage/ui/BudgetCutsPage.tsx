@@ -334,7 +334,7 @@ const BudgetCutsPage = () => {
           sortField='name'
           sortOrder={1}
           scrollable
-          scrollHeight='calc(100vh - 180px)'
+          scrollHeight='calc(100vh - 150px)'
           tableStyle={{
             borderCollapse: 'separate',
             alignItems: 'center',

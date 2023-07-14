@@ -11,11 +11,11 @@ import { getPeriodList } from '@shared/lib/util';
 interface SenlerHeaderProps {
   filterChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onWeekChange: (weekStart: DateTime) => void;
-  onRangeChange: (date_from: Period['date_from'], date_to: Period['date_to']) => void;
+  onRangeChange: (period: Period) => void;
 }
 
 export interface Period {
-  range?: string;
+  range: string;
   date_from: DateTime;
   date_to: DateTime;
 }
@@ -30,9 +30,8 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
   // const [months, setMonths] = useState<Period[]>([]);
 
   useEffect(() => {
-    const weekList = getPeriodList('week', 8);
-    setWeeks(weekList);
-    onWeekChange(weekList[1]?.date_from);
+    setWeeks(getPeriodList('week', 8));
+    // setMonths(getPeriodList('month', 3));
   }, []);
 
   useEffect(() => {
@@ -51,7 +50,7 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
         range: 'custom',
       });
 
-      onRangeChange(range.date_from, range.date_to);
+      onRangeChange({ ...range, range: 'day' });
     }
   }, [dates]);
 

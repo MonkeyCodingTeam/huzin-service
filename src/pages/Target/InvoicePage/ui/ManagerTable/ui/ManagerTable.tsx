@@ -1,7 +1,7 @@
-import { Client } from '@entities/client/types';
+import { Client, ClientAPI } from '@entities/client';
 import { ChangeEvent, FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { DropdownChangeEvent } from 'primereact/dropdown';
-import { User } from '@entities/user/types';
+import { User, UserAPI } from '@entities/user';
 import { FilterMatchMode } from 'primereact/api';
 import { ContextMenu } from 'primereact/contextmenu';
 import { redirectToVK } from '@shared/lib/util';
@@ -13,8 +13,6 @@ import { Column } from 'primereact/column';
 import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber';
 import { Checkbox } from 'primereact/checkbox';
 import { type Toast } from 'primereact/toast';
-import { UserAPI } from '@entities/user/api';
-import { ClientAPI } from '@entities/client';
 
 interface ManagerTableProps {
   user: User;
@@ -176,7 +174,7 @@ export const ManagerTable: FC<ManagerTableProps> = ({ user, toast }) => {
         value={clients}
         size='small'
         scrollable
-        scrollHeight='calc(100vh - 160px)'
+        scrollHeight='calc(100vh - 120px)'
         selectionMode='single'
         onContextMenu={(e) => contextMenu.current?.show(e.originalEvent)}
         contextMenuSelection={selectedClient}

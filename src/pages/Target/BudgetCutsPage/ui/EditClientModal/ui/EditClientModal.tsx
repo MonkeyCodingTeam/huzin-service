@@ -1,9 +1,10 @@
 import { Dialog } from 'primereact/dialog';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import css from './EditClientModal.module.scss';
-import { FloatInput } from '@shared/ui';
+import { FloatInput } from '@shared/ui/FloatInput';
 import { Button } from 'primereact/button';
-import { Client, emptyClientState } from '@entities/client';
+import { emptyClientState } from '@entities/client/model/client';
+import { Client } from '@entities/client';
 import { InputText } from 'primereact/inputtext';
 
 type EditClientFields = Pick<Client, 'critical_balance' | 'month_plan' | 'budget_adjustment'>;

@@ -6,7 +6,6 @@ import type {
   GetStatisticByCompaniesProps,
   GetStatisticProps,
   InvoiceUpdatePayload,
-  Statistic,
 } from '@entities/client';
 import { User } from '@entities/user';
 import { Company } from '@entities/company';
@@ -37,13 +36,13 @@ export const ClientAPI = {
   getStatistics: async (
     id: Client['id'],
     payload: GetStatisticByCompaniesProps,
-  ): AxiosPromise<ClientsStatisticResponse> => {
+  ): AxiosPromise<ClientsStatisticResponse[]> => {
     const template = payload.company_template_id ? `/template/${payload.company_template_id}` : '';
     return axiosTargetInstance.get(`${STAT_URL}/${id}${template}`, {
       params: payload,
     });
   },
-  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<Statistic[]> =>
+  getAllStatistics: async (payload: GetStatisticProps): AxiosPromise<ClientsStatisticResponse[]> =>
     axiosTargetInstance.get(STAT_URL, {
       params: payload,
     }),

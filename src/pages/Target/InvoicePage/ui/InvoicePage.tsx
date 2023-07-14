@@ -10,7 +10,7 @@ const InvoicePage = () => {
   const toast = useRef<Toast>(null);
 
   const page = () => {
-    if (user.roles.find((role) => role.slug === 'accountant' || role.slug === 'admin')) {
+    if (user.roles.find((role) => role.slug === 'accountant')) {
       return <AccountantTable toast={toast} />;
     }
     return <ManagerTable toast={toast} user={user} />;

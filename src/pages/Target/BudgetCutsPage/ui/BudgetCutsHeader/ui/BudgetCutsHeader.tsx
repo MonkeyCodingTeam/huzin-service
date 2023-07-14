@@ -3,7 +3,7 @@ import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { DateTime } from 'luxon';
 import { ChangeEvent, FC } from 'react';
-import { User } from '@entities/user/types';
+import { User } from '@entities/user';
 
 interface BudgetCutsHeaderProps {
   users: User[];

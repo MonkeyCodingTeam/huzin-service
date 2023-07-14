@@ -1,5 +1,5 @@
 import { TableLoader } from '@widgets';
-import { Client, Invoice } from '@entities/client/types';
+import { Client, ClientAPI, Invoice } from '@entities/client';
 import { DataTable, DataTableDataSelectableEvent } from 'primereact/datatable';
 import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { InvoiceApi } from '@shared/lib/api';
@@ -20,7 +20,6 @@ import { InputText } from 'primereact/inputtext';
 import { FloatInput } from '@shared/ui';
 import { InputTextarea } from 'primereact/inputtextarea';
 import classNames from 'classnames';
-import { ClientAPI } from '@entities/client';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
@@ -106,7 +105,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
       name='invoice[]'
       accept='.pdf'
       maxFileSize={10000000}
-      chooseLabel='Счёт'
+      chooseLabel='Прикрепить счёт'
     />
   );
 
@@ -295,7 +294,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           <Field
             as={InputText}
             name='vk_number'
-            style={{ maxWidth: '8rem', minWidth: '6rem' }}
+            style={{ maxWidth: '8rem' }}
             placeholder='Счёт вк'
           />
           <Button label='Не оплачен' severity='danger' type='submit' />
@@ -383,7 +382,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
         <DataTable
           value={clientsData}
           scrollable
-          scrollHeight='calc(100vh - 160px)'
+          scrollHeight='calc(100vh - 120px)'
           selectionMode='single'
           key='id'
           sortField='is_budget_agreed'
@@ -393,7 +392,11 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           header={header}
         >
           <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
-          <Column field='recommended_budget' header='Бюджет' body={recommendedBudgetTemplate} />
+          <Column
+            field='recommended_budget'
+            header='Рекомндованный бюджет'
+            body={recommendedBudgetTemplate}
+          />
           <Column
             field='current_invoice_id'
             header='Счёт'

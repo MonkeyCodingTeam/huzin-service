@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from 'react';
-import { ClientGroupAPI, Group, GroupApi } from '@entities/group';
+import { FC, useCallback, useEffect, useState } from 'react';
 import css from './ClientSettingsGroup.module.scss';
 import { Button } from 'primereact/button';
 import { InputGroup } from '@shared/ui/InputGroup';
 import { Input } from '@shared/ui/Input';
+import { ClientGroupAPI, Group, GroupApi } from '@entities/group';
 import { Client } from '@entities/client';
 import { GroupList } from './GroupList';
 
@@ -16,46 +16,47 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
   const [group, setGroup] = useState<Group>();
   const [loadingGroup, setLoadingGroup] = useState(false);
 
+  const getGroups = useCallback(() => {
+    ClientGroupAPI.get(client.id).then((res) => {
+      res.data;
+      setGroup(res.data);
+    });
+  }, [client.id]);
+
   const handleSubmit = () => {
     const screenName = groupLink.match(/vk.com\/(?<screen_name>[\w_.]+)/)?.groups?.screen_name;
-    setLoadingGroup(true);
 
     if (screenName) {
       GroupApi.getBy({
         group_id: screenName,
-        fields: ['city', 'site'],
+        fields: ['city', 'public_date_label', 'site'],
       }).then((res) => {
-        const { id, city, place, screen_name, name, photo_200, site } = res.data[0];
+        const groupVk = res.data[0];
         const group = {
-          id,
-          name,
-          site,
-          screen_name,
-          photo: photo_200,
+          ...groupVk,
+          photo: groupVk?.photo_200,
+          site: groupVk?.site,
           link: `https://vk.com/${screenName}`,
-          city: city?.title,
+          city: groupVk?.city?.title,
         };
 
         ClientGroupAPI.create(client.id, group).then((res) => {
           setGroup(res.data);
           setGroupLink('');
-          setLoadingGroup(false);
         });
       });
     }
   };
 
   useEffect(() => {
-    ClientGroupAPI.get(client.id).then((res) => {
-      setGroup(res.data);
-    });
+    getGroups();
     setGroupLink('');
   }, [client.id]);
 
   const handleDeleteGroup = () => {
-    if (!client.group_id) return;
+    if (!group?.id) return;
 
-    ClientGroupAPI.delete(client).then(() => {
+    GroupApi.delete(group.id).then(() => {
       return setGroup(undefined);
     });
   };

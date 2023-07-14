@@ -47,9 +47,9 @@ export interface Invoice {
 }
 
 export interface GetStatisticProps {
+  period: 'day' | 'week' | 'month' | 'year' | 'overall';
   date_to: AppDate;
   date_from: AppDate;
-  metrics?: Metrics[];
   only_field?: string[];
 }
 
@@ -100,6 +100,37 @@ export interface UniquesStatistic {
   increment: number;
   initial_total: number;
   frequency: number;
+}
+
+export interface GetStatisticProps {
+  period: 'day' | 'week' | 'month' | 'year' | 'overall';
+  date_to: AppDate;
+  date_from: AppDate;
+  only_field?: string[];
+}
+
+export interface GetStatisticByCompaniesProps extends GetStatisticProps {
+  company_template_id?: CompanyTemplate['id'];
+}
+
+export interface ClientsStatisticResponse {
+  id: Client['id'];
+  stats: StatisticResponse[];
+  type: 'ad' | 'campaign' | 'client' | 'office';
+}
+
+export interface StatisticResponse {
+  clicks: number;
+  ctr: number;
+  day_from: string;
+  day_to: string;
+  month: string;
+  effective_cost_per_click: number;
+  effective_cost_per_mille: number;
+  impressions: number;
+  reach: number;
+  join_rate: number;
+  spent: number;
 }
 
 export type InvoiceUpdatePayload = Partial<Pick<Client, 'recommended_budget' | 'is_budget_agreed'>>;

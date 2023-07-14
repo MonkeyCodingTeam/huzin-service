@@ -1,22 +1,21 @@
 import { DataTable } from 'primereact/datatable';
 import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { CompanyTemplateAPI } from '@shared/lib/api';
 import { DateTime } from 'luxon';
 import { Column } from 'primereact/column';
 import css from './ClientTable.module.scss';
 import { SelectButton } from 'primereact/selectbutton';
+import { sumStats } from '@shared/lib/util/sumStats';
 import { TableLoader } from '@widgets';
-import { groupStatsByPeriod } from '@shared/lib/util/groupStatsByPeriod';
-import { PeriodStatistic } from '@entities/client/types';
+import { ClientAPI, StatisticResponse } from '@entities/client';
+import { CompanyTemplateAPI } from '@shared/lib/api';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
-import { ClientAPI } from '@entities/client';
 
 export const ClientTable = () => {
   const selectedClient = useSelector((state: RootState) => state.selectedClient);
+  const [stats, setStats] = useState<StatisticResponse[]>();
   const [selectedTemplate, setSelectedTemplate] = useState<CompanyTemplate>();
   const [companyTemplate, setCompanyTemplate] = useState<CompanyTemplate[]>([]);
-  const [stats, setStats] = useState<PeriodStatistic[]>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,13 +28,12 @@ export const ClientTable = () => {
     setLoading(true);
     if (selectedClient.id) {
       ClientAPI.getStatistics(selectedClient.id, {
-        date_from: DateTime.now().minus({ month: 3 }),
+        period: 'week',
+        date_from: DateTime.now().minus({ month: 5 }),
         date_to: DateTime.now(),
-        metrics: ['base', 'uniques'],
         company_template_id: selectedTemplate?.id,
       }).then((res) => {
-        setStats(groupStatsByPeriod(res.data, 'week'));
-        console.log(res.data);
+        setStats(sumStats(res.data, 'day_from'));
         setLoading(false);
       });
     } else {
@@ -43,17 +41,33 @@ export const ClientTable = () => {
     }
   }, [selectedClient.id, selectedTemplate?.id]);
 
-  const dateBodyTemplate = (stat: PeriodStatistic) => {
-    const date = DateTime.fromFormat(stat.date, 'yyyy-MM-dd').toFormat('dd.MM');
+  const dateBodyTemplate = (stat: StatisticResponse) => {
+    const date = DateTime.fromFormat(stat.day_from, 'yMMdd').toFormat('dd.MM.yyyy');
     return <span>{date}</span>;
   };
 
-  const truncateTemplate = (stat?: number) => (
-    <span>{stat ? Math.round(stat).toLocaleString() : '-'}</span>
+  const spentBodyTemplate = (stat: StatisticResponse) => (
+    <span>{stat.spent ? Math.trunc(stat.spent).toLocaleString() : '-'}</span>
   );
-
-  const toLocaleStringTemplate = (stat?: number, precision = 1) => (
-    <span>{stat ? (+stat).toFixed(precision).toLocaleString() : '-'}</span>
+  const clicksBodyTemplate = (stat: StatisticResponse) => (
+    <span>{stat.clicks ? Math.trunc(stat.clicks).toLocaleString() : '-'}</span>
+  );
+  const impressionsBodyTemplate = (stat: StatisticResponse) => (
+    <span>{stat.impressions ? Math.trunc(stat.impressions).toLocaleString() : '-'}</span>
+  );
+  const cpcBodyTemplate = (stat: StatisticResponse) => (
+    <span>
+      {stat.effective_cost_per_click
+        ? (+stat.effective_cost_per_click).toFixed(1).toLocaleString()
+        : '-'}
+    </span>
+  );
+  const cpmBodyTemplate = (stat: StatisticResponse) => (
+    <span>
+      {stat.effective_cost_per_mille
+        ? (+stat.effective_cost_per_mille).toFixed(1).toLocaleString()
+        : '-'}
+    </span>
   );
 
   return (
@@ -69,7 +83,7 @@ export const ClientTable = () => {
           <DataTable
             selectionMode='single'
             value={stats}
-            sortField='date'
+            sortField='day_to'
             sortOrder={-1}
             reorderableColumns
             tableStyle={{
@@ -79,30 +93,15 @@ export const ClientTable = () => {
             className={css.box__container__table}
             showGridlines
             scrollable
-            scrollHeight='calc(100vh - 120px)'
+            scrollHeight='calc(100vh - 64px)'
             key='id'
             globalFilterFields={['name']}
             emptyMessage='Нет данных'
           >
-            <Column header='Дата' field='date' sortable body={dateBodyTemplate} />
-            <Column
-              header='Расход'
-              field='spent'
-              sortable
-              body={(stat) => truncateTemplate(stat.spent)}
-            />
-            <Column
-              header='Клики'
-              field='clicks'
-              sortable
-              body={(stat) => truncateTemplate(stat.clicks)}
-            />
-            <Column
-              header='Показы'
-              field='shows'
-              sortable
-              body={(stat) => truncateTemplate(stat.shows)}
-            />
+            <Column header='Дата' field='day_from' sortable body={dateBodyTemplate} />
+            <Column header='Расход' field='spent' sortable body={spentBodyTemplate} />
+            <Column header='Клики' field='clicks' sortable body={clicksBodyTemplate} />
+            <Column header='Охват' field='impressions' sortable body={impressionsBodyTemplate} />
             <Column
               header='CTR'
               field='ctr'
@@ -110,29 +109,24 @@ export const ClientTable = () => {
               headerTooltipOptions={{
                 position: 'bottom',
               }}
-              body={(stat) =>
-                stat.shows ? toLocaleStringTemplate((stat.clicks / stat.shows) * 100, 2) : '-'
-              }
             />
             <Column
               header='CPC'
-              field='cpc'
+              field='effective_cost_per_click'
               headerTooltip='Эффективная цена за клик'
               headerTooltipOptions={{
                 position: 'bottom',
               }}
-              body={(stat) =>
-                stat.clicks ? toLocaleStringTemplate(stat.spent / stat.clicks) : '-'
-              }
+              body={cpcBodyTemplate}
             />
             <Column
               header='CPM'
-              field='cpm'
+              field='effective_cost_per_mille'
               headerTooltip='Эффективная цена за тысячу показов'
               headerTooltipOptions={{
                 position: 'bottom',
               }}
-              body={(stat) => toLocaleStringTemplate(stat.spent / stat.shows, 2)}
+              body={cpmBodyTemplate}
             />
           </DataTable>
         </TableLoader>
