@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { TabPanel, TabView, TabViewTabChangeEvent } from 'primereact/tabview';
-import css from '@pages/Target/SettingsPage/ui/SettingsPage.module.scss';
+import css from './SettingsTab.module.scss';
 import { Transition } from '@widgets';
 import { Outlet } from 'react-router-dom';
 
@@ -37,9 +37,7 @@ export const SettingsTab: FC<SettingsTabProps> = ({ tabs }) => {
             <TabPanel key={`tab_panel_${index}`} header={tab.name} />
           ))}
         </TabView>
-        <div className={css.container__block__content}>
-          <Outlet />
-        </div>
+        <Outlet />
       </div>
     </Transition>
   );

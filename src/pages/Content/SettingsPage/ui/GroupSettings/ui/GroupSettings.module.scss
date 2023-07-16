@@ -1,7 +1,8 @@
 .container {
   display: flex;
   gap: 1rem;
-  height: 100%;
+  height: calc(100% - 48px);
+  padding: 1rem;
 
   &__left {
     display: flex;
@@ -21,7 +22,7 @@
 .groupItem {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
+  gap: 1rem;
 
   &__header {
     display: flex;

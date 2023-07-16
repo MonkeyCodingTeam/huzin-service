@@ -61,4 +61,12 @@ export const GroupApi = {
     axiosAppInstance.delete(`group/${groupId}`),
   create: async (payload: GroupCreate): AxiosPromise<Group> =>
     axiosAppInstance.post('group', payload),
+  getLinkedGroups: async (groupId: Group['id']): AxiosPromise<Group[]> =>
+    axiosAppInstance.get(`group/${groupId}/link`),
+  setLinkedGroups: async (
+    groupId: Group['id'],
+    payload: {
+      groups: Group['id'][];
+    },
+  ): AxiosPromise<Group[]> => axiosAppInstance.post(`group/${groupId}/link`, payload),
 };

@@ -91,7 +91,7 @@ export const ClientSettings = () => {
     <div className={css.container}>
       <ListBox
         className={css.clientList}
-        listStyle={{ height: 'calc(100% - 61px)' }}
+        listStyle={{ height: 'calc(100% - 48px)' }}
         value={selectedClient.id}
         filter
         filterPlaceholder='Поиск'

@@ -1,4 +1,4 @@
-import { Group, GroupApi, selectGroup } from '@entities/group';
+import { Group, GroupApi, LinkGroupDialog, selectGroup } from '@entities/group';
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@shared/lib/redux';
 import { useNavigate, useParams } from 'react-router';
@@ -14,6 +14,7 @@ import { Toast } from 'primereact/toast';
 
 export const GroupSettings = () => {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [openLinkDialog, setOpenLinkDialog] = useState(false);
   const selectedGroup = useAppSelector((state) => state.selectedGroup);
   const dispatch = useAppDispatch();
   const { groupId } = useParams<{ groupId: string }>();
@@ -110,6 +111,12 @@ export const GroupSettings = () => {
   return (
     <div className={css.container}>
       <Toast ref={toast} />
+      <LinkGroupDialog
+        group={selectedGroup}
+        onHide={() => setOpenLinkDialog(false)}
+        isOpen={openLinkDialog}
+        groups={groups}
+      />
       <ConfirmPopup />
       <div className={css.container__left}>
         <Formik initialValues={{ link: '' }} onSubmit={handleSubmit}>
@@ -137,7 +144,12 @@ export const GroupSettings = () => {
       </div>
       <div className={css.container__right}>
         {selectedGroup.id ? (
-          <GroupItem group={selectedGroup} onDelete={handleGroupDelete} onSave={handleSaveGroup} />
+          <GroupItem
+            group={selectedGroup}
+            onDelete={handleGroupDelete}
+            onSave={handleSaveGroup}
+            openLinkDialog={() => setOpenLinkDialog(true)}
+          />
         ) : (
           'Нет группы'
         )}

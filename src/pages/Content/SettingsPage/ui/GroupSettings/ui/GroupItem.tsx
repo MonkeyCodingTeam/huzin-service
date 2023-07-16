@@ -10,9 +10,10 @@ interface GroupSettingsProps {
   group: Group;
   onDelete: (groupId: Group['id']) => void;
   onSave: (values: FormikValues, helpers?: FormikHelpers<Group>) => void;
+  openLinkDialog: () => void;
 }
 
-export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave }) => {
+export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave, openLinkDialog }) => {
   const confirmRemove = useCallback(
     (e: MouseEvent<HTMLButtonElement>, group: Group) => {
       confirmPopup({
@@ -40,6 +41,13 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave }) =
           onClick={(event) => confirmRemove(event, group)}
         />
       </div>
+      <Button
+        className={css.groupItem__form__button}
+        onClick={openLinkDialog}
+        title='Связать группу с другой'
+      >
+        Связать группу
+      </Button>
       <Formik initialValues={{ ...emptyGroupState, ...group }} onSubmit={onSave} key={group.id}>
         <Form className={css.groupItem__form}>
           <InputGroup>

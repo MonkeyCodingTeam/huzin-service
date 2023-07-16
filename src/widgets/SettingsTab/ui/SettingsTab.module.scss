@@ -1,0 +1,27 @@
+.container {
+  width: 70vw;
+  margin: auto;
+  height: 100%;
+
+  &__block {
+    height: 100%;
+    background-color: var(--light-color);
+    border-radius: 1rem;
+
+    &__nav {
+      margin-bottom: 1rem;
+      padding: 0 !important;
+
+      &__link {
+        padding: 4px 1rem;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 761rem) {
+  .container {
+    width: 100%;
+  }
+}
