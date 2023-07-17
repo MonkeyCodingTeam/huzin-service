@@ -116,6 +116,7 @@ export const GroupSettings = () => {
         onHide={() => setOpenLinkDialog(false)}
         isOpen={openLinkDialog}
         groups={groups}
+        toast={toast}
       />
       <ConfirmPopup />
       <div className={css.container__left}>

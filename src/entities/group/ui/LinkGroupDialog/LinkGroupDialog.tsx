@@ -1,26 +1,39 @@
-import { FC, useEffect } from 'react';
+import { FC, RefObject, useEffect } from 'react';
 import { Dialog } from 'primereact/dialog';
 import css from './LinkGroupDialog.module.scss';
 import { Group, GroupApi } from '@entities/group';
 import { useFormik } from 'formik';
 import { Checkbox, CheckboxChangeEvent } from 'primereact/checkbox';
 import { Button } from 'primereact/button';
+import { Toast } from 'primereact/toast';
 
 interface LinkGroupDialogProps {
   isOpen: boolean;
   onHide: () => void;
   group: Group;
   groups: Group[];
+  toast: RefObject<Toast>;
 }
 
-export const LinkGroupDialog: FC<LinkGroupDialogProps> = ({ isOpen, onHide, group, groups }) => {
+export const LinkGroupDialog: FC<LinkGroupDialogProps> = ({
+  isOpen,
+  onHide,
+  group,
+  groups,
+  toast,
+}) => {
   const formik = useFormik({
     initialValues: {
       groups: new Set<Group['id']>([]),
     },
     onSubmit: (data) => {
-      GroupApi.setLinkedGroups(group.id, { groups: [...data.groups] }).then(({ data }) => {
-        console.log(data);
+      GroupApi.setLinkedGroups(group.id, { groups: [...data.groups] }).then(() => {
+        onHide();
+        toast.current?.show({
+          severity: 'success',
+          detail: 'Сохранено!',
+          life: 2000,
+        });
       });
     },
   });
@@ -29,16 +42,11 @@ export const LinkGroupDialog: FC<LinkGroupDialogProps> = ({ isOpen, onHide, grou
     if (!group.id) return;
 
     GroupApi.getLinkedGroups(group.id).then(({ data }) => {
-      console.log(data);
-      formik.setValues((prevState) => {
-        data.forEach((item) => {
-          prevState.groups.add(item.id);
-          console.log(item.id);
-        });
-        return prevState;
+      formik.setValues({
+        groups: data.reduce<Set<Group['id']>>((prev, current) => prev.add(current.id), new Set()),
       });
     });
-  }, [group]);
+  }, [group.id]);
 
   return (
     <Dialog header='Связать группы' className={css.dialog} visible={isOpen} onHide={onHide}>

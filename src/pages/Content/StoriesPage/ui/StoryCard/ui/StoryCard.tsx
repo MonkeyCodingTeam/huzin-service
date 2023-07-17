@@ -46,6 +46,14 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
         </div>
       );
     }
+
+    if (DateTime.fromSQL(story.date) < DateTime.now()) {
+      return (
+        <div title='Просрочен' className={classNames(css.alert, css.alert_warning)}>
+          Просрочен
+        </div>
+      );
+    }
   };
 
   return (
