@@ -394,7 +394,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           <Column field='name' header='Клиент' style={{ maxWidth: '10rem' }} />
           <Column
             field='recommended_budget'
-            header='Рекомндованный бюджет'
+            header='Рекомендованный бюджет'
             body={recommendedBudgetTemplate}
           />
           <Column

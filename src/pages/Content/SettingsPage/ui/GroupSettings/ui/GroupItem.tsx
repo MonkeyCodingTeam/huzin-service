@@ -1,7 +1,7 @@
-import { emptyGroupState, Group } from '@entities/group';
+import { Group } from '@entities/group';
 import { FC, MouseEvent, useCallback } from 'react';
 import { Input, InputGroup } from '@shared/ui';
-import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
+import { Field, Form, Formik, FormikValues } from 'formik';
 import { confirmPopup } from 'primereact/confirmpopup';
 import css from './GroupSettings.module.scss';
 import { Button } from 'primereact/button';
@@ -9,7 +9,7 @@ import { Button } from 'primereact/button';
 interface GroupSettingsProps {
   group: Group;
   onDelete: (groupId: Group['id']) => void;
-  onSave: (values: FormikValues, helpers?: FormikHelpers<Group>) => void;
+  onSave: (values: FormikValues) => void;
   openLinkDialog: () => void;
 }
 
@@ -48,7 +48,7 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave, ope
       >
         Связать группу
       </Button>
-      <Formik initialValues={{ ...emptyGroupState, ...group }} onSubmit={onSave} key={group.id}>
+      <Formik initialValues={{ timezone: group.timezone }} onSubmit={onSave} key={group.id}>
         <Form className={css.groupItem__form}>
           <InputGroup>
             <Field
