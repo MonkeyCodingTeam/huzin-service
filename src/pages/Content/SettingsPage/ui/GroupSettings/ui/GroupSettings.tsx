@@ -100,6 +100,7 @@ export const GroupSettings = () => {
           return group;
         }),
       );
+      dispatch(selectGroup(data));
       toast.current!.show({
         severity: 'success',
         detail: 'Сохранено!',

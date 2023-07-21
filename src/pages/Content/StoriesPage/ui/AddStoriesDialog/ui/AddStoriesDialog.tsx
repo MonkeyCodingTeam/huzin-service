@@ -19,6 +19,7 @@ import { GroupStoryAPI } from '@entities/story/api/groupStory';
 import { Group } from '@entities/group';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Message } from 'primereact/message';
+import axios from 'axios';
 
 interface AddStoriesDialogProps {
   visible: boolean;
@@ -74,15 +75,17 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
 
     const timeout = setTimeout(() => {
       getDownloadObject(link)
-        .then((res) => {
-          const { href } = res.data;
+        .then(({ data }) => {
+          const { href } = data;
           const params = new URLSearchParams(href);
           const filename = params.get('filename') || 'yandex_file';
 
-          fetch(href)
-            .then((res) => res.blob())
-            .then((blob) => {
-              const file = new File([blob], filename, {
+          axios
+            .get(href, {
+              responseType: 'blob',
+            })
+            .then(({ data }) => {
+              const file = new File([data], filename, {
                 type: params.get('content_type') || 'image/jpg',
               });
               setStory((prevState) => ({
@@ -96,7 +99,6 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
             .finally(() => setIsFileLoading(false));
         })
         .catch((err) => {
-          console.log('file error');
           setIsFileLoading(false);
           refMessages.current?.show({ severity: 'error', content: 'Не удалось загрузить файл' });
         });
