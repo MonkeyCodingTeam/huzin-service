@@ -146,7 +146,6 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const handleTimeChange = (e: InputMaskChangeEvent) => {
     if (!e.value?.length) return;
     const splitedTime = e.value?.split(':') || '00:00';
-    console.log(e.value);
 
     setStory((prevState) => ({
       ...prevState,
