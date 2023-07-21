@@ -68,6 +68,16 @@ const StoriesPage = () => {
     GroupStoryAPI.getAll(selectedGroup.id).then((res) => {
       setStories(res.data);
     });
+
+    const interval = setInterval(() => {
+      GroupStoryAPI.getAll(selectedGroup.id).then((res) => {
+        setStories(res.data);
+      });
+    }, 1000 * 60 * 2);
+
+    return () => {
+      clearInterval(interval);
+    };
   }, [selectedGroup.id]);
 
   const handleGroupChange = (e: ListBoxChangeEvent) => {
@@ -101,7 +111,11 @@ const StoriesPage = () => {
           <span className={css.stories__header__title}>{selectedGroup?.name}</span>
           <div className={css.stories__header__tools}>
             <Button label='Добавить сторис' severity='success' onClick={() => setOpenModal(true)} />
-            <a href={`https://vk.com/public${selectedGroup.id}?act=stories`} target='_blank' rel="noreferrer">
+            <a
+              href={`https://vk.com/public${selectedGroup.id}?act=stories`}
+              target='_blank'
+              rel='noreferrer'
+            >
               Сторис группы
             </a>
           </div>
