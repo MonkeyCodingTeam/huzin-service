@@ -12,14 +12,13 @@ import classNames from 'classnames';
 import { Calendar, CalendarChangeEvent } from 'primereact/calendar';
 import { InputMask, InputMaskChangeEvent } from 'primereact/inputmask';
 import { Checkbox } from 'primereact/checkbox';
-import { getDownloadObject } from '@shared/lib/yandex';
 import { Messages } from 'primereact/messages';
 import { DateTime } from 'luxon';
 import { GroupStoryAPI } from '@entities/story/api/groupStory';
 import { Group } from '@entities/group';
 import { ProgressSpinner } from 'primereact/progressspinner';
 import { Message } from 'primereact/message';
-import axios from 'axios';
+import { ContentAPI } from '@entities/content';
 
 interface AddStoriesDialogProps {
   visible: boolean;
@@ -74,34 +73,23 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
     setError(undefined);
 
     const timeout = setTimeout(() => {
-      getDownloadObject(link)
-        .then(({ data }) => {
-          const { href } = data;
-          const params = new URLSearchParams(href);
-          const filename = params.get('filename') || 'yandex_file';
-
-          axios
-            .get(href, {
-              responseType: 'blob',
-            })
-            .then(({ data }) => {
-              const file = new File([data], filename, {
-                type: params.get('content_type') || 'image/jpg',
-              });
-              setStory((prevState) => ({
-                ...prevState,
-                link,
-                file,
-              }));
-              setLink('');
-              fileUploadRef.current?.setFiles([file]);
-            })
-            .finally(() => setIsFileLoading(false));
+      ContentAPI.downloadFromYandex(link)
+        .then((res) => {
+          setStory((prevState) => ({
+            ...prevState,
+            link,
+            file: res.data,
+          }));
+          setLink('');
+          fileUploadRef.current?.setFiles([res.data]);
         })
-        .catch((err) => {
-          setIsFileLoading(false);
-          refMessages.current?.show({ severity: 'error', content: 'Не удалось загрузить файл' });
-        });
+        .catch(({ response }) => {
+          refMessages.current?.show({
+            severity: 'error',
+            content: response.data.message,
+          });
+        })
+        .finally(() => setIsFileLoading(false));
     }, 2000);
 
     return () => clearTimeout(timeout);
@@ -183,18 +171,13 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
     }
 
     GroupStoryAPI.create(group.id, formData)
-      .then((res) => {
+      .then(() => {
         onSubmit();
       })
       .catch(({ response }) => {
-        const errors: Record<string, []> = response.data.errors;
-        Object.keys(errors).forEach((error) => {
-          if (error === 'date') {
-            refMessages.current?.show({
-              severity: 'error',
-              content: 'Проверьте дату публикации по МСК',
-            });
-          }
+        refMessages.current?.show({
+          severity: 'error',
+          content: response.data.message,
         });
       });
   };

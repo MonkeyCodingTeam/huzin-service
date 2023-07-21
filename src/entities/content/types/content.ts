@@ -6,3 +6,9 @@ export interface Content {
   mime: string;
   extension: string;
 }
+
+export interface YandexFile {
+  file: Blob;
+  contentType: string;
+  filename: string;
+}
