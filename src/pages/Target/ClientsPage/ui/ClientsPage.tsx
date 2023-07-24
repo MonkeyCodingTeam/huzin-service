@@ -56,7 +56,7 @@ const ClientsPage = () => {
         <ListBox
           value={selectedClient}
           listStyle={{ height: 'calc(100% - 47px)' }}
-          style={{ height: 'calc(100%- 47px)' }}
+          style={{ height: '100%' }}
           filter
           filterPlaceholder='Поиск'
           options={clients}

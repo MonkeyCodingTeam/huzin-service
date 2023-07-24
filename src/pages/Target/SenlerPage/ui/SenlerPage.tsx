@@ -213,7 +213,7 @@ const SenlerPage = () => {
             borderCollapse: 'separate',
             alignItems: 'center',
           }}
-          className={css.table}
+          className={css.container__table}
           size='small'
           showGridlines
           key='id'
@@ -223,7 +223,7 @@ const SenlerPage = () => {
           groupRowsBy='success'
           rowGroupHeaderTemplate={groupHeaderTemplate}
           scrollable
-          scrollHeight='calc(100vh - 120px)'
+          scrollHeight='calc(100% - 56px)'
           header={
             <SenlerHeader
               filterChange={handleFilterChange}

@@ -73,13 +73,13 @@ export const ClientTable = () => {
   return (
     <div className={css.box}>
       <div className={css.box__container}>
-        <SelectButton
-          value={selectedTemplate}
-          options={companyTemplate}
-          onChange={(e) => setSelectedTemplate(e.value)}
-          optionLabel='name'
-        />
         <TableLoader isLoading={loading}>
+          <SelectButton
+            value={selectedTemplate}
+            options={companyTemplate}
+            onChange={(e) => setSelectedTemplate(e.value)}
+            optionLabel='name'
+          />
           <DataTable
             selectionMode='single'
             value={stats}
@@ -93,7 +93,6 @@ export const ClientTable = () => {
             className={css.box__container__table}
             showGridlines
             scrollable
-            scrollHeight='calc(100vh - 64px)'
             key='id'
             globalFilterFields={['name']}
             emptyMessage='Нет данных'

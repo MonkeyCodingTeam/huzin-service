@@ -382,8 +382,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
         <DataTable
           value={clientsData}
           scrollable
-          scrollHeight='calc(100% - 64px)'
-          style={{ height: '100%' }}
+          scrollHeight='calc(100vh - 120px)'
           selectionMode='single'
           key='id'
           sortField='is_budget_agreed'
