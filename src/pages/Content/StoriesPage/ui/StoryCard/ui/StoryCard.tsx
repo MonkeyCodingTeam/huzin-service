@@ -20,13 +20,9 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
     const contentUri = ContentAPI.get(path);
 
     return mime.match(/^video\//) ? (
-      <video
-        src={contentUri}
-        className={css.card__block__media}
-        controls
-        playsInline
-        controlsList='nofullscreen'
-      />
+      <video className={css.card__block__media} controls controlsList='nofullscreen'>
+        <source src={contentUri} />
+      </video>
     ) : (
       <img
         alt={name}
