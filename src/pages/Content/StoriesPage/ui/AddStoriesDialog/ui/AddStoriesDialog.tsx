@@ -30,6 +30,7 @@ interface AddStoriesDialogProps {
 interface storiesProps {
   publish_date: DateTime;
   with_linked: boolean;
+  from_msk: boolean;
   link?: string;
   file?: File;
 }
@@ -45,6 +46,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const [isFileLoading, setIsFileLoading] = useState(false);
   const [story, setStory] = useState<storiesProps>({
     with_linked: true,
+    from_msk: false,
     publish_date: DateTime.now(),
   });
   const [isFullFilled, setIsFullFilled] = useState(false);
@@ -157,7 +159,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   };
 
   const submit = () => {
-    const { publish_date, file, with_linked, link } = story;
+    const { publish_date, file, with_linked, from_msk, link } = story;
     if (!file || !publish_date) return;
 
     const formData = new FormData();
@@ -165,6 +167,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
     formData.append('content', file, file.name);
     formData.append('date', publish_date.minus({ hour: group.timezone }).toString());
     formData.append('with_linked', `${+with_linked}`);
+    formData.append('from_msk', `${+from_msk}`);
 
     if (link) {
       formData.append('link', link);
@@ -233,7 +236,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
             style={{ maxWidth: '4rem', textAlign: 'center' }}
           />
         </div>
-        <div className={css.preview__linked}>
+        <div className={css.preview__ceckbox}>
           <label htmlFor='linkeClients' className='ml-2'>
             Опубликовать в связанных проектах
           </label>
@@ -248,6 +251,23 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
               })
             }
             checked={story.with_linked}
+          />
+        </div>
+        <div className={css.preview__ceckbox}>
+          <label htmlFor='linkeClients' className='ml-2'>
+            Время относительно МСК
+          </label>
+          <Checkbox
+            inputId='linkeClients'
+            onChange={() =>
+              setStory((prevState) => {
+                return {
+                  ...prevState,
+                  from_msk: !story.from_msk,
+                };
+              })
+            }
+            checked={story.from_msk}
           />
         </div>
         <div
