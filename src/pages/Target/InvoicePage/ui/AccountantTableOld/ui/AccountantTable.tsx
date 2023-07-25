@@ -1,5 +1,5 @@
 import { TableLoader } from '@widgets';
-import { Client, ClientAPI, Invoice } from '@entities/client';
+import { Client, ClientAPI } from '@entities/client';
 import { DataTable, DataTableDataSelectableEvent } from 'primereact/datatable';
 import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { InvoiceApi } from '@shared/lib/api';
@@ -20,6 +20,7 @@ import { InputText } from 'primereact/inputtext';
 import { FloatInput } from '@shared/ui';
 import { InputTextarea } from 'primereact/inputtextarea';
 import classNames from 'classnames';
+import { getInvoiceText, Invoice, isInvoiceFullFilled } from '@entities/invoice';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
@@ -55,7 +56,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
       if (isInvoiceHidden) {
         return clients.filter((client) => {
           const { current_invoice } = client;
-          return !current_invoice?.is_vk_paid;
+          return !current_invoice?.vk_paid_at;
         });
       }
       return clients;
@@ -239,7 +240,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   };
 
   const paidTemplate = (client: Client) => {
-    if (client.current_invoice?.is_paid) {
+    if (client.current_invoice?.paid_at) {
       return <Badge severity='success' value='Оплачен' />;
     }
     return (
@@ -274,7 +275,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   const vkPaidTemplate = (client: Client) => {
     const { current_invoice } = client;
 
-    if (current_invoice?.is_vk_paid) {
+    if (current_invoice?.vk_paid_at) {
       return <Badge severity='success' value='Оплачен' />;
     }
 
@@ -287,7 +288,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
       >
         <Form
           className={classNames('p-inputgroup', {
-            'p-disabled': !client.current_invoice?.is_paid,
+            'p-disabled': !client.current_invoice?.paid_at,
           })}
           style={{ justifyContent: 'center' }}
         >
@@ -324,7 +325,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
 
   const submitInvoiceChange = (invoice: FormikValues) => {
     const { number, inn, customer, description } = invoice;
-    InvoiceApi.updateInvoice(invoice.id, { number, inn, customer, description }).then((res) => {
+    InvoiceApi.updateInvoice(invoice.id, { number, inn, description }).then((res) => {
       setClients((prevState) =>
         prevState.map((client) => {
           if (client.id === res.data.client_id) {
@@ -410,15 +411,4 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
       </TableLoader>
     </>
   );
-};
-
-const getInvoiceText = (invoice: Invoice) => {
-  return `Счёт № ${invoice.number}
-Сумма ${invoice.budget.toLocaleString()}
-${invoice.customer} 
-ИНН ${invoice.inn}`;
-};
-
-const isInvoiceFullFilled = (invoice: Invoice) => {
-  return invoice.inn && invoice.customer && invoice.number;
 };

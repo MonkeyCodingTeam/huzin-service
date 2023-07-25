@@ -4,6 +4,7 @@ import { Client } from '@entities/client';
 export const emptyClientState: Client = {
   id: 0,
   name: '',
+  entrepreneur: '',
   all_limit: 0,
   balance: 0,
   critical_balance: 0,
