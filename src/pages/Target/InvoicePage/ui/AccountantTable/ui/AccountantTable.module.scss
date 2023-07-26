@@ -1,29 +1,40 @@
-.filterInvoice {
+.clientList {
+  overflow: auto;
+
+  height: 100%;
+  padding: 1rem;
+
+  background: var(--light-color);
+  border-radius: 1rem;
+
+  &__item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--secondary-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &__header {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+  }
+}
+
+.invoiceList {
   display: flex;
+  flex-direction: column;
   gap: .5rem;
-  align-items: center;
-}
 
-.row {
-  vertical-align: middle !important;
+  padding: 1rem 0;
 
-  & > td {
-    vertical-align: middle !important;
-  }
-}
+  font-size: var(--regular-font-size);
 
-
-.form {
-  &__body {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    margin-bottom: 1rem;
-  }
-
-  &__footer {
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between
+  &__item {
+    padding: 1rem;
+    border-radius: .5rem;
+    box-shadow: 2px 2px 4px 0 rgb(34 60 80 / 20%);
   }
 }

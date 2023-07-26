@@ -29,15 +29,20 @@ export const ClientSettings = () => {
         return;
       }
 
+      const { clientId } = params;
+
+      if (clientId) {
+        const client = res.data.find((client) => client.id === +clientId) || res.data[0];
+        dispatch(selectClient(client));
+        return navigate(`${ROUTES.TARGET.Settings}/client/${client.id}`);
+      }
+
       if (selectedClient.id) {
         return navigate(`${ROUTES.TARGET.Settings}/client/${selectedClient.id}`);
       }
 
-      const { clientId = res.data[0].id } = params;
-      const client = res.data.find((client) => client.id === +clientId) || res.data[0];
-
-      dispatch(selectClient(client));
-      navigate(`${ROUTES.TARGET.Settings}/client/${client.id}`);
+      dispatch(selectClient(res.data[0]));
+      return navigate(`${ROUTES.TARGET.Settings}/client/${res.data[0].id}`);
     });
   }, []);
 

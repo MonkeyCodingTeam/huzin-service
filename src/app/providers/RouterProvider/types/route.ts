@@ -12,4 +12,5 @@ export interface AppRoute {
   children?: Omit<AppRoute, 'protected'>[];
   index?: boolean;
   access?: Role['slug'][];
+  loader?: (...arg: any[]) => any;
 }

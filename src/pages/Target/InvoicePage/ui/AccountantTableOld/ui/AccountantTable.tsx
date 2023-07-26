@@ -45,7 +45,7 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
   }, []);
 
   const getClients = useCallback(() => {
-    ClientAPI.getClients({ with: ['currentInvoice'] }).then((res) => {
+    ClientAPI.getClients({}).then((res) => {
       setClients(res.data);
       setLoading(false);
     });

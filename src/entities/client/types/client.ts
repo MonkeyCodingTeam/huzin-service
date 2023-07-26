@@ -31,7 +31,8 @@ export interface Client extends Model {
 
   current_invoice?: Invoice;
   users?: User[];
-  group?: Group;
+  group: Group;
+  invoices: Invoice[];
 }
 
 export interface GetStatisticProps {
