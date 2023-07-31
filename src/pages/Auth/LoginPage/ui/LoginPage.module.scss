@@ -17,7 +17,7 @@
   padding: 1.5rem 32px;
 
   background-color: var(--light-color);
-  border-radius: 1rem;
+  border-radius: var(--large-border-radius);
 
   &__logo {
     display: flex;

@@ -6,11 +6,16 @@ export interface Invoice {
   budget: number;
   client_id: number;
   path: string;
-  number: string | null;
-  inn: string | null;
-  description: string | null;
-  vk_number: number | null;
-  paid_at: string | null;
-  vk_paid_at: string | null;
+  number: string;
+  inn: string;
+  entrepreneur: string;
+  description?: string;
+  vk_number?: number;
+  paid_at?: string;
+  vk_paid_at?: string;
   client: Client;
 }
+
+export type InvoiceInfo = Pick<Invoice, 'inn' | 'entrepreneur' | 'sum' | 'number' | 'description'>;
+
+export type InvoiceWithFile = InvoiceInfo & { file?: File };

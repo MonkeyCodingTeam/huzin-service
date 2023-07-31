@@ -26,6 +26,15 @@ time, mark, audio, video {
   border: 0;
 }
 
+button {
+  background: transparent;
+  border: transparent;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
@@ -53,4 +62,14 @@ q::before, q::after {
 table {
   border-spacing: 0;
   border-collapse: collapse;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
 }

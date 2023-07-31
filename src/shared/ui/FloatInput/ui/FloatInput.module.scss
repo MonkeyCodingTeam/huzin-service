@@ -1,12 +1,92 @@
 .inputBox {
-  width: 100%;
-  margin-top: 1.5rem;
+  $parent: &;
+  position: relative;
+  z-index: 1;
 
-  & > input, textarea {
-    width: 100%;
+  width: 100%;
+  margin: 14px 0;
+
+  font-size: var(--regular-font-size);
+
+  background-color: var(--light-color);
+  border-radius: var(--border-radius);
+
+  &__label {
+    position: absolute;
+    top: 11px;
+    left: 8px;
+
+    overflow-x: hidden;
+
+    max-width: 20rem;
+    padding: 0 4px;
+
+    color: var(--primary-color);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    background-color: inherit;
+    border-radius: var(--border-radius);
+
+    transition: 0.2s ease all;
+  }
+
+  &__error {
+    position: absolute;
+    bottom: -8px;
+    left: 8px;
+
+    overflow-x: hidden;
+
+    max-width: 20rem;
+    padding: 0 4px;
+
+    color: var(--danger-color);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    background-color: inherit;
+    border-radius: var(--border-radius);
   }
 
   &__input {
+    z-index: 0;
+
+    display: block;
+
+    box-sizing: border-box;
     width: 100%;
+    height: 36px;
+    padding: 0 12px;
+
+    color: #323840;
+
+    background-color: inherit;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+
+    &_error {
+      border-color: var(--danger-color);
+    }
+
+    &:focus {
+      outline: none;
+
+      ~ #{$parent}__label {
+        top: -8px;
+      }
+    }
+
+    &:not(:placeholder-shown) {
+      & ~ #{$parent}__label {
+        top: -8px;
+        font-size: 13px;
+      }
+
+      & ~ #{$parent}__error {
+        font-size: 13px;
+      }
+    }
   }
+
 }

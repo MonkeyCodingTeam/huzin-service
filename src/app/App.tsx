@@ -7,10 +7,14 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch } from '@shared/lib/redux';
 import { AuthThunk } from '@processes/auth';
 import { Loader } from '@shared/ui';
+import { ru } from 'yup-locales';
+import { setLocale } from 'yup';
 
 export function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
+
+  setLocale(ru);
 
   useEffect(() => {
     dispatch(AuthThunk.getUser()).finally(() => setLoading(false));
