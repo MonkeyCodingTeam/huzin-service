@@ -17,8 +17,6 @@ import { InputNumber, InputNumberValueChangeEvent } from 'primereact/inputnumber
 import { Dialog } from 'primereact/dialog';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { InputText } from 'primereact/inputtext';
-import { FloatInput } from '@shared/ui';
-import { InputTextarea } from 'primereact/inputtextarea';
 import classNames from 'classnames';
 import { getInvoiceText, Invoice, isInvoiceFullFilled } from '@entities/invoice';
 
@@ -354,18 +352,18 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
         <Formik onSubmit={submitInvoiceChange} initialValues={selectedInvoice!}>
           <Form>
             <div className={css.form__body}>
-              <FloatInput label='Номер счёта'>
-                <Field as={InputText} name='number' />
-              </FloatInput>
-              <FloatInput label='Заказчик'>
-                <Field as={InputText} name='customer' />
-              </FloatInput>
-              <FloatInput label='ИНН'>
-                <Field as={InputText} name='inn' />
-              </FloatInput>
-              <FloatInput label='Комментарий'>
-                <Field as={InputTextarea} name='description' />
-              </FloatInput>
+              {/*<FloatInput label='Номер счёта'>*/}
+              {/*  <Field as={InputText} name='number' />*/}
+              {/*</FloatInput>*/}
+              {/*<FloatInput label='Заказчик'>*/}
+              {/*  <Field as={InputText} name='customer' />*/}
+              {/*</FloatInput>*/}
+              {/*<FloatInput label='ИНН'>*/}
+              {/*  <Field as={InputText} name='inn' />*/}
+              {/*</FloatInput>*/}
+              {/*<FloatInput label='Комментарий'>*/}
+              {/*  <Field as={InputTextarea} name='description' />*/}
+              {/*</FloatInput>*/}
             </div>
             <div className={css.form__footer}>
               <Button

@@ -84,7 +84,7 @@ export interface GroupGetByProps {
   fields?: (keyof GroupOptionalProps)[];
 }
 
-export interface GroupGetByResponse extends Partial<GroupOptionalProps> {
+interface GroupGetInfo extends Partial<GroupOptionalProps> {
   id: number;
   name: string;
   screen_name: string;
@@ -98,6 +98,11 @@ export interface GroupGetByResponse extends Partial<GroupOptionalProps> {
   photo_50: string;
   photo_100: string;
   photo_200: string;
+}
+
+export interface GroupGetByResponse {
+  groups: GroupGetInfo[];
+  profiles: [];
 }
 
 export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_token' | 'timezone'> &
