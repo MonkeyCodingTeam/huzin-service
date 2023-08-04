@@ -2,13 +2,16 @@ import { FC, MouseEvent, RefObject, useCallback, useEffect, useState } from 'rea
 import { Toast } from 'primereact/toast';
 import { Client, ClientAPI } from '@entities/client';
 import css from './AccountantTable.module.scss';
-import { AddInvoiceDialog, Invoice, InvoiceAPI, InvoiceWithFile } from '@entities/invoice';
+import {
+  AddInvoiceDialog,
+  Invoice,
+  InvoiceAPI,
+  InvoiceList,
+  InvoiceWithFile,
+} from '@entities/invoice';
 import { Link } from '@shared/ui';
 import { InputText } from 'primereact/inputtext';
-import { PrimeIcons } from 'primereact/api';
-import classNames from 'classnames';
 import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
-import { Button } from 'primereact/button';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
@@ -60,42 +63,41 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     });
   }, []);
 
-  const invoiceList = (invoices: Invoice[]) => {
-    return (
-      <ul className={css.invoiceList}>
-        {invoices.map((invoice) => (
-          <li className={css.invoiceList__item} key={invoice.id}>
-            <span className={css.invoiceList__item__title}>
-              <i
-                className={classNames(PrimeIcons.FILE)}
-                style={{ color: 'var(--primary-color)' }}
-              />
-              № {invoice.number}
-            </span>
-            <span>
-              {invoice.entrepreneur} ИНН {invoice.inn}
-            </span>
-            <span>Сумма: {invoice.sum}</span>
-            <div>
-              <Button
-                type='button'
-                icon='pi pi-trash'
-                area-label='Удалить'
-                severity='danger'
-                text
-                onClick={(event) => confirmRemove(event, invoice)}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    );
-  };
+  // const handleDragEnd = (event: DragEndEvent, client: Client) => {
+  //   const { active, over } = event;
+  //
+  //   if (active.id !== over?.id) {
+  //     setClients((prevState) =>
+  //       prevState.map((item) => {
+  //         if (item.id === client.id) {
+  //           const { invoices } = client;
+  //
+  //           const oldInvoice = invoices.find((invoice) => invoice.id === active.id);
+  //           const newInvoice = invoices.find((invoice) => invoice.id === over?.id);
+  //
+  //           if (!oldInvoice || !newInvoice) return client;
+  //
+  //           const oldIndex = invoices.indexOf(oldInvoice);
+  //           const newIndex = invoices.indexOf(newInvoice);
+  //
+  //           item.invoices = arrayMove(invoices, oldIndex, newIndex);
+  //
+  //           const invoiceIds = item.invoices.reduce<Invoice['id'][]>((prev, current) => {
+  //             prev.push(current.id);
+  //             return prev;
+  //           }, []);
+  //           InvoiceAPI.reorder(invoiceIds).then();
+  //         }
+  //         return item;
+  //       }),
+  //     );
+  //   }
+  // };
 
   return (
     <div className={css.container}>
-      <ConfirmPopup />
       <InputText placeholder='Поиск' />
+      <ConfirmPopup />
       <AddInvoiceDialog
         isOpen={showAddInvoice}
         onClose={() => setShowAddInvoice(false)}
@@ -126,7 +128,12 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
                 />
               </div>
             </div>
-            {invoiceList(client.invoices)}
+            <InvoiceList
+              // onDragEnd={(event) => {
+              //   handleDragEnd(event, client);
+              // }}
+              invoices={client.invoices}
+            />
           </li>
         ))}
       </ul>

@@ -9,6 +9,7 @@ import { FileUpload } from 'primereact/fileupload';
 import { InvoiceAPI, InvoiceWithFile } from '@entities/invoice';
 import { mixed, number, object, string } from 'yup';
 import { FormikConfig } from 'formik/dist/types';
+import { motion } from 'framer-motion';
 
 interface AddInvoiceDialogProps {
   isOpen: boolean;
@@ -24,7 +25,7 @@ export const AddInvoiceDialog: FC<AddInvoiceDialogProps> = ({
   title = 'Добавить счёт',
 }) => {
   const formikProps: FormikConfig<InvoiceWithFile> = {
-    initialValues: { ...AddInvoiceState },
+    initialValues: AddInvoiceState,
     onSubmit,
     validationSchema: object({
       file: mixed().required().label('файл'),
@@ -63,12 +64,24 @@ export const AddInvoiceDialog: FC<AddInvoiceDialogProps> = ({
                 chooseLabel={formik.values.file?.name || 'Загрузить счёт'}
                 chooseOptions={{ style: { width: '100%' } }}
               />
-
-              <FloatInput label='Номер счёта' name='number' />
-              <FloatInput label='Заказчик' name='entrepreneur' />
-              <FloatInput label='ИНН' name='inn' />
-              <FloatInput label='Сумма' name='sum' />
-              <FloatInput label='Комментарий' name='description' />
+              <motion.div
+                className={css.form__body}
+                initial={{
+                  opacity: +!!formik.values.file,
+                  height: formik.values.file ? 'auto' : 0,
+                }}
+                animate={{
+                  opacity: +!!formik.values.file,
+                  height: formik.values.file ? 'auto' : 0,
+                }}
+                transition={{ duration: 0.2 }}
+              >
+                <FloatInput label='Номер счёта' name='number' />
+                <FloatInput label='Заказчик' name='entrepreneur' />
+                <FloatInput label='ИНН' name='inn' />
+                <FloatInput label='Сумма' name='sum' />
+                <FloatInput label='Комментарий' name='description' />
+              </motion.div>
             </div>
             <div className={css.form__footer}>
               <Button type='button' label='Отменить' severity='secondary' onClick={onClose} />

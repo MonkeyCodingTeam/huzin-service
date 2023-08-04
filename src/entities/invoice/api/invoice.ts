@@ -24,4 +24,8 @@ export const InvoiceAPI = {
         headers: { 'Content-Type': 'multipart/form-data' },
       },
     ),
+  reorder: (invoiceIds: Invoice['id'][]): AxiosPromise<Invoice[]> =>
+    axiosTargetInstance.post('invoice/reorder', {
+      invoices: invoiceIds,
+    }),
 };

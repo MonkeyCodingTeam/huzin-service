@@ -222,11 +222,8 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
     });
   };
 
-  const paidConfirm = (
-    client: Client,
-    // @ts-ignore
-    event: MessageEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
+  // @ts-ignore
+  const paidConfirm = (client: Client, event: MessageEvent<HTMLButtonElement, MouseEvent>) => {
     confirmPopup({
       target: event.currentTarget,
       message: 'Счёт оплачен?',

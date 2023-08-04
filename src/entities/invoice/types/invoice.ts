@@ -5,6 +5,7 @@ export interface Invoice {
   sum: number;
   budget: number;
   client_id: number;
+  order: number;
   path: string;
   number: string;
   inn: string;
