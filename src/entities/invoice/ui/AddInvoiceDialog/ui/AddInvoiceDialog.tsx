@@ -10,19 +10,20 @@ import { InvoiceAPI, InvoiceWithFile } from '@entities/invoice';
 import { mixed, number, object, string } from 'yup';
 import { FormikConfig } from 'formik/dist/types';
 import { motion } from 'framer-motion';
+import { Client, emptyClientState } from '@entities/client';
 
 interface AddInvoiceDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (values: InvoiceWithFile, helpers: FormikHelpers<InvoiceWithFile>) => void;
-  title?: string;
+  client?: Client;
 }
 
 export const AddInvoiceDialog: FC<AddInvoiceDialogProps> = ({
   isOpen,
   onClose,
   onSubmit,
-  title = 'Добавить счёт',
+  client = emptyClientState,
 }) => {
   const formikProps: FormikConfig<InvoiceWithFile> = {
     initialValues: AddInvoiceState,
@@ -41,11 +42,15 @@ export const AddInvoiceDialog: FC<AddInvoiceDialogProps> = ({
     !(number && inn && file && sum && entrepreneur);
 
   return (
-    <Dialog className={css.dialog} visible={isOpen} onHide={onClose} header={title}>
+    <Dialog className={css.dialog} visible={isOpen} onHide={onClose} header='Добавить счёт'>
       <Formik {...formikProps}>
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <div className={css.form__body}>
+              <b>{client.entrepreneur}</b>
+              <p>
+                Сумма оплаты: <b>{client.basic_payment}</b>
+              </p>
               <FileUpload
                 auto
                 customUpload

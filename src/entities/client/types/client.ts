@@ -25,6 +25,7 @@ export interface Client extends Model {
   paid_at: string | null;
   zero_balance_at: string | null;
   low_balance_at: string | null;
+  basic_payment?: number;
 
   group_id?: number;
   is_mine?: boolean;

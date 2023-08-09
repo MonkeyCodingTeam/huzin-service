@@ -10,6 +10,17 @@
   border-radius: var(--large-border-radius);
 }
 
+.noResult {
+  display: flex;
+  width: 100%;
+  text-align: center;
+  justify-content: center;
+  padding: 1rem;
+
+  font-size: var(--semi-large-font-size);
+  color: var(--text-color-secondary);
+}
+
 .clientList {
   overflow: auto;
   height: 100%;
@@ -25,17 +36,19 @@
     }
 
     &__block {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
       gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
 
-      & > * {
+      &_info {
         display: flex;
-        align-items: center;
+        gap: 2rem;
       }
 
       &__tools {
-        justify-content: space-between;
+        display: flex;
+        gap: 1rem;
       }
 
       &__addInvoice {

@@ -9,10 +9,11 @@
 
   &__block {
     display: flex;
+    gap: 8px;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
 
+    width: 100%;
     margin-top: .5rem;
     padding: .5rem;
 
@@ -21,15 +22,28 @@
     border-radius: var(--border-radius);
     box-shadow: 2px 2px 4px 0 rgb(34 60 80 / 10%);
 
-    &__title {
+    &__info {
       display: flex;
-      gap: 4px;
-      align-items: baseline;
+      gap: 2rem;
 
-      &__drag {
-        cursor: move !important;
+      &__number {
+        width: 8rem;
+      }
+
+      &__description {
+        overflow: hidden;
+
+        max-width: 20rem;
+
+        color: var(--text-color-secondary);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &__tools {
+        display: flex;
+        gap: 1rem;
       }
     }
-
   }
 }

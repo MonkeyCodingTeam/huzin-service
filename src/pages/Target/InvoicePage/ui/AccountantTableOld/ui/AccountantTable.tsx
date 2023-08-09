@@ -8,7 +8,6 @@ import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
 import { Badge } from 'primereact/badge';
 import { Button } from 'primereact/button';
-import { PrimeIcons } from 'primereact/api';
 import { Checkbox } from 'primereact/checkbox';
 import css from './AccountantTable.module.scss';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
@@ -18,7 +17,7 @@ import { Dialog } from 'primereact/dialog';
 import { Field, Form, Formik, FormikValues } from 'formik';
 import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
-import { getInvoiceText, Invoice, isInvoiceFullFilled } from '@entities/invoice';
+import { Invoice } from '@entities/invoice';
 
 interface AccountantTableProps {
   toast: RefObject<Toast>;
@@ -140,51 +139,6 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
           detail: err.response.data.message,
         });
       });
-  };
-
-  const invoiceBody = (client: Client) => {
-    const { current_invoice } = client;
-    if (current_invoice) {
-      let invoiceTitle = '';
-      if (current_invoice) {
-        invoiceTitle = getInvoiceText(current_invoice);
-      }
-      return (
-        <>
-          <span className='p-buttonset'>
-            {!isInvoiceFullFilled(current_invoice) && (
-              <Button
-                icon={PrimeIcons.EXCLAMATION_TRIANGLE}
-                title={'Данные счёта не заполнены'}
-                severity='warning'
-              />
-            )}
-            <Button
-              icon={PrimeIcons.PENCIL}
-              type='button'
-              title='Редактировать данные счёта'
-              onClick={() => setSelectedInvoice(current_invoice)}
-            />
-            <Button
-              severity='info'
-              icon={PrimeIcons.EYE}
-              type='button'
-              title={invoiceTitle}
-              onClick={() => getCurrentInvoice(client)}
-            />
-            <Button
-              severity='danger'
-              icon={PrimeIcons.TIMES}
-              type='button'
-              title='Удалить счёт'
-              onClick={() => removeCurrentInvoice(client)}
-            />
-          </span>
-        </>
-      );
-    }
-
-    return invoiceTemplate(client);
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -398,7 +352,6 @@ export const AccountantTable: FC<AccountantTableProps> = ({ toast }) => {
             header='Счёт'
             bodyStyle={{ minWidth: '14rem' }}
             align='center'
-            body={invoiceBody}
           />
           <Column header='Оплачен' align='center' body={paidTemplate} />
           <Column header='Оплачен ВК' align='center' body={vkPaidTemplate} />
