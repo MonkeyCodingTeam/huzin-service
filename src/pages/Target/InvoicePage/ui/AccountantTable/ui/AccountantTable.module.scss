@@ -12,13 +12,14 @@
 
 .noResult {
   display: flex;
-  width: 100%;
-  text-align: center;
   justify-content: center;
+
+  width: 100%;
   padding: 1rem;
 
   font-size: var(--semi-large-font-size);
   color: var(--text-color-secondary);
+  text-align: center;
 }
 
 .clientList {
