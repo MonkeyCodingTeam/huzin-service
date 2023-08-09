@@ -1,8 +1,6 @@
 import { Field, Form, Formik } from 'formik';
 import { FloatInput } from '@shared/ui/FloatInput';
 import css from './LoginPage.module.scss';
-import { InputText } from 'primereact/inputtext';
-import { Password } from 'primereact/password';
 import { Button } from 'primereact/button';
 import HR from '@shared/assets/HR.svg';
 import { AuthThunk, SignInData } from '@processes/auth';
@@ -45,24 +43,17 @@ const LoginPage = () => {
               <HR />
             </div>
             {loginFailed && <Message severity='error' text='Неправильный логин или пароль' />}
-            <FloatInput label='Логин'>
-              <Field
-                as={InputText}
-                name='login'
-                className={classNames(css.form__input, { [css.form__input__invalid]: loginFailed })}
-              />
-            </FloatInput>
-            <FloatInput label='Пароль'>
-              <Field
-                as={Password}
-                name='password'
-                feedback={false}
-                className={css.form__input}
-                inputClassName={classNames(css.form__input, {
-                  [css.form__input__invalid]: loginFailed,
-                })}
-              />
-            </FloatInput>
+            <FloatInput
+              label='Логин'
+              name='login'
+              className={classNames(css.form__input, { [css.form__input__invalid]: loginFailed })}
+            />
+            <FloatInput
+              label='Пароль'
+              name='password'
+              feedback={false}
+              className={css.form__input}
+            />
             <div className={css.form__footer}>
               <div className={css.form__footer__remember}>
                 <Field as={Checkbox} inputId='remember' name='remember' checked={values.remember} />

@@ -7,7 +7,7 @@
     display: grid;
 
     border: 1px solid #eee;
-    border-radius: 1rem;
+    border-radius: var(--large-border-radius);
 
     &__tools {
       position: absolute;

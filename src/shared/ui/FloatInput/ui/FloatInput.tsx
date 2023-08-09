@@ -1,11 +1,11 @@
-import { FieldAttributes } from 'formik';
+import { FieldAttributes, useField } from 'formik';
 import classNames from 'classnames';
 import css from './FloatInput.module.scss';
-import { DateTime } from 'luxon';
 import { FC } from 'react';
 
 interface FloatInputProps extends FieldAttributes<any> {
   label: string;
+  name: string;
   placeholder?: string;
   title?: string;
   className?: string;
@@ -13,12 +13,27 @@ interface FloatInputProps extends FieldAttributes<any> {
 }
 
 export const FloatInput: FC<FloatInputProps> = (props) => {
-  const { name, label, id = name + DateTime.now(), title = '', children, className = '' } = props;
+  const { label, title, className, inputClassName, name, ...ref } = props;
+
+  const [field, { touched, error }, { setValue }] = useField(props);
 
   return (
-    <span className={classNames('p-float-label', css.inputBox, className)} title={title}>
-      {children}
-      <label>{label}</label>
+    <span className={classNames(css.inputBox, className)} title={title || label}>
+      <input
+        id={`floatInput_${name}`}
+        placeholder=' '
+        className={classNames(css.inputBox__input, inputClassName, {
+          [css.inputBox__input_error]: error && touched,
+        })}
+        {...field}
+        {...ref}
+      />
+      <label htmlFor={`floatInput_${name}`} className={css.inputBox__label} title={label}>
+        {label}
+      </label>
+      <label htmlFor={`floatInput_${name}`} className={css.inputBox__error} title={error}>
+        {touched && error}
+      </label>
     </span>
   );
 };

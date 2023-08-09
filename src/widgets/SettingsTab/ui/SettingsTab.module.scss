@@ -6,7 +6,7 @@
   &__block {
     height: 100%;
     background-color: var(--light-color);
-    border-radius: 1rem;
+    border-radius: var(--large-border-radius);
 
     &__nav {
       margin-bottom: 1rem;

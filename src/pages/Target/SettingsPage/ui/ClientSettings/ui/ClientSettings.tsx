@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import css from './ClientSettings.module.scss';
 import { Divider } from 'primereact/divider';
 import { Link, Loader } from '@shared/ui';
-import { Client, ClientAPI } from '@entities/client';
+import { Client, ClientAPI, EditInvoiceSettings } from '@entities/client';
 import { ClientSettingsGroup } from '../../ClientSettingsGroup';
 import { Tag } from 'primereact/tag';
 import { PrimeIcons } from 'primereact/api';
@@ -29,15 +29,20 @@ export const ClientSettings = () => {
         return;
       }
 
+      const { clientId } = params;
+
+      if (clientId) {
+        const client = res.data.find((client) => client.id === +clientId) || res.data[0];
+        dispatch(selectClient(client));
+        return navigate(`${ROUTES.TARGET.Settings}/client/${client.id}`);
+      }
+
       if (selectedClient.id) {
         return navigate(`${ROUTES.TARGET.Settings}/client/${selectedClient.id}`);
       }
 
-      const { clientId = res.data[0].id } = params;
-      const client = res.data.find((client) => client.id === +clientId) || res.data[0];
-
-      dispatch(selectClient(client));
-      navigate(`${ROUTES.TARGET.Settings}/client/${client.id}`);
+      dispatch(selectClient(res.data[0]));
+      return navigate(`${ROUTES.TARGET.Settings}/client/${res.data[0].id}`);
     });
   }, []);
 
@@ -120,6 +125,12 @@ export const ClientSettings = () => {
                 </Divider>
                 <ClientSettingsGroup client={selectedClient} />
               </div>
+              <Divider id='invoice' align='left'>
+                <a href='#invoice' className={css.settings__list__anchor}>
+                  # Счета
+                </a>
+              </Divider>
+              <EditInvoiceSettings client={selectedClient} />
               <Divider id='telegram' align='left'>
                 <a href='#telegram' className={css.settings__list__anchor}>
                   # Telegram
@@ -151,6 +162,9 @@ export const ClientSettings = () => {
         <div className={css.settings__panel}>
           <a href='#main' className={css.settings__panel__anchor}>
             # Группы
+          </a>
+          <a href='#invoice' className={css.settings__panel__anchor}>
+            # Счета
           </a>
           <a href='#telegram' className={css.settings__panel__anchor}>
             # Telegram

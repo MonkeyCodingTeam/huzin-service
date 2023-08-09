@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { Toast } from 'primereact/toast';
 import { useAppSelector } from '@shared/lib/redux';
 import { AccountantTable } from './AccountantTable';
-import { ManagerTable } from '@pages/Target/InvoicePage/ui/ManagerTable';
+import { ManagerTable } from './ManagerTable';
 
 const InvoicePage = () => {
   const user = useAppSelector((state) => state.user);

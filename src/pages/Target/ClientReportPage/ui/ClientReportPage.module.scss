@@ -19,20 +19,20 @@
       font-size: var(--semi-large-font-size);
 
       background-color: var(--light-color);
-      border-radius: 1rem;
+      border-radius: var(--large-border-radius);
     }
 
     &__chart {
       width: auto;
       padding: 1.5rem;
       background-color: var(--light-color);
-      border-radius: 1rem;
+      border-radius: var(--large-border-radius);
     }
   }
 
   &__card {
     background-color: var(--light-color);
-    border-radius: 1rem;
+    border-radius: var(--large-border-radius);
 
     &__title {
       padding: 1.5rem;

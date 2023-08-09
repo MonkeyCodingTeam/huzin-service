@@ -2,6 +2,7 @@ import { User } from '@entities/user';
 import { Group } from '@entities/group';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { Company } from '@entities/company';
+import { Invoice } from '@entities/invoice';
 
 export interface Client extends Model {
   name: string;
@@ -20,30 +21,19 @@ export interface Client extends Model {
   current_invoice_id: number | null;
   token: string;
   has_telegram: boolean;
+  entrepreneur: string;
   paid_at: string | null;
   zero_balance_at: string | null;
   low_balance_at: string | null;
+  basic_payment?: number;
 
   group_id?: number;
   is_mine?: boolean;
 
   current_invoice?: Invoice;
   users?: User[];
-  group?: Group;
-}
-
-export interface Invoice {
-  id: number;
-  budget: number;
-  client_id: number;
-  path: string;
-  number: string | null;
-  inn: string | null;
-  customer: string | null;
-  description: string | null;
-  vk_number: number | null;
-  is_paid: boolean;
-  is_vk_paid: boolean;
+  group: Group;
+  invoices: Invoice[];
 }
 
 export interface GetStatisticProps {

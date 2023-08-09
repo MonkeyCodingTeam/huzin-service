@@ -16,7 +16,7 @@ const STAT_URL = 'statistic/client';
 export const ClientAPI = {
   getClients: async (payload?: {
     user_id?: User['id'];
-    with?: ('currentInvoice' | 'group')[];
+    with?: ('group' | 'invoices')[];
   }): AxiosPromise<Client[]> => {
     return axiosTargetInstance.get(BASE_URL, {
       params: payload,

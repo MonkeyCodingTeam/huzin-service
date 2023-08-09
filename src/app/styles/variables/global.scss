@@ -3,11 +3,12 @@
   --light-color: #fff;
   --dark-color: #2e2e2e;
   --light-dark-color: #8a8e98;
-  --secondary-color: #ced4da;
+  --secondary-color: #b3b9c4;
   --background-color: #f9f7f6;
   --danger-color: #fdac9a;
   --warning-color: #ffcda2;
   --low-warning-color: #fff1b8;
+  --success-color: #7fa366;
 
   // fonts
   --font-family: 'Roboto';
@@ -15,7 +16,7 @@
   --small-font-size: 1rem;
   --small-line-height: 1rem;
   --regular-font-size: 14px;
-  --regular-line-height: 14px;
+  --regular-line-height: 16px;
   --semi-large-font-size: 20px;
   --semi-large-line-height: 20px;
   --large-font-size: 24px;
@@ -23,4 +24,8 @@
   --extra-large-font-size: 32px;
   --extra-large-line-height: 32px;
   --regular-font: var(--regular-font-size) / var(--regular-line-height) var(--font-family);
+
+  // borders
+  --border-radius: 4px;
+  --large-border-radius: 8px;
 }

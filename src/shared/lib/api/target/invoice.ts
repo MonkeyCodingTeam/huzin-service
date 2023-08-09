@@ -1,13 +1,14 @@
-import { Client, Invoice } from '@entities/client/types';
+import { Client } from '@entities/client/types';
 import { AxiosPromise } from 'axios/index';
 import { axiosTargetInstance } from '@shared/lib/axios';
+import { Invoice } from '@entities/invoice';
 
 const BASE_URL = 'invoice';
 
 export const InvoiceApi = {
   updateInvoice: async (
     invoiceId: Invoice['id'],
-    payload: Pick<Invoice, 'inn' | 'customer' | 'number' | 'description'>,
+    payload: Pick<Invoice, 'inn' | 'number' | 'description'>,
   ): AxiosPromise<Invoice> => axiosTargetInstance.patch(`${BASE_URL}/${invoiceId}`, payload),
   deleteInvoice: async (invoiceId: Client['current_invoice_id']): AxiosPromise<Client> =>
     axiosTargetInstance.delete(`${BASE_URL}/${invoiceId}`),

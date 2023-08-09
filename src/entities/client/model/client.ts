@@ -1,9 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Client } from '@entities/client';
+import { emptyGroupState } from '@entities/group';
 
 export const emptyClientState: Client = {
+  group: emptyGroupState,
+  invoices: [],
   id: 0,
   name: '',
+  entrepreneur: '',
   all_limit: 0,
   balance: 0,
   critical_balance: 0,
