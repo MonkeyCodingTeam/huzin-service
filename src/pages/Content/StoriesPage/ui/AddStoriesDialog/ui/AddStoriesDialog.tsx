@@ -35,6 +35,12 @@ interface storiesProps {
   file?: File;
 }
 
+const defaultStoryState = {
+  with_linked: true,
+  from_msk: false,
+  publish_date: DateTime.now(),
+};
+
 export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   visible,
   onHide,
@@ -44,11 +50,7 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   const fileUploadRef = useRef<FileUpload>(null);
   const [link, setLink] = useState('');
   const [isFileLoading, setIsFileLoading] = useState(false);
-  const [story, setStory] = useState<storiesProps>({
-    with_linked: true,
-    from_msk: false,
-    publish_date: DateTime.now(),
-  });
+  const [story, setStory] = useState<storiesProps>(defaultStoryState);
   const [isFullFilled, setIsFullFilled] = useState(false);
   const [error, setError] = useState<string>();
 
