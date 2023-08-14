@@ -37,8 +37,8 @@ export const ClientAPI = {
     id: Client['id'],
     payload: GetStatisticByCompaniesProps,
   ): AxiosPromise<ClientsStatisticResponse[]> => {
-    const template = payload.company_template_id ? `/template/${payload.company_template_id}` : '';
-    return axiosTargetInstance.get(`${STAT_URL}/${id}${template}`, {
+    console.log(payload);
+    return axiosTargetInstance.get(`${STAT_URL}/${id}/template`, {
       params: payload,
     });
   },

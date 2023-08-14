@@ -46,7 +46,7 @@ export interface GetStatisticProps {
 type Metrics = 'all' | 'base' | 'events' | 'video' | 'uniques' | 'tps' | 'playable' | 'romi';
 
 export interface GetStatisticByCompaniesProps extends GetStatisticProps {
-  company_template_id?: CompanyTemplate['id'];
+  company_templates?: CompanyTemplate['id'][];
 }
 
 export interface ClientsStatisticResponse {

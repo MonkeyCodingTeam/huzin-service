@@ -10,6 +10,18 @@
       &_name {
         font-weight: bolder;
       }
+
+      &_success {
+        background-color: #bcffb4;
+      }
+
+      &_warning {
+        background-color: #f0f69a;
+      }
+
+      &_danger {
+        background-color: #ff8a8a;
+      }
     }
   }
 }

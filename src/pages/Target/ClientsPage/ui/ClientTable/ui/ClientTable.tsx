@@ -31,7 +31,7 @@ export const ClientTable = () => {
         period: 'week',
         date_from: DateTime.now().minus({ month: 5 }),
         date_to: DateTime.now(),
-        company_template_id: selectedTemplate?.id,
+        company_templates: selectedTemplate?.id ? [selectedTemplate?.id] : [],
       }).then((res) => {
         setStats(sumStats(res.data, 'day_from'));
         setLoading(false);

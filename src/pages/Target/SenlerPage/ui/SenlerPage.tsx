@@ -148,6 +148,26 @@ const SenlerPage = () => {
     return <span>-</span>;
   };
 
+  const spentColorAlert = (stat: SenlerStats) => {
+    if (loadingSenler) return '';
+
+    if (stat.spent && stat.subscribers !== undefined) {
+      const def = Math.round(stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers);
+
+      if (def > 75) {
+        return css.container__table__column_danger;
+      }
+
+      if (def > 55) {
+        return css.container__table__column_warning;
+      }
+
+      return css.container__table__column_success;
+    }
+
+    return '';
+  };
+
   const handleWeekChange = (weekStart: DateTime) => {
     setWeek(weekStart);
   };
@@ -235,7 +255,11 @@ const SenlerPage = () => {
           <Column header='Клиенты' body={nameTemplate} />
           <Column header='Потрачено' body={spentTemplate} />
           <Column header='Подписки' body={subscribersTemplate} />
-          <Column header='Цена подписки' body={spentPerSubTemplate} />
+          <Column
+            header='Цена подписки'
+            body={spentPerSubTemplate}
+            bodyClassName={spentColorAlert}
+          />
         </DataTable>
       </TableLoader>
     </Transition>
