@@ -34,7 +34,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
       date_from: DateTime.now().minus({ month: monthCount - 1 }),
       date_to: DateTime.now(),
       period: 'month',
-      company_template_id: company_template?.id,
+      company_templates: company_template?.id ? [company_template?.id] : [],
     }).then((res) => {
       setCompanyStats(res.data);
     });
