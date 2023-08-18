@@ -36,7 +36,8 @@
     "vite.config.ts",
     "**/*.ts",
     "**/*.tsx",
-    "src"
+    "src",
+    "types"
   ],
   "typeRoots": [
     "node_modules/@types"

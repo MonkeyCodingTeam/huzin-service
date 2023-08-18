@@ -1,6 +1,6 @@
 import gif from '@shared/assets/gifs/wait_page_illustration.gif';
+import { Transition } from '@widgets/Transition';
 import css from './StubPage.module.scss';
-import { Transition } from '@widgets';
 
 const StubPage = () => {
   return (

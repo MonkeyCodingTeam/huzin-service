@@ -1,0 +1,13 @@
+.layout {
+  width: 100vw;
+  height: 100vh;
+
+  &__header {
+    color: var(--light-color);
+  }
+
+  &__content {
+    overflow: auto;
+    height: 100%;
+  }
+}

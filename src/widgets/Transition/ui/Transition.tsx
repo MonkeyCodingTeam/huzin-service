@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FC, ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 
 interface TransitionProps {
   children: ReactNode;

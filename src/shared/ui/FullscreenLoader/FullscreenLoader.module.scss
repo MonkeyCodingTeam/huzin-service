@@ -1,0 +1,11 @@
+.root {
+  height: 95vh;
+
+  &__box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
+}

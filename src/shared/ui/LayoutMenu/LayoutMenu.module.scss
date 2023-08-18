@@ -1,0 +1,37 @@
+.menu {
+  &__desktop {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background-color: white;
+
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
+
+  &__mobile {
+    position: absolute;
+    right: 0;
+
+    display: none;
+
+    height: 100vh;
+
+    background-color: #fff !important;
+    box-shadow: var(--shadow);
+
+    &__aside {
+      flex-direction: column;
+      align-items: end;
+      height: 100%;
+      background-color: #fff !important;
+
+    }
+
+
+    @media screen and (max-width: 992px) {
+      display: flex;
+    }
+  }
+}

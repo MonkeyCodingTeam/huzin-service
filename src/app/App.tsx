@@ -1,36 +1,22 @@
 import '@app/styles/index.scss';
-import { ScrollTop } from 'primereact/scrolltop';
-import { AppRouter } from '@app/providers/RouterProvider';
-import { Helmet } from 'react-helmet-async';
-import { Header } from '@widgets';
-import { useEffect, useState } from 'react';
-import { useAppDispatch } from '@shared/lib/redux';
-import { AuthThunk } from '@processes/auth';
-import { Loader } from '@shared/ui';
-import { ru } from 'yup-locales';
-import { setLocale } from 'yup';
+import React, { Suspense } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { Provider as ReduxProvider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
+import { appStore } from '@app/store';
+import { FullscreenLoader } from '@shared/ui';
+import { appRouter } from './providers/appRouter';
 
 export function App() {
-  const [loading, setLoading] = useState(true);
-  const dispatch = useAppDispatch();
-
-  setLocale(ru);
-
-  useEffect(() => {
-    dispatch(AuthThunk.getUser()).finally(() => setLoading(false));
-  }, [dispatch]);
-
-  return loading ? (
-    <Loader />
-  ) : (
-    <>
-      <Helmet titleTemplate={`${__APP_TITLE__} | %s`} defaultTitle={__APP_TITLE__}>
-        <meta charSet='utf-8' />
-      </Helmet>
-      <ScrollTop />
-      <Header>
-        <AppRouter />
-      </Header>
-    </>
+  return (
+    <React.StrictMode>
+      <ReduxProvider store={appStore}>
+        <HelmetProvider>
+          <Suspense fallback={<FullscreenLoader />}>
+            <RouterProvider router={appRouter()} />
+          </Suspense>
+        </HelmetProvider>
+      </ReduxProvider>
+    </React.StrictMode>
   );
 }

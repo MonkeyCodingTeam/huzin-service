@@ -1,25 +1,43 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 import logger from 'redux-logger';
-import { selectedClient } from '@entities/client';
-import { userModel } from '@entities/user';
-import { selectedGroup } from '@entities/group';
+import { userSlice } from '@entities/user';
+import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
+import { baseApi } from '@shared/api/baseApi';
+import { baseAuthApi } from '@shared/api/baseAuthApi';
+import { env } from '@shared/const';
+import { authSlice } from 'entities/auth';
 
-export const appInitialState = {
-  selectedClient: null,
-  user: null,
-};
+export function makeStore() {
+  const store = configureStore({
+    reducer: {
+      [authSlice.name]: authSlice.reducer,
+      [userSlice.name]: userSlice.reducer,
+      [baseApi.reducerPath]: baseApi.reducer,
+      [baseAuthApi.reducerPath]: baseAuthApi.reducer,
+    },
+    devTools: env.MODE === 'development',
+    middleware: (getDefaultMiddleware) => {
+      const middlewares = [
+        baseApi.middleware,
+        baseAuthApi.middleware,
+        invalidateAccessTokenListener.middleware,
+      ];
+      if (env.MODE === 'development') {
+        middlewares.push(logger);
+      }
+      return getDefaultMiddleware().concat(middlewares);
+    },
+  });
 
-export const store = configureStore({
-  reducer: {
-    selectedClient: selectedClient.reducer,
-    selectedGroup: selectedGroup.reducer,
-    user: userModel.reducer,
-  },
-  middleware: (getDefaultMiddleware) => {
-    const middlewares = [];
-    if (__MODE__ === 'development') {
-      middlewares.push(logger);
-    }
-    return getDefaultMiddleware({ serializableCheck: false }).concat(middlewares);
-  },
-});
+  setupListeners(store.dispatch);
+
+  return store;
+}
+
+export const appStore = makeStore();
+
+// Infer the `RootState` and `AppDispatch` types from the store itself
+export type RootState = ReturnType<typeof appStore.getState>;
+// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof appStore.dispatch;

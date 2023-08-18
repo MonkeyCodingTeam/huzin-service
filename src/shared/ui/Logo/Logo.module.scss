@@ -1,0 +1,19 @@
+$logo-sizes: ("xs": .75, "sm": 1.5rem, "md": 2rem, "lg": 3rem, "xl": 6rem, "xxl": 12rem);
+
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  padding: .2rem 0;
+
+  vertical-align: center;
+
+  @each $size, $value in $logo-sizes {
+    &_#{$size} {
+      width: $value;
+      height: $value;
+    }
+  }
+}
