@@ -33,10 +33,10 @@ const ClientReportPage = () => {
         }
       });
 
-    GuestAPI.getCompanyTemlpates().then((res) => {
+    GuestAPI.getCompanyTemlpates(+clientId).then((res) => {
       setCompanyTemplates(res.data);
     });
-  }, [clientId, token]);
+  }, []);
 
   if (!client) {
     return <Loader />;
@@ -68,7 +68,7 @@ const ClientReportPage = () => {
           >
             {template.name}
           </p>
-          <GuestStatsTable client={client} company_template={template} />
+          <GuestStatsTable client={client} companyTemplate={template} />
         </div>
       ))}
     </div>

@@ -10,5 +10,10 @@
       white-space: nowrap;
       background-color: var(--highlight-bg);
     }
+
+    &__checkbox {
+      display: flex;
+      gap: .5rem;
+    }
   }
 }

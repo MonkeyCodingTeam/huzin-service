@@ -22,7 +22,8 @@ export const CompanyTemplateAPI = {
   storeTags: async (
     templateId: CompanyTemplate['id'],
     payload: CreateCompanyTemplateTag,
-  ): AxiosPromise<CompanyTemplateTag['tag'][]> => {
-    return axiosTargetInstance.post(`${BASE_URL}/${templateId}/tag`, payload);
-  },
+  ): AxiosPromise<CompanyTemplateTag['tag'][]> =>
+    axiosTargetInstance.post(`${BASE_URL}/${templateId}/tag`, payload),
+  toggleSenler: async (templateId: CompanyTemplate['id']): AxiosPromise<CompanyTemplate> =>
+    axiosTargetInstance.patch(`${BASE_URL}/${templateId}/toggle-senler`),
 };

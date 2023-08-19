@@ -41,6 +41,13 @@ export const CompanyTagsSetting = () => {
     });
   };
 
+  const handleSenlerToggle = (template: CompanyTemplate) => {
+    console.log('togle');
+    CompanyTemplateAPI.toggleSenler(template.id).then(({ data }) => {
+      setTemplates((prev) => prev.map((item) => (item.id === data.id ? data : item)));
+    });
+  };
+
   return (
     <>
       <Toast ref={toast} />
@@ -51,7 +58,11 @@ export const CompanyTagsSetting = () => {
         </Form>
       </Formik>
 
-      <CompanyTemplateList onRemove={removeTemplate} templates={templates} />
+      <CompanyTemplateList
+        onRemove={removeTemplate}
+        onSenlerToggle={handleSenlerToggle}
+        templates={templates}
+      />
     </>
   );
 };

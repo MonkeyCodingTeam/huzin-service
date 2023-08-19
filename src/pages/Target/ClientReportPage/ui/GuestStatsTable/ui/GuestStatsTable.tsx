@@ -1,4 +1,4 @@
-import { Client, ClientsStatisticResponse, StatisticResponse } from '@entities/client';
+import { Client, StatisticResponse } from '@entities/client';
 import { FC, useEffect, useState } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -12,57 +12,42 @@ import { sumStats } from '@shared/lib/util';
 
 interface GuestStatsTableProps {
   client?: Client;
-  company_template?: CompanyTemplate;
+  companyTemplate?: CompanyTemplate;
 }
 
 const monthCount = 6;
 
-export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_template }) => {
+export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, companyTemplate }) => {
   const [stats, setStats] = useState<StatisticResponse[]>([]);
-  const [companyStats, setCompanyStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerStats, setSenlerStats] = useState<Record<string, GetSubscribersCountResponse>>();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 10000);
-
-    if (!client?.id) return;
-
-    GuestAPI.getCompanyStats(client.id, {
-      date_from: DateTime.now().minus({ month: monthCount - 1 }),
-      date_to: DateTime.now(),
-      period: 'month',
-      company_templates: company_template?.id ? [company_template?.id] : [],
-    }).then((res) => {
-      setCompanyStats(res.data);
-    });
-
-    GuestAPI.getSubscribersCountByPeriod(client.group_id!, {
-      date_from: DateTime.now().minus({ month: monthCount - 1 }),
-      date_to: DateTime.now(),
-      period: 'month',
-      company_template_id: company_template?.id,
-    }).then((res) => {
-      setSenlerStats(res.data);
-    });
-
-    return () => {
-      clearTimeout(timeout);
-    };
+    Promise.all([companyStatsPromise, subsCountPromise])
+      .then(([companyStat, subsCountStat]) => {
+        setStats(sumStats(companyStat.data));
+        setSenlerStats(subsCountStat.data);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
-  useEffect(() => {
-    if (companyStats.length) {
-      setStats(() => {
-        setIsLoading(false);
-        return sumStats(companyStats);
-      });
-    } else {
-      setStats([]);
-    }
-  }, [companyStats]);
+  if (!client?.id) return <></>;
+
+  const companyStatsPromise = GuestAPI.getCompanyStats(client.id, {
+    date_from: DateTime.now().minus({ month: monthCount - 1 }),
+    date_to: DateTime.now(),
+    period: 'month',
+    company_templates: companyTemplate?.id ? [companyTemplate?.id] : [],
+  });
+
+  const subsCountPromise = companyTemplate?.has_senler
+    ? GuestAPI.getSubscribersCountByPeriod(client.group_id!, {
+        date_from: DateTime.now().minus({ month: monthCount - 1 }),
+        date_to: DateTime.now(),
+        period: 'month',
+        company_template_id: companyTemplate?.id,
+      })
+    : { data: undefined };
 
   const senlerCountBody = (value: StatisticResponse) => {
     if (senlerStats === undefined) {
@@ -86,7 +71,9 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
     return senler ? (value.spent / senler).toFixed(2) : '-';
   };
 
-  return !isLoading ? (
+  if (isLoading) return <TableSkeleton rows={monthCount} columns={monthCount} />;
+
+  return (
     <DataTable value={stats} sortField='month' sortOrder={-1} emptyMessage='Нет данных'>
       <Column
         header='Месяц'
@@ -101,8 +88,23 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         field='spent'
         body={(value) => Math.round(value.spent).toLocaleString()}
       />
-      <Column header='Подписка Senler' field='senler' body={senlerCountBody} />
-      <Column header='Цена подписки' body={senlerCostBody} />
+      <Column
+        hidden={!companyTemplate?.has_senler}
+        header='Подписка Senler'
+        field='senler'
+        body={senlerCountBody}
+      />
+      <Column hidden={!companyTemplate?.has_senler} header='Цена подписки' body={senlerCostBody} />
+      <Column
+        header='Клики'
+        field='clicks'
+        body={(value) => Math.round(value.clicks).toLocaleString()}
+      />
+      <Column
+        header='Цена клика'
+        field='clicks_value'
+        body={(value) => (value.clicks ? (value.spent / value.clicks).toPrecision(2) : '-')}
+      />
       <Column
         header='Охват'
         field='reach'
@@ -113,13 +115,6 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, company_temp
         field='impressions'
         body={(value) => Math.round(value.impressions).toLocaleString()}
       />
-      <Column
-        header='Клики'
-        field='clicks'
-        body={(value) => Math.round(value.clicks).toLocaleString()}
-      />
     </DataTable>
-  ) : (
-    <TableSkeleton rows={monthCount} columns={monthCount} />
   );
 };

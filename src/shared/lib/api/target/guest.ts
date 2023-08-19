@@ -28,8 +28,8 @@ export const GuestAPI = {
   getClient: async (clientId: Client['id']): AxiosPromise<Client> => {
     return axiosAppInstance.get(`${ROUTES.CLIENT}/${clientId}`);
   },
-  getCompanyTemlpates: async (): AxiosPromise<CompanyTemplate[]> => {
-    return axiosAppInstance.get(`${BASE_URL}/company-template`);
+  getCompanyTemlpates: async (clientId: Client['id']): AxiosPromise<CompanyTemplate[]> => {
+    return axiosAppInstance.get(`${BASE_URL}/client/${clientId}/company-template`);
   },
   getSubscribersCountByPeriod: async (
     groupId: Group['id'],
