@@ -2,20 +2,24 @@ import { useNavigate, useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { setCookie } from '@shared/lib/util';
-import { Client } from '@entities/client';
+import { Client, ClientsStatisticResponse } from '@entities/client';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { GuestStatsTable } from '@pages/Target/ClientReportPage/ui/GuestStatsTable';
 import { Loader } from '@shared/ui';
 import css from './ClientReportPage.module.scss';
+import { DateTime } from 'luxon';
 
 interface ClientReportParams extends Record<string, string> {
   clientId: string;
   token: string;
 }
 
+const monthCount = 6;
+
 const ClientReportPage = () => {
   const { clientId = '', token = '' } = useParams<ClientReportParams>();
   const [companyTemplates, setCompanyTemplates] = useState<CompanyTemplate[]>();
+  const [stats, setStats] = useState<ClientsStatisticResponse[]>([]);
   const [client, setClient] = useState<Client>();
   const navigate = useNavigate();
 
@@ -32,6 +36,14 @@ const ClientReportPage = () => {
           navigate('/');
         }
       });
+
+    GuestAPI.getCompanyStats(+clientId, {
+      date_from: DateTime.now().minus({ month: monthCount - 1 }),
+      date_to: DateTime.now(),
+      period: 'month',
+    }).then(({ data }) => {
+      setStats(data);
+    });
 
     GuestAPI.getCompanyTemlpates(+clientId).then((res) => {
       setCompanyTemplates(res.data);
@@ -57,7 +69,7 @@ const ClientReportPage = () => {
       </div>
       <div className={css.container__card}>
         <p className={css.container__card__title}>Общая статистика</p>
-        <GuestStatsTable client={client} />
+        <GuestStatsTable client={client} stats={stats} />
       </div>
       <h1>Рекламные компании:</h1>
       {companyTemplates?.map((template) => (
@@ -68,9 +80,16 @@ const ClientReportPage = () => {
           >
             {template.name}
           </p>
-          <GuestStatsTable client={client} companyTemplate={template} />
+          <GuestStatsTable client={client} companyTemplate={template} stats={stats} />
         </div>
       ))}
+
+      <div className={css.container__card}>
+        <p className={css.container__card__title} title={'Другие компании'}>
+          Другие компании
+        </p>
+        <GuestStatsTable client={client} companyTemplate={null} stats={stats} />
+      </div>
     </div>
   );
 };
