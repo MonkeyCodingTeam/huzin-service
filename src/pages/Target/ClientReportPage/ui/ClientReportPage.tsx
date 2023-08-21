@@ -5,7 +5,7 @@ import { setCookie } from '@shared/lib/util';
 import { Client, ClientsStatisticResponse } from '@entities/client';
 import { GuestAPI } from '@shared/lib/api/target/guest';
 import { GuestStatsTable } from '@pages/Target/ClientReportPage/ui/GuestStatsTable';
-import { Loader } from '@shared/ui';
+import { TableSkeleton } from '@shared/ui';
 import css from './ClientReportPage.module.scss';
 import { DateTime } from 'luxon';
 
@@ -21,6 +21,11 @@ const ClientReportPage = () => {
   const [companyTemplates, setCompanyTemplates] = useState<CompanyTemplate[]>();
   const [stats, setStats] = useState<ClientsStatisticResponse[]>([]);
   const [client, setClient] = useState<Client>();
+  const [loading, setLoading] = useState({
+    client: true,
+    stats: true,
+    templates: true,
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,23 +40,43 @@ const ClientReportPage = () => {
         if (err.response.status === 401) {
           navigate('/');
         }
+      })
+      .finally(() => {
+        setLoading((prevState) => {
+          prevState.client = false;
+          return prevState;
+        });
       });
 
     GuestAPI.getCompanyStats(+clientId, {
       date_from: DateTime.now().minus({ month: monthCount - 1 }),
       date_to: DateTime.now(),
       period: 'month',
-    }).then(({ data }) => {
-      setStats(data);
-    });
+    })
+      .then(({ data }) => {
+        setStats(data);
+      })
+      .finally(() => {
+        setLoading((prevState) => {
+          prevState.stats = false;
+          return prevState;
+        });
+      });
 
-    GuestAPI.getCompanyTemlpates(+clientId).then((res) => {
-      setCompanyTemplates(res.data);
-    });
+    GuestAPI.getCompanyTemlpates(+clientId)
+      .then((res) => {
+        setCompanyTemplates(res.data);
+      })
+      .finally(() => {
+        setLoading((prevState) => {
+          prevState.templates = false;
+          return prevState;
+        });
+      });
   }, []);
 
-  if (!client) {
-    return <Loader />;
+  if (!client || loading.stats || loading.stats || loading.stats) {
+    return <TableSkeleton />;
   }
 
   return (
@@ -88,7 +113,7 @@ const ClientReportPage = () => {
         <p className={css.container__card__title} title={'Другие компании'}>
           Другие компании
         </p>
-        <GuestStatsTable client={client} companyTemplate={null} stats={stats} />
+        <GuestStatsTable client={client} withoutTemplate={true} stats={stats} />
       </div>
     </div>
   );

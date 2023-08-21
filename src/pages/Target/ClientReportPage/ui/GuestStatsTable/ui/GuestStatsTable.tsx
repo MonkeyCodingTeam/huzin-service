@@ -64,9 +64,11 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({
   const getStats = useCallback(() => {
     let result = [...stats];
 
-    if (companyTemplate === null) {
+    if (withoutTemplate) {
       const companies = client.companies.filter((company) => !company.company_template_id);
       result = result.filter((stat) => companies.find((company) => company.id === stat.id));
+
+      return sumStats(result);
     }
 
     if (companyTemplate && companyTemplate.companies) {
