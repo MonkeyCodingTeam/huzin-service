@@ -103,7 +103,7 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({ client, companyTempl
       <Column
         header='Цена клика'
         field='clicks_value'
-        body={(value) => (value.clicks ? (value.spent / value.clicks).toPrecision(2) : '-')}
+        body={(value) => (value.clicks ? (value.spent / value.clicks).toFixed(2) : '-')}
       />
       <Column
         header='Охват'
