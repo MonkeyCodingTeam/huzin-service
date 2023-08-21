@@ -3,6 +3,7 @@ import { Client } from '@entities/client';
 import { emptyGroupState } from '@entities/group';
 
 export const emptyClientState: Client = {
+  companies: [],
   group: emptyGroupState,
   invoices: [],
   id: 0,
