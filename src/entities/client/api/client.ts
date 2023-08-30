@@ -2,6 +2,7 @@ import { axiosTargetInstance } from '@shared/lib/axios';
 import type { AxiosPromise } from 'axios';
 import type {
   Client,
+  ClientRelationsName,
   ClientsStatisticResponse,
   GetStatisticByCompaniesProps,
   GetStatisticProps,
@@ -16,7 +17,7 @@ const STAT_URL = 'statistic/client';
 export const ClientAPI = {
   getClients: async (payload?: {
     user_id?: User['id'];
-    with?: ('group' | 'invoices')[];
+    with?: Array<ClientRelationsName>;
   }): AxiosPromise<Client[]> => {
     return axiosTargetInstance.get(BASE_URL, {
       params: payload,

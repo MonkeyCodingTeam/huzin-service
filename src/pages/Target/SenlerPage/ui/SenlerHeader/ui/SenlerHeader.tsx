@@ -24,20 +24,15 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
   const { filterChange, onWeekChange, onRangeChange } = props;
   const [period, setPeriod] = useState<Period>();
   const [dates, setDates] = useState<Nullable<string | Date | Date[]>>(null);
-  const [weeks, setWeeks] = useState<Period[]>([]);
+  const weeks = getPeriodList('week', 8);
 
   const maxDate = new Date();
   // const [months, setMonths] = useState<Period[]>([]);
 
   useEffect(() => {
-    setWeeks(getPeriodList('week', 8));
-    // setMonths(getPeriodList('month', 3));
-  }, []);
-
-  useEffect(() => {
     setPeriod(weeks[1]);
     onWeekChange(weeks[1]?.date_from);
-  }, [weeks]);
+  }, []);
 
   useEffect(() => {
     if (Array.isArray(dates) && dates[0] && dates[1]) {

@@ -3,8 +3,9 @@ import { Group } from '@entities/group';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { Company } from '@entities/company';
 import { Invoice } from '@entities/invoice';
+import { Ads } from '@entities/ads';
 
-export interface Client extends Model {
+export interface Client extends Model, ClientRelations {
   name: string;
   balance: number;
   critical_balance: number;
@@ -26,15 +27,19 @@ export interface Client extends Model {
   zero_balance_at: string | null;
   low_balance_at: string | null;
   basic_payment?: number;
-  companies: Company[];
   group_id?: number;
   is_mine?: boolean;
+}
 
-  current_invoice?: Invoice;
+interface ClientRelations {
   users?: User[];
+  companies: Company[];
+  ads?: Ads[];
   group: Group;
   invoices: Invoice[];
 }
+
+export type ClientRelationsName = keyof ClientRelations;
 
 export interface GetStatisticProps {
   period: 'day' | 'week' | 'month' | 'year' | 'overall';

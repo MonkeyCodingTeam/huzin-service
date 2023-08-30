@@ -7,6 +7,7 @@ import { SenlerPage } from '@pages/Target/SenlerPage';
 import { BudgetCutsPage } from '@pages/Target/BudgetCutsPage';
 import { InvoicePage } from '@pages/Target/InvoicePage';
 import { ClientSettings, CompanyTagsSetting, SettingsPage } from '@pages/Target/SettingsPage';
+import { AdsPage } from '@pages/Target/AdsPage';
 
 export const TargetRoutes: AppRoute[] = [
   {
@@ -42,6 +43,12 @@ export const TargetRoutes: AppRoute[] = [
     icon: PrimeIcons.CREDIT_CARD,
     element: <InvoicePage />,
     path: ROUTES.TARGET.Invoice,
+  },
+  {
+    name: 'Объявления',
+    icon: 'pi pi-megaphone',
+    element: <AdsPage />,
+    path: ROUTES.TARGET.Ads,
   },
   {
     name: 'Настройки',

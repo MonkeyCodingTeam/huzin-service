@@ -33,7 +33,6 @@
     }
   },
   "include": [
-    "vite.config.ts",
     "**/*.ts",
     "**/*.tsx",
     "src"
@@ -42,7 +41,8 @@
     "node_modules/@types"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "vite.config.ts"
   ],
   "references": [
     {

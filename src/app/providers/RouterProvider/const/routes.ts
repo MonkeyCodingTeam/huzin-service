@@ -2,6 +2,7 @@ import type { AppRoute } from '@app/providers/RouterProvider';
 import type { Role } from '@entities/user';
 
 export enum TARGET_ROUTES {
+  Ads = '/target/ads',
   Clients = '/target/client',
   Client = '/target/client/:clientId',
   BudgetCuts = '/target/budget-cuts',
