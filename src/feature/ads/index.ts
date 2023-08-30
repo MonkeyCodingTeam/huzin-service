@@ -1,1 +1,2 @@
-export * from './ui/ClientAdsTable';
+export * from './ui/ClientAdsTable/ClientAdsTable';
+export * from './ui/ErrorsModal/ErrorsModal';
