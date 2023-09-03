@@ -13,7 +13,7 @@ export function App() {
       <ReduxProvider store={appStore}>
         <HelmetProvider>
           <Suspense fallback={<FullscreenLoader />}>
-            <RouterProvider router={appRouter()} />
+            <RouterProvider router={appRouter} />
           </Suspense>
         </HelmetProvider>
       </ReduxProvider>

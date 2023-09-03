@@ -1,6 +1,12 @@
-import { AppstoreOutlined, MailOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  DollarOutlined,
+  MonitorOutlined,
+  ProjectOutlined,
+  SettingOutlined,
+  SolutionOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu, type MenuProps } from 'antd';
-import { type FC, type ReactNode } from 'react';
+import React, { type FC, type ReactNode } from 'react';
 import { HeaderAppCategory } from '@shared/ui';
 import css from './LayoutMenu.module.scss';
 
@@ -8,28 +14,29 @@ const { Sider, Header, Footer, Content } = Layout;
 
 const items: MenuProps['items'] = [
   {
-    label: 'Navigation One',
-    key: 'mail',
-    icon: <MailOutlined rev={undefined} />,
+    label: 'Клиент',
+    key: 'client',
+    icon: <ProjectOutlined rev={undefined} />,
   },
   {
-    label: 'Navigation Two',
-    key: 'app',
-    icon: <AppstoreOutlined rev={undefined} />,
-    disabled: true,
+    label: 'Senler',
+    key: 'senler',
+    icon: <SolutionOutlined rev={undefined} />,
   },
   {
-    label: 'Navigation Three - Submenu',
-    key: 'SubMenu',
+    label: 'Открут',
+    key: 'budget',
+    icon: <MonitorOutlined rev={undefined} />,
+  },
+  {
+    label: 'Счета',
+    key: 'invoice',
+    icon: <DollarOutlined rev={undefined} />,
+  },
+  {
+    label: 'Настройки',
+    key: 'settings',
     icon: <SettingOutlined rev={undefined} />,
-  },
-  {
-    label: (
-      <a href='https://ant.design' target='_blank' rel='noopener noreferrer'>
-        Navigation Four - Link
-      </a>
-    ),
-    key: 'alipay',
   },
 ];
 
@@ -57,7 +64,7 @@ export const LayoutMenu: FC<Props> = ({ profileBlock }) => {
               <HeaderAppCategory />
             </Header>
             <Content>
-              <Menu theme='light' mode='inline' defaultSelectedKeys={['4']} items={items} />
+              <Menu theme='light' mode='inline' items={items} />
             </Content>
             <Footer style={{ alignItems: 'end' }}>{profileBlock}</Footer>
           </Layout>
