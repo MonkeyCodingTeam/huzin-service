@@ -1,3 +1,6 @@
+// @ts-nocheck
+// TODO Remove after new Api
+
 // import { ClientsStatisticResponse, StatisticResponse } from '@shared/lib/api/target/types';
 //
 import {ClientsStatisticResponse, PeriodStatistic, SummeryFields} from '@entities/client/types';

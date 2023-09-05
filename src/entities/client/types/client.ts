@@ -42,7 +42,7 @@ interface ClientRelations {
 export type ClientRelationsName = keyof ClientRelations;
 
 export interface GetStatisticProps {
-  period: 'day' | 'week' | 'month' | 'year' | 'overall';
+  period: 'day' | 'week' | 'month' | 'year';
   date_to: AppDate;
   date_from: AppDate;
   only_field?: string[];
@@ -54,22 +54,22 @@ export interface GetStatisticByCompaniesProps extends GetStatisticProps {
   company_templates?: CompanyTemplate['id'][];
 }
 
-export interface ClientsStatisticResponse {
-  items: Statistic[];
-  total: Omit<StatisticResponse, 'date'>;
-}
+// export interface ClientsStatisticResponse {
+//   items: Statistic[];
+//   total: Omit<StatisticResponse, 'date'>;
+// }
 
-export interface Statistic {
-  id: Client['id'] | Company['id'];
-  rows?: StatisticResponse[];
-  total: Partial<BaseStatistic & UniquesStatistic>;
-}
+// export interface Statistic {
+//   id: Client['id'] | Company['id'];
+//   rows?: StatisticResponse[];
+//   total: Partial<BaseStatistic & UniquesStatistic>;
+// }
 
-export interface StatisticResponse {
-  base?: BaseStatistic;
-  uniques?: UniquesStatistic;
-  date: string;
-}
+// export interface StatisticResponse {
+//   base?: BaseStatistic;
+//   uniques?: UniquesStatistic;
+//   date: string;
+// }
 
 export interface BaseStatistic {
   spent: number;
@@ -98,7 +98,7 @@ export interface UniquesStatistic {
 }
 
 export interface GetStatisticProps {
-  period: 'day' | 'week' | 'month' | 'year' | 'overall';
+  period: 'day' | 'week' | 'month' | 'year';
   date_to: AppDate;
   date_from: AppDate;
   only_field?: string[];
@@ -120,6 +120,7 @@ export interface StatisticResponse {
   day_from: string;
   day_to: string;
   month: string;
+  period: string;
   effective_cost_per_click: number;
   effective_cost_per_mille: number;
   impressions: number;

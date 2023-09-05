@@ -3,7 +3,7 @@ import { AxiosPromise } from 'axios';
 import { axiosAppInstance } from '@shared/lib/axios';
 import { Client, ClientsStatisticResponse, GetStatisticByCompaniesProps } from '@entities/client';
 import {
-  GetSubscribersCountPriodRequest,
+  GetSubscribersCountPeriodRequest,
   GetSubscribersCountResponse,
   Group,
 } from '@entities/group';
@@ -28,12 +28,12 @@ export const GuestAPI = {
   getClient: async (clientId: Client['id']): AxiosPromise<Client> => {
     return axiosAppInstance.get(`${ROUTES.CLIENT}/${clientId}`);
   },
-  getCompanyTemlpates: async (clientId: Client['id']): AxiosPromise<CompanyTemplate[]> => {
+  getCompanyTemplates: async (clientId: Client['id']): AxiosPromise<CompanyTemplate[]> => {
     return axiosAppInstance.get(`${BASE_URL}/client/${clientId}/company-template`);
   },
   getSubscribersCountByPeriod: async (
     groupId: Group['id'],
-    payload: GetSubscribersCountPriodRequest,
+    payload: GetSubscribersCountPeriodRequest,
   ): AxiosPromise<Record<string, GetSubscribersCountResponse>> => {
     const route = `${BASE_URL}/subscribers_count/${groupId}/period${
       payload.company_template_id ? `/${payload.company_template_id}` : ''

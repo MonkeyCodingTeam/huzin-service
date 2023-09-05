@@ -3,7 +3,7 @@ import { axiosAppInstance, axiosTargetInstance } from '@shared/lib/axios';
 import type { Client } from '@entities/client';
 import type {
   GetAllSubscribersCountResponse,
-  GetSubscribersCountPriodRequest,
+  GetSubscribersCountPeriodRequest,
   GetSubscribersCountRequest,
   GetSubscribersCountResponse,
   Group,
@@ -33,7 +33,7 @@ export const ClientGroupAPI = {
     }),
   getSubscribersCountByPeriod: async (
     groupId: Group['id'],
-    payload: GetSubscribersCountPriodRequest,
+    payload: GetSubscribersCountPeriodRequest,
   ): AxiosPromise<Record<string, GetSubscribersCountResponse>> =>
     axiosTargetInstance.get(`senler/subscribers_count/${groupId}/period`, {
       params: payload,
