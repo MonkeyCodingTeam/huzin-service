@@ -109,13 +109,13 @@ export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_toke
   Partial<Pick<GroupPlace, 'latitude' | 'longitude'>>;
 
 export interface GetSubscribersCountRequest {
-  date_from: DateTime;
-  date_to: DateTime;
+  date_from: AppDate;
+  date_to: AppDate;
   company_template_id?: CompanyTemplate['id'];
 }
 
-export interface GetSubscribersCountPriodRequest extends GetSubscribersCountRequest {
-  period?: 'day' | 'week' | 'month';
+export interface GetSubscribersCountPeriodRequest extends GetSubscribersCountRequest {
+  period?: 'day' | 'week' | 'month' | 'year';
 }
 
 export interface GetSubscribersCountResponse {
