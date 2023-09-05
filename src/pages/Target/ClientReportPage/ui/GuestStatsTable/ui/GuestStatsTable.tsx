@@ -134,12 +134,14 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({
       <Column
         header='Клики'
         field='clicks'
-        body={(value) => (value.spent ? Math.round(value.clicks).toLocaleString() : '-')}
+        body={(value) => (value.clicks ? Math.round(value.clicks).toLocaleString() : '-')}
       />
       <Column
         header='Цена клика'
         field='clicks_value'
-        body={(value) => (value.clicks ? (value.spent / value.clicks).toFixed(2) : '-')}
+        body={(value) =>
+          value.spent && value.clicks ? (value.spent / value.clicks).toFixed(2) : '-'
+        }
       />
       <Column
         header='Охват'
