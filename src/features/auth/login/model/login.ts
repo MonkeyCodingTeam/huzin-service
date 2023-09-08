@@ -10,7 +10,7 @@ export const loginThunk = createAsyncThunk(
     try {
       await dispatch(AuthAPI.endpoints.csrf.initiate(null));
       await dispatch(AuthAPI.endpoints.login.initiate(body)).unwrap();
-      await dispatch(UserAPI.endpoints.me.initiate(null));
+      await dispatch(UserAPI.endpoints.getMe.initiate(null));
     } catch (error) {
       if (isFetchBaseQueryError(error)) {
         throw new Error(error.data.message);

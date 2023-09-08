@@ -20,8 +20,8 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(UserAPI.endpoints.me.matchFulfilled, (state, { payload }) => payload)
-      .addMatcher(UserAPI.endpoints.me.matchRejected, () => initialState);
+      .addMatcher(UserAPI.endpoints.getMe.matchFulfilled, (state, { payload }) => payload)
+      .addMatcher(UserAPI.endpoints.getMe.matchRejected, () => initialState);
   },
 });
 

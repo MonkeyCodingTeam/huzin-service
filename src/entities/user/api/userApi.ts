@@ -4,7 +4,7 @@ import { AUTH_TAG } from '@shared/api/tags';
 
 export const UserAPI = baseAuthApi.injectEndpoints({
   endpoints: (builder) => ({
-    me: builder.query<User, null>({
+    getMe: builder.query<User, null>({
       query() {
         return {
           url: 'api/me',
@@ -14,3 +14,5 @@ export const UserAPI = baseAuthApi.injectEndpoints({
     }),
   }),
 });
+
+export const { useGetMeQuery } = UserAPI;

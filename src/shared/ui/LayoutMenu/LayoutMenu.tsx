@@ -7,6 +7,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, type MenuProps } from 'antd';
 import React, { type FC, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { HeaderAppCategory } from '@shared/ui';
 import css from './LayoutMenu.module.scss';
 
@@ -14,8 +15,8 @@ const { Sider, Header, Footer, Content } = Layout;
 
 const items: MenuProps['items'] = [
   {
-    label: 'Клиент',
-    key: 'client',
+    label: <Link to='/clients-stats'>Клиенты</Link>,
+    key: 'clients',
     icon: <ProjectOutlined rev={undefined} />,
   },
   {

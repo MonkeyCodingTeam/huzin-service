@@ -5,6 +5,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { appStore } from '@app/store';
 import { FullscreenLoader } from '@shared/ui';
+import { AntdProvider } from './providers/antdProvider';
 import { appRouter } from './providers/appRouter';
 
 export function App() {
@@ -13,7 +14,9 @@ export function App() {
       <ReduxProvider store={appStore}>
         <HelmetProvider>
           <Suspense fallback={<FullscreenLoader />}>
-            <RouterProvider router={appRouter} />
+            <AntdProvider>
+              <RouterProvider router={appRouter} />
+            </AntdProvider>
           </Suspense>
         </HelmetProvider>
       </ReduxProvider>
