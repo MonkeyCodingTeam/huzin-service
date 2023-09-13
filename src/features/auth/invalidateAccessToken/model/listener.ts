@@ -1,5 +1,5 @@
 import { createListenerMiddleware, type TypedStartListening } from '@reduxjs/toolkit';
-import { logoutThunk } from '@features/auth/logout';
+import { AuthAPI } from '@entities/user';
 import { invalidateAccessToken } from '@shared/api';
 
 export const invalidateAccessTokenListener = createListenerMiddleware();
@@ -12,10 +12,10 @@ export const startInvalidateAccessTokenListener =
 
 startInvalidateAccessTokenListener({
   actionCreator: invalidateAccessToken,
-  effect: async (_, api) => {
+  effect: (_, api) => {
     console.log('Refresh');
     // In the future here may be logic with refresh access token
     // @see https://redux-toolkit.js.org/rtk-query/usage/customizing-queries#preventing-multiple-unauthorized-errors
-    api.dispatch(logoutThunk());
+    api.dispatch(AuthAPI.endpoints.logout.initiate(null));
   },
 });

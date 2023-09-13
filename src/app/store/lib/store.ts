@@ -1,5 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { Middleware, MiddlewareAPI, configureStore, isRejectedWithValue } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
+import { message } from 'antd';
 import logger from 'redux-logger';
 import { selectedClientSlice, clientsSlice, statsSlice } from '@entities/client';
 import { userSlice } from '@entities/user';
@@ -7,12 +8,11 @@ import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessTo
 import { baseApi } from '@shared/api/baseApi';
 import { baseAuthApi } from '@shared/api/baseAuthApi';
 import { env } from '@shared/const';
-import { authSlice } from 'entities/auth';
+
 
 export function makeStore() {
   const store = configureStore({
     reducer: {
-      [authSlice.name]: authSlice.reducer,
       [userSlice.name]: userSlice.reducer,
       [selectedClientSlice.name]: selectedClientSlice.reducer,
       [clientsSlice.name]: clientsSlice.reducer,

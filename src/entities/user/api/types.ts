@@ -3,7 +3,3 @@ export type LoginRequest = {
   password: string;
   remember: boolean;
 };
-
-export type Session = {
-  isAuthorized: boolean;
-};

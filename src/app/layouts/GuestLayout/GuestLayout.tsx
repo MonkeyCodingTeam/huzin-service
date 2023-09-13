@@ -1,12 +1,19 @@
 import { Layout } from 'antd';
 import { Navigate, Outlet } from 'react-router-dom';
+import { useGetMeQuery } from '@entities/user';
 import { useAppSelector } from '@shared/lib';
+import { FullscreenLoader } from '@shared/ui';
 import css from './GuestLayout.module.scss';
 
 export const GuestLayout = () => {
-  const { id } = useAppSelector((state) => state.user);
+  const { isLoading, isSuccess } = useGetMeQuery(null);
+  const user = useAppSelector((state) => state.user);
 
-  if (id) {
+  if (isLoading) {
+    <FullscreenLoader />;
+  }
+
+  if (user.id || isSuccess) {
     return <Navigate to='/' />;
   }
 

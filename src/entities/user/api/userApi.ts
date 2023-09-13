@@ -1,6 +1,6 @@
 import { type User } from '@entities/user';
 import { baseAuthApi } from '@shared/api/baseAuthApi';
-import { AUTH_TAG } from '@shared/api/tags';
+import { USER_TAG } from '@shared/api/tags';
 
 export const UserAPI = baseAuthApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -10,7 +10,7 @@ export const UserAPI = baseAuthApi.injectEndpoints({
           url: 'api/me',
         };
       },
-      providesTags: [AUTH_TAG],
+      providesTags: [USER_TAG],
     }),
   }),
 });

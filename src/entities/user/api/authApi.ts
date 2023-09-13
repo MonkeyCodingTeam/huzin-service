@@ -1,16 +1,17 @@
 import { baseAuthApi } from '@shared/api/baseAuthApi';
-import { AUTH_TAG } from '@shared/api/tags';
-import { type LoginRequest, type Session } from './types';
+import { USER_TAG } from '@shared/api/tags';
+import { User } from '../model/types';
+import { type LoginRequest } from './types';
 
 export const AuthAPI = baseAuthApi.injectEndpoints({
   endpoints: (build) => ({
-    login: build.mutation<Session, LoginRequest>({
+    login: build.mutation<User, LoginRequest>({
       query: (body) => ({
         url: 'login',
         method: 'POST',
         body,
       }),
-      invalidatesTags: [AUTH_TAG],
+      invalidatesTags: [USER_TAG],
     }),
     csrf: build.query({
       query: () => ({
@@ -23,7 +24,9 @@ export const AuthAPI = baseAuthApi.injectEndpoints({
         url: 'logout',
         method: 'POST',
       }),
-      invalidatesTags: [AUTH_TAG],
+      invalidatesTags: [USER_TAG],
     }),
   }),
 });
+
+export const { useLazyCsrfQuery, useLoginMutation, useLogoutMutation } = AuthAPI;

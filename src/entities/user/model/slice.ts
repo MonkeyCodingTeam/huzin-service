@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { UserAPI } from '@entities/user';
+import { AuthAPI } from '../api/authApi';
 import { type User } from './types';
 
 const initialState: User = {
@@ -21,7 +22,8 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addMatcher(UserAPI.endpoints.getMe.matchFulfilled, (state, { payload }) => payload)
-      .addMatcher(UserAPI.endpoints.getMe.matchRejected, () => initialState);
+      .addMatcher(UserAPI.endpoints.getMe.matchRejected, () => initialState)
+      .addMatcher(AuthAPI.endpoints.logout.matchFulfilled, () => initialState);
   },
 });
 

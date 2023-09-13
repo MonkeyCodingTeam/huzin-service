@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
+// eslint-disable-next-line boundaries/element-types
+import { AuthLayout, GuestLayout } from '@app/layouts';
 import { targetRouter } from '@app/providers/targetRouter';
 import { LoginPage } from '@pages/Auth';
 import { StubPage } from '@pages/StubPage';
 import { AUTH_ROUTES } from '@shared/const';
-import { AuthLayout } from '@widgets/AuthLayout';
-import { GuestLayout } from 'widgets/GuestLayout';
 
 export const appRouter = createBrowserRouter([
   {
