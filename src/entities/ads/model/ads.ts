@@ -5,5 +5,6 @@ export interface Ads extends Model {
   link_url: string;
   post_id: null | string;
   is_checked: boolean;
+  is_active: boolean;
   published_at: string;
 }

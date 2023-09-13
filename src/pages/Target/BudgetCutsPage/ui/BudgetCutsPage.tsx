@@ -262,13 +262,18 @@ const BudgetCutsPage = () => {
   };
 
   const needSpentBodyTemplate = (client: ClientPlans) => {
-    if (client.monthday_plan && client.monthday_plan < client.month_spent) {
-      return '-';
-    }
     const dayDifference = daysInMonth - monthday;
 
-    if (dayDifference === 0) {
+    if (
+      dayDifference === 0 ||
+      !client.monthday_plan ||
+      client.month_plan - client.month_spent < 0
+    ) {
       return '-';
+    }
+
+    if (client.monthday_plan < client.month_spent) {
+      return Math.trunc((client.month_plan - client.month_spent) / dayDifference).toLocaleString();
     }
 
     if (client.zero_days) {
@@ -396,7 +401,12 @@ const BudgetCutsPage = () => {
             header='Траты: месяц'
           />
           <Column field='month_plan' body={monthPlanBody} header='План' />
-          <Column body={needSpentBodyTemplate} header='Докрут в день' />
+          <Column
+            body={needSpentBodyTemplate}
+            headerTooltip='Рекомендованный открут'
+            headerTooltipOptions={{ position: 'top' }}
+            header='Рек. открут'
+          />
           <Column body={needRequestBodyTemplate} header='Зачислить' />
         </DataTable>
       </TableLoader>

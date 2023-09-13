@@ -8,6 +8,7 @@ export interface DataType {
   key: number;
   name: Client['name'];
   adsCount: number;
+  activeAdsDif: string;
 }
 
 const columns: ColumnsType<DataType> = [
@@ -21,6 +22,11 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'adsCount',
     fixed: true,
   },
+  // {
+  //   title: 'Запущенные объявления',
+  //   dataIndex: 'activeAdsDif',
+  //   fixed: true,
+  // },
 ];
 
 interface Props {

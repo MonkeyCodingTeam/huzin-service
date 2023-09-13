@@ -7,30 +7,37 @@ import { DateTime } from 'luxon';
 import { Ads } from '@entities/ads';
 
 const selectedClintIds: number[] = [1608290902];
+interface DatePeriod {
+  start: DateTime;
+  end: DateTime;
+}
 
 export const AdsPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClients, setSelectedClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
-  const [date, setDate] = useState<{ start: DateTime; end: DateTime }>();
+  const [date, setDate] = useState<DatePeriod>();
   const [errors, setErrors] = useState<Ads[]>([]);
   const [data, setData] = useState<DataType[]>([]);
   const [filter, setFilter] = useState('');
 
-  const reformatClients = (clients: Client[]) => {
-    return clients.map((client) => {
-      const adsCount = client.ads?.length || 0;
+  const reformatClients = (clients: Client[], period: DatePeriod): DataType[] => {
+    return clients.map((client: Client) => {
+      const adsCount =
+        client.ads?.filter((ads) => {
+          const published_at = DateTime.fromSQL(ads.published_at);
+          return published_at >= period.start && published_at <= period.end;
+        }).length || 0;
       return {
         key: client.id,
         name: client.name,
         adsCount,
+        activeAdsDif: `${client.ads?.filter((ad) => ad.is_active).length}`,
       };
     });
   };
 
   useEffect(() => {
-    setData(reformatClients(clients));
-
     setErrors(
       clients.reduce<Ads[]>((prev, { ads }) => {
         if (!ads) return prev;
@@ -43,6 +50,9 @@ export const AdsPage = () => {
         return prev;
       }, []),
     );
+
+    if (!date) return;
+    setData(reformatClients(clients, date));
   }, [clients]);
 
   useEffect(() => {
@@ -70,19 +80,7 @@ export const AdsPage = () => {
       const startDay = start.startOf('day');
       const endDay = end.endOf('day');
 
-      setData(
-        reformatClients(
-          clients.map((client) => {
-            if (!client.ads) return client;
-            const newClient = { ...client };
-            newClient.ads = client.ads.filter((ads) => {
-              const published_at = DateTime.fromSQL(ads.published_at);
-              return published_at >= startDay && published_at <= endDay;
-            });
-            return newClient;
-          }),
-        ),
-      );
+      setData(reformatClients(clients, { start: startDay, end: endDay }));
     },
     [clients],
   );
