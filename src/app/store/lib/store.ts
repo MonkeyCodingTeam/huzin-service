@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import logger from 'redux-logger';
-import { clientsSlice, statsSlice } from '@entities/client';
+import { selectedClientSlice, clientsSlice, statsSlice } from '@entities/client';
 import { userSlice } from '@entities/user';
 import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
 import { baseApi } from '@shared/api/baseApi';
@@ -14,6 +14,7 @@ export function makeStore() {
     reducer: {
       [authSlice.name]: authSlice.reducer,
       [userSlice.name]: userSlice.reducer,
+      [selectedClientSlice.name]: selectedClientSlice.reducer,
       [clientsSlice.name]: clientsSlice.reducer,
       [statsSlice.name]: statsSlice.reducer,
       [baseApi.reducerPath]: baseApi.reducer,

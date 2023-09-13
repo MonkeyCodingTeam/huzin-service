@@ -24,20 +24,20 @@ export interface IClient extends Model {
   is_mine?: boolean;
 }
 
-export interface IStatReq {
+export interface IStatsReq {
   id: number;
-  period: string;
+  period: 'day' | 'week' | 'month' | 'year';
   date_from: string;
   date_to: string;
 }
 
-export interface IStatResp {
+export interface IStatsResp {
   clicks: number;
   ctr: number;
   day_from: string;
   day_to: string;
   month: string;
-  period: string;
+  period_date: string;
   effective_cost_per_click: number;
   effective_cost_per_mille: number;
   impressions: number;
@@ -46,8 +46,8 @@ export interface IStatResp {
   spent: number;
 }
 
-export interface IClientStatResp {
+export interface IClientStatsResp {
   id: IClient['id'];
-  stats: IStatResp[];
+  stats: IStatsResp[];
   type: 'ad' | 'campaign' | 'client' | 'office';
 }

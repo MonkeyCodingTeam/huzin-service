@@ -3,10 +3,12 @@ import { ClientAPI } from '@entities/client/api/clientAPI';
 import { initClientState, initClientStatsState } from '@entities/client/model/inits';
 import { IClient } from '@entities/client/model/types';
 
-export const clientSlice = createSlice({
-  name: 'client',
+export const selectedClientSlice = createSlice({
+  name: 'selectedClient',
   initialState: initClientState,
-  reducers: {},
+  reducers: {
+    setSelectedClient: (state, { payload }) => payload,
+  },
   extraReducers: {},
 });
 
@@ -34,3 +36,5 @@ export const statsSlice = createSlice({
       .addMatcher(ClientAPI.endpoints.getClients.matchRejected, () => [initClientStatsState]);
   },
 });
+
+export const { setSelectedClient } = selectedClientSlice.actions;

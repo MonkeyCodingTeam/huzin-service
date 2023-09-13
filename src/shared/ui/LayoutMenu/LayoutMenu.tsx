@@ -15,7 +15,7 @@ const { Sider, Header, Footer, Content } = Layout;
 
 const items: MenuProps['items'] = [
   {
-    label: <Link to='/clients-stats'>Клиенты</Link>,
+    label: <Link to='/client-stats'>Клиенты</Link>,
     key: 'clients',
     icon: <ProjectOutlined rev={undefined} />,
   },

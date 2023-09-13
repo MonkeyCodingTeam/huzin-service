@@ -2,7 +2,7 @@ import { ClientsPage } from 'pages/Target/ClientsPage';
 
 export const targetRouter = [
   {
-    path: '/clients-stats',
+    path: '/client-stats',
     element: <ClientsPage />,
   },
 ];
