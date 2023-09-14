@@ -1,40 +1,56 @@
 import { Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
 import { setSelectedClient, useGetClientsQuery } from '@entities/client';
+import { TARGET_ROUTES } from '@shared/const';
 import { setArrayToOptionsFormat } from '@shared/lib/setArrayToOptionsFormat';
 import css from './ClientSelect.module.scss';
 
 export const ClientSelect = () => {
+  const params = useParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [selectedValue, setSelectedValue] = useState<number>();
+
+  const [selectedValue, setSelectedValue] = useState<number | null>();
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
   const { isLoading, data = [], isFetching } = useGetClientsQuery(null);
 
-  const handleChange = (value: number) => {
+  const handleValueChange = (value: number) => {
     setSelectedValue(value);
-    dispatch(setSelectedClient(data.find((client) => client.id === value)));
+  };
+  const checkId = (id: number): boolean => {
+    return data.some((client) => client.id === id);
   };
 
   useEffect(() => {
-    if (data.length && !selectedClientId) {
-      setSelectedValue(data[0].id);
-      dispatch(setSelectedClient(data[0]));
+    if (!isFetching && !selectedClientId && !params.id) {
+      return setSelectedValue(data[0].id);
+    }
+    if (!isFetching && !selectedClientId && params.id) {
+      return checkId(+params.id) ? setSelectedValue(+params.id) : setSelectedValue(null);
     }
     if (selectedClientId) {
-      setSelectedValue(selectedClientId);
+      return setSelectedValue(selectedClientId);
     }
-  }, [data, selectedClientId]);
+  }, [data]);
+
+  useEffect(() => {
+    if (selectedValue) {
+      dispatch(setSelectedClient(data.find((client) => client.id === selectedValue)));
+      navigate(`${TARGET_ROUTES.BaseClientStats}/${selectedValue}`);
+    }
+  }, [selectedValue]);
 
   return (
     <Select
-      className={css.clients_select}
+      className={css.clientsSelect}
       showSearch
       loading={isLoading && isFetching}
-      placeholder='Клиенты'
+      placeholder='Выберите клиента'
       optionFilterProp='children'
       options={setArrayToOptionsFormat(data, 'id', 'name')}
-      onChange={(value) => handleChange(value)}
+      onChange={(value) => handleValueChange(value)}
       value={selectedValue}
       filterOption={(input, option): boolean => {
         if (!option) return false;

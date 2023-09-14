@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ClientAPI } from '@entities/client/api/clientAPI';
-import { initClientState, initClientStatsState } from '@entities/client/model/inits';
+import { initClientState } from '@entities/client/model/inits';
 import { IClient } from '@entities/client/model/types';
 
 export const selectedClientSlice = createSlice({
@@ -20,20 +20,6 @@ export const clientsSlice = createSlice({
     builder
       .addMatcher(ClientAPI.endpoints.getClients.matchFulfilled, (state, { payload }) => payload)
       .addMatcher(ClientAPI.endpoints.getClients.matchRejected, () => []);
-  },
-});
-
-export const statsSlice = createSlice({
-  name: 'statistics',
-  initialState: [initClientStatsState],
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(
-        ClientAPI.endpoints.getClientStats.matchFulfilled,
-        (state, { payload }) => payload,
-      )
-      .addMatcher(ClientAPI.endpoints.getClients.matchRejected, () => [initClientStatsState]);
   },
 });
 
