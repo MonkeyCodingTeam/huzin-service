@@ -14,11 +14,28 @@
     gap: 1rem;
     align-items: center;
 
-    max-width: fit-content;
+    width: fit-content;
     padding: 1rem;
 
     background-color: var(--light-color);
-    border-radius: 8px;
+    border-radius: 11px;
+    @media screen and (max-width: 575px){
+      flex-direction: column;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start
+  }
+
+  &__text {
+    min-width: fit-content;
+    @media screen and (max-width: 575px){
+      min-width: 48px;
+    }
   }
 
   &__table {

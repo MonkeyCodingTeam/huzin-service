@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Grid, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table/interface';
 import { DateTime } from 'luxon';
 import { useEffect } from 'react';
@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@features/clientStats';
 import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
 import css from './ClientStatsTable.module.scss';
+
+const { useBreakpoint } = Grid;
 
 const semiAnnualReport: IStatsReq = {
   id: 0,
@@ -15,10 +17,15 @@ const semiAnnualReport: IStatsReq = {
 };
 
 export const ClientStatsTable = () => {
+  const screens = useBreakpoint();
+
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
   const selectedTemplateId = useSelector((state: RootState) => state.selectedCampaignTemplate.id);
+
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
+  const dataSource = sumStatsForPeriod(data);
+
   const truncValue = (value: number) => `${value ? Math.trunc(value).toLocaleString() : '-'}`;
   const toFixedValue = (value: number) => `${value ? +value.toFixed(1).toLocaleString() : '-'}`;
   const toDateFormat = (value: string) =>
@@ -33,10 +40,6 @@ export const ClientStatsTable = () => {
       });
     }
   }, [selectedClientId, selectedTemplateId]);
-
-  const dataSource = sumStatsForPeriod(data);
-
-  console.log(dataSource);
 
   const columns: ColumnsType<IStatsResp> = [
     {
@@ -83,7 +86,14 @@ export const ClientStatsTable = () => {
 
   return (
     <Table
-      scroll={{ x: 1000, y: 'calc(100vh - 18em)' }}
+      scroll={{
+        x: 1000,
+        y: screens.lg
+          ? 'calc(100vh - 18em)'
+          : screens.xs
+          ? 'calc(100vh - 16em)'
+          : 'calc(100vh - 14em)',
+      }}
       className={css.clientStats_table}
       rowKey='day_from'
       loading={isLoading || isFetching}

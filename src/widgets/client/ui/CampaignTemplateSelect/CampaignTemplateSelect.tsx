@@ -25,8 +25,6 @@ export const CampaignTemplateSelect = () => {
     }
   }, [selectedValue]);
 
-  console.log(data);
-
   // const ucFirst = (str: string) => str[0].toUpperCase() + str.slice(1);
 
   return (
@@ -35,7 +33,7 @@ export const CampaignTemplateSelect = () => {
       onClear={() => setSelectedValue(null)}
       className={css.templatesSelect}
       loading={isLoading && isFetching}
-      placeholder='Выберите шаблон'
+      placeholder='Выберите РК'
       optionFilterProp='children'
       options={setArrayToOptionsFormat(data, 'id', 'name')}
       onChange={(value) => handleValueChange(value)}
