@@ -1,10 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import logger from 'redux-logger';
-import {
-  campaignTemplateSlice,
-  selectedCampaignTemplateSlice,
-} from '@entities/campaignTemplate/model/slice';
+import { campaignTemplatesSlice } from '@entities/campaignTemplate';
 import { clientsSlice, selectedClientSlice } from '@entities/client';
 import { userSlice } from '@entities/user';
 import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
@@ -22,8 +19,7 @@ export function makeStore() {
       [selectedClientSlice.name]: selectedClientSlice.reducer,
       [clientsSlice.name]: clientsSlice.reducer,
       [statsSlice.name]: statsSlice.reducer,
-      [campaignTemplateSlice.name]: campaignTemplateSlice.reducer,
-      [selectedCampaignTemplateSlice.name]: selectedCampaignTemplateSlice.reducer,
+      [campaignTemplatesSlice.name]: campaignTemplatesSlice.reducer,
       [baseApi.reducerPath]: baseApi.reducer,
       [baseAuthApi.reducerPath]: baseAuthApi.reducer,
     },

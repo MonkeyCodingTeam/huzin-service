@@ -1,29 +1,21 @@
 import { Select } from 'antd';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {
-  setSelectedCampaignTemplate,
-  useGetCampaignTemplatesQuery,
-} from '@entities/campaignTemplate';
+import { FC, useState } from 'react';
+import { useGetCampaignTemplatesQuery } from '@entities/campaignTemplate';
 import { setArrayToOptionsFormat } from '@shared/lib/setArrayToOptionsFormat';
 import css from './CampaignTemplateSelect.module.scss';
 
-export const CampaignTemplateSelect = () => {
-  const dispatch = useDispatch();
+interface Props {
+  onSelect: (value: number | null | undefined) => void;
+}
 
+export const CampaignTemplateSelect: FC<Props> = ({ onSelect }) => {
   const { isLoading, data = [], isFetching } = useGetCampaignTemplatesQuery(null);
   const [selectedValue, setSelectedValue] = useState<number | null>();
-  const handleValueChange = (value: number) => {
-    setSelectedValue(value);
-  };
 
-  useEffect(() => {
-    if (selectedValue) {
-      dispatch(setSelectedCampaignTemplate(data.find((template) => template.id === selectedValue)));
-    } else {
-      dispatch(setSelectedCampaignTemplate([]));
-    }
-  }, [selectedValue]);
+  const handleValueChange = (value: number | null | undefined) => {
+    setSelectedValue(value);
+    onSelect(value);
+  };
 
   // const ucFirst = (str: string) => str[0].toUpperCase() + str.slice(1);
 

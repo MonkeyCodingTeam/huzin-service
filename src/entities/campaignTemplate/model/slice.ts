@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CampaignTemplateAPI, initCampaignTemplateState } from '@entities/campaignTemplate';
 
-export const campaignTemplateSlice = createSlice({
+export const campaignTemplatesSlice = createSlice({
   name: 'campaignTemplate',
   initialState: [initCampaignTemplateState],
   reducers: {},
@@ -16,13 +16,3 @@ export const campaignTemplateSlice = createSlice({
       ]);
   },
 });
-
-export const selectedCampaignTemplateSlice = createSlice({
-  name: 'selectedCampaignTemplate',
-  initialState: initCampaignTemplateState,
-  reducers: {
-    setSelectedCampaignTemplate: (state, { payload }) => payload,
-  },
-});
-
-export const { setSelectedCampaignTemplate } = selectedCampaignTemplateSlice.actions;

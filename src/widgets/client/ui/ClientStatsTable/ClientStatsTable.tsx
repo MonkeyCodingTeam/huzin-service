@@ -1,11 +1,10 @@
 import { Grid, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table/interface';
 import { DateTime } from 'luxon';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@features/clientStats';
 import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
-import css from './ClientStatsTable.module.scss';
 
 const { useBreakpoint } = Grid;
 
@@ -16,12 +15,14 @@ const semiAnnualReport: IStatsReq = {
   date_to: DateTime.now().toISODate(),
 };
 
-export const ClientStatsTable = () => {
+interface Props {
+  selectedTemplate: number | null | undefined;
+}
+
+export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
   const screens = useBreakpoint();
 
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
-  const selectedTemplateId = useSelector((state: RootState) => state.selectedCampaignTemplate.id);
-
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
   const dataSource = sumStatsForPeriod(data);
@@ -36,10 +37,10 @@ export const ClientStatsTable = () => {
       trigger({
         ...semiAnnualReport,
         id: selectedClientId,
-        company_template_ids: selectedTemplateId ? [selectedTemplateId] : undefined,
+        company_template_ids: selectedTemplate ? [selectedTemplate] : undefined,
       });
     }
-  }, [selectedClientId, selectedTemplateId]);
+  }, [selectedClientId, selectedTemplate]);
 
   const columns: ColumnsType<IStatsResp> = [
     {
@@ -94,12 +95,11 @@ export const ClientStatsTable = () => {
           ? 'calc(100vh - 16em)'
           : 'calc(100vh - 14em)',
       }}
-      className={css.clientStats_table}
       rowKey='day_from'
       loading={isLoading || isFetching}
       dataSource={dataSource}
       columns={columns}
-      size='middle'
+      size={screens.xs ? 'small' : 'middle'}
       pagination={false}
       showSorterTooltip={false}
     />

@@ -1,5 +1,5 @@
-import { Grid, Typography } from 'antd';
-import { Transition } from '@shared/ui/Transition';
+import { Grid, Layout, Typography } from 'antd';
+import { useState } from 'react';
 import { CampaignTemplateSelect } from '@widgets/client/ui/CampaignTemplateSelect/CampaignTemplateSelect';
 import { ClientSelect, ClientStatsTable } from 'widgets/client';
 import css from './ClientsPage.module.scss';
@@ -9,11 +9,14 @@ const { useBreakpoint } = Grid;
 
 const ClientsPage = () => {
   const screens = useBreakpoint();
+  const [selectedTemplate, setSelectedTemplate] = useState<number | null>();
 
-  console.log(screens);
+  const onTemplateSelect = (value: number | null | undefined) => {
+    setSelectedTemplate(value);
+  };
 
   return (
-    <Transition className={css.clientPage__container}>
+    <Layout className={css.clientPage}>
       <section className={css.clientPage__filters}>
         <div className={css.clientPage__filter}>
           <Text className={css.clientPage__text} hidden={!screens.lg && !screens.xs}>
@@ -25,13 +28,13 @@ const ClientsPage = () => {
           <Text className={css.clientPage__text} hidden={!screens.lg && !screens.xs}>
             РК:
           </Text>
-          <CampaignTemplateSelect />
+          <CampaignTemplateSelect onSelect={onTemplateSelect} />
         </div>
       </section>
-      <div className={css.clientPage__table}>
-        <ClientStatsTable />
-      </div>
-    </Transition>
+      <section className={css.clientPage__table}>
+        <ClientStatsTable selectedTemplate={selectedTemplate} />
+      </section>
+    </Layout>
   );
 };
 
