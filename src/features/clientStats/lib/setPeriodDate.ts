@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { IClientStatsResp } from '@entities/client';
+import { IClientStatsResp } from '@features/clientStats';
 
 const setDateToFormatYMD = (day: string) => {
   return `${DateTime.fromFormat(day, 'yyyymmdd').toFormat('yyyy-mm-dd')}`;
