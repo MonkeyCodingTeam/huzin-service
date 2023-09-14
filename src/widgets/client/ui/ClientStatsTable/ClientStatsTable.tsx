@@ -3,9 +3,9 @@ import type { ColumnsType } from 'antd/es/table/interface';
 import { DateTime } from 'luxon';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@entities/client';
+import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@features/clientStats';
 import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
-import css from './ClientsStatsTable.module.scss';
+import css from './ClientStatsTable.module.scss';
 
 const semiAnnualReport: IStatsReq = {
   id: 0,
@@ -16,6 +16,7 @@ const semiAnnualReport: IStatsReq = {
 
 export const ClientStatsTable = () => {
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
+  const selectedTemplateId = useSelector((state: RootState) => state.selectedCampaignTemplate.id);
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
   const truncValue = (value: number) => `${value ? Math.trunc(value).toLocaleString() : '-'}`;
@@ -25,11 +26,18 @@ export const ClientStatsTable = () => {
 
   useEffect(() => {
     if (selectedClientId) {
-      trigger({ ...semiAnnualReport, id: selectedClientId });
+      trigger({
+        ...semiAnnualReport,
+        id: selectedClientId,
+        company_template_ids: selectedTemplateId ? [selectedTemplateId] : undefined,
+      });
     }
-  }, [selectedClientId]);
+  }, [selectedClientId, selectedTemplateId]);
 
   const dataSource = sumStatsForPeriod(data);
+
+  console.log(dataSource);
+
   const columns: ColumnsType<IStatsResp> = [
     {
       title: 'Дата',
@@ -75,8 +83,8 @@ export const ClientStatsTable = () => {
 
   return (
     <Table
-      scroll={{ x: 658, y: 768 }}
-      className={css.clientsStats_table}
+      scroll={{ x: 1000, y: 'calc(100vh - 18em)' }}
+      className={css.clientStats_table}
       rowKey='day_from'
       loading={isLoading || isFetching}
       dataSource={dataSource}
