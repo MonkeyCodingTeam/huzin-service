@@ -23,5 +23,5 @@ export const baseQuery: BaseQueryFn<
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json',
   },
-  paramsSerializer: (params) => queryString.stringify(params),
+  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' }),
 });

@@ -6,11 +6,13 @@ const STAT_URL = 'statistic/client';
 export const ClientStatsAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getClientStats: builder.query<IClientStatsResp[], IStatsReq>({
-      query: (params) => ({
-        url: `target/${STAT_URL}/${params.id}/template`,
-        method: 'GET',
-        params,
-      }),
+      query: (params) => {
+        return {
+          url: `target/${STAT_URL}/${params.id}/template`,
+          method: 'GET',
+          params,
+        };
+      },
       transformResponse: (response: IClientStatsResp[], fetch, request) => {
         return response.map((client) => setPeriodDate(client, request.period));
       },
