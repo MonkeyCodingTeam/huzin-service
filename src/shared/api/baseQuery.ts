@@ -26,5 +26,4 @@ export const baseQuery: BaseQueryFn<
 
     return headers;
   },
-  
 });
