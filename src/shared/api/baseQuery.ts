@@ -19,9 +19,13 @@ export const baseQuery: BaseQueryFn<
   baseUrl: `${env.API_URL}/api`,
   credentials: 'include',
   headers: {
-    'X-XSRF-TOKEN': getCookie('XSRF-TOKEN') ?? '',
     'X-Requested-With': 'XMLHttpRequest',
     'Content-Type': 'application/json',
   },
-  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' }),
+  prepareHeaders: (headers) => {
+    headers.set('X-XSRF-TOKEN', getCookie('XSRF-TOKEN') || '');
+
+    return headers;
+  },
+  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' })
 });

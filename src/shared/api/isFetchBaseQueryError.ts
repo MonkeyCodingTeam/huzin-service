@@ -1,7 +1,10 @@
-import { type AxiosError } from 'axios';
+interface ErrorData {
+  data: {
+    message: string;
+  };
+  status: number;
+}
 
-export const isFetchBaseQueryError = (
-  error: unknown,
-): error is { data: AxiosError; status: number } => {
+export const isFetchBaseQueryError = (error: unknown): error is ErrorData => {
   return typeof error === 'object' && error != null && Object.hasOwn(error, 'status');
 };

@@ -1,13 +1,17 @@
 import { Button, Checkbox, Form, Input } from 'antd';
 import { type FC } from 'react';
-import { type LoginRequest } from '@entities/auth/api/types';
-import { loginThunk } from '@features/auth/login';
-import { useAppDispatch } from '@shared/lib';
+import { useLazyCsrfQuery, useLoginMutation } from '@entities/user';
+import { LoginRequest } from '@entities/user/api/types';
+import { ErrorAlert } from '@shared/ui/ErrorAlert/ErrorAlert';
 
 export const LoginForm: FC = () => {
-  const dispatch = useAppDispatch();
-  const handleFinish = (value: LoginRequest) => {
-    dispatch(loginThunk(value));
+  const [csrf] = useLazyCsrfQuery();
+  const [login, { isLoading, error }] = useLoginMutation();
+
+  const handleSubmit = async (value: LoginRequest) => {
+    await csrf(null);
+    const user = await login(value);
+    console.log(user);
   };
 
   return (
@@ -17,8 +21,10 @@ export const LoginForm: FC = () => {
       labelCol={{ span: 8 }}
       wrapperCol={{ span: 16 }}
       initialValues={{ remember: true }}
-      onFinish={handleFinish}
+      onFinish={handleSubmit}
+      disabled={isLoading}
     >
+      {error && <ErrorAlert error={error} />}
       <Form.Item<LoginRequest>
         label='Логин'
         name='login'
