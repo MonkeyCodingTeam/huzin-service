@@ -12,7 +12,7 @@ export const ErrorAlert: FC<Props> = ({ error }) => {
   if (!error) return <></>;
 
   const errors = useCallback(() => {
-    if (!isFetchBaseQueryError(error)) return;
+    if (!isFetchBaseQueryError(error) || !error.data?.message) return;
 
     return <Alert message={error.data.message} type='error' showIcon />;
   }, [error]);
