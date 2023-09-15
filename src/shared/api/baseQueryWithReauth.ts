@@ -23,7 +23,7 @@ export const baseQueryWithReauth = async (
     api.dispatch(invalidateAccessToken());
   }
 
-  if (isFetchBaseQueryError(error)) {
+  if (isFetchBaseQueryError(error) && error.data?.message) {
     console.warn('We got a rejected action!', error);
     message.error(error.data.message);
   }
