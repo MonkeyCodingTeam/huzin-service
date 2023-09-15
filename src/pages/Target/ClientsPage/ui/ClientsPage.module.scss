@@ -1,0 +1,46 @@
+.clientPage {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  max-width: 1280px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+
+  &__filters {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    width: fit-content;
+    padding: 1rem;
+
+    background-color: var(--light-color);
+    border-radius: var(--large-border-radius);
+
+    @media screen and (max-width: 576px){
+      flex-direction: column;
+    }
+  }
+
+  &__filter {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start
+  }
+
+  &__text {
+    min-width: fit-content;
+
+    @media screen and (max-width: 576px){
+      min-width: 48px;
+    }
+  }
+
+  &__table {
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--large-border-radius);
+  }
+}

@@ -1,4 +1,4 @@
-import { IClientStatsResp, IStatsResp } from '@entities/client';
+import { IClientStatsResp, IStatsResp } from '@features/clientStats';
 
 const fields: (keyof Pick<IStatsResp, 'spent' | 'impressions' | 'clicks' | 'reach'>)[] = [
   'spent',

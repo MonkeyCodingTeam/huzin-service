@@ -2,9 +2,11 @@ import { Middleware, MiddlewareAPI, configureStore, isRejectedWithValue } from '
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { message } from 'antd';
 import logger from 'redux-logger';
-import { selectedClientSlice, clientsSlice, statsSlice } from '@entities/client';
+import { campaignTemplatesSlice } from '@entities/campaignTemplate';
+import { clientsSlice, selectedClientSlice } from '@entities/client';
 import { userSlice } from '@entities/user';
 import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
+import { statsSlice } from '@features/clientStats';
 import { baseApi } from '@shared/api/baseApi';
 import { baseAuthApi } from '@shared/api/baseAuthApi';
 import { env } from '@shared/const';
@@ -17,6 +19,7 @@ export function makeStore() {
       [selectedClientSlice.name]: selectedClientSlice.reducer,
       [clientsSlice.name]: clientsSlice.reducer,
       [statsSlice.name]: statsSlice.reducer,
+      [campaignTemplatesSlice.name]: campaignTemplatesSlice.reducer,
       [baseApi.reducerPath]: baseApi.reducer,
       [baseAuthApi.reducerPath]: baseAuthApi.reducer,
     },

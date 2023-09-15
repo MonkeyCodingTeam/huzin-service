@@ -1,11 +1,12 @@
-import { Table } from 'antd';
+import { Grid, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table/interface';
 import { DateTime } from 'luxon';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@entities/client';
+import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@features/clientStats';
 import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
-import css from './ClientsStatsTable.module.scss';
+
+const { useBreakpoint } = Grid;
 
 const semiAnnualReport: IStatsReq = {
   id: 0,
@@ -14,10 +15,18 @@ const semiAnnualReport: IStatsReq = {
   date_to: DateTime.now().toISODate(),
 };
 
-export const ClientStatsTable = () => {
+interface Props {
+  selectedTemplate: number | null | undefined;
+}
+
+export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
+  const screens = useBreakpoint();
+
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
+  const dataSource = sumStatsForPeriod(data);
+
   const truncValue = (value: number) => `${value ? Math.trunc(value).toLocaleString() : '-'}`;
   const toFixedValue = (value: number) => `${value ? +value.toFixed(1).toLocaleString() : '-'}`;
   const toDateFormat = (value: string) =>
@@ -25,11 +34,14 @@ export const ClientStatsTable = () => {
 
   useEffect(() => {
     if (selectedClientId) {
-      trigger({ ...semiAnnualReport, id: selectedClientId });
+      trigger({
+        ...semiAnnualReport,
+        id: selectedClientId,
+        company_template_ids: selectedTemplate ? [selectedTemplate] : undefined,
+      });
     }
-  }, [selectedClientId]);
+  }, [selectedClientId, selectedTemplate]);
 
-  const dataSource = sumStatsForPeriod(data);
   const columns: ColumnsType<IStatsResp> = [
     {
       title: 'Дата',
@@ -75,13 +87,19 @@ export const ClientStatsTable = () => {
 
   return (
     <Table
-      scroll={{ x: 658, y: 768 }}
-      className={css.clientsStats_table}
+      scroll={{
+        x: 1000,
+        y: screens.lg
+          ? 'calc(100vh - 18em)'
+          : screens.xs
+          ? 'calc(100vh - 16em)'
+          : 'calc(100vh - 14em)',
+      }}
       rowKey='day_from'
       loading={isLoading || isFetching}
       dataSource={dataSource}
       columns={columns}
-      size='middle'
+      size={screens.xs ? 'small' : 'middle'}
       pagination={false}
       showSorterTooltip={false}
     />

@@ -5,6 +5,7 @@ import {
   type FetchBaseQueryMeta,
 } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import queryString from 'query-string';
 import { env } from '@shared/const';
 import { getCookie } from '@shared/lib';
 
@@ -26,4 +27,5 @@ export const baseQuery: BaseQueryFn<
 
     return headers;
   },
+  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' })
 });
