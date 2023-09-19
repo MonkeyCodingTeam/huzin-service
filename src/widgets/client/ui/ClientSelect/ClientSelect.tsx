@@ -1,15 +1,13 @@
 import { Select } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { setSelectedClient, useGetClientsQuery } from '@entities/client';
-import { TARGET_ROUTES } from '@shared/const';
 import { setArrayToOptionsFormat } from '@shared/lib/setArrayToOptionsFormat';
 import css from './ClientSelect.module.scss';
 
 export const ClientSelect = () => {
   const params = useParams();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [selectedValue, setSelectedValue] = useState<number | null>();
@@ -38,7 +36,6 @@ export const ClientSelect = () => {
   useEffect(() => {
     if (selectedValue) {
       dispatch(setSelectedClient(data.find((client) => client.id === selectedValue)));
-      navigate(`${TARGET_ROUTES.BaseClientStats}/${selectedValue}`);
     }
   }, [selectedValue]);
 

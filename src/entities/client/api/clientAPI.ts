@@ -16,4 +16,4 @@ export const ClientAPI = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGetClientsQuery } = ClientAPI;
+export const { useGetClientsQuery, useLazyGetClientsQuery } = ClientAPI;

@@ -20,7 +20,7 @@ const items: MenuProps['items'] = [
     icon: <ProjectOutlined rev={undefined} />,
   },
   {
-    label: 'Senler',
+    label: <Link to='/senler-stats'>Senler</Link>,
     key: 'senler',
     icon: <SolutionOutlined rev={undefined} />,
   },

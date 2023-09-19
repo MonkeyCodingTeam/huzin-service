@@ -1,0 +1,17 @@
+.senlerStatsTable{
+  &__cellIcon{
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: filter .2s ease-in-out;
+    &:hover {
+      filter: brightness(90%);
+    }
+
+    &_success{
+      color: var(--success-color);
+    }
+    &_error{
+      color: var(--danger-color);
+    }
+  }
+}

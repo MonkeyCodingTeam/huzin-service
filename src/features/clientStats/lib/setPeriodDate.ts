@@ -1,15 +1,11 @@
 import { DateTime } from 'luxon';
-import { IClientStatsResp } from '@features/clientStats';
+import { IClientStatsRes } from '@features/clientStats';
 
 const setDateToFormatYMD = (day: string) => {
   return `${DateTime.fromFormat(day, 'yyyymmdd').toFormat('yyyy-mm-dd')}`;
 };
 
-export const setPeriodDate = (
-  client: IClientStatsResp,
-  // TODO передать из типов
-  period: 'day' | 'week' | 'month' | 'year',
-): IClientStatsResp => {
+export const setPeriodDate = (client: IClientStatsRes, period: TPeriod): IClientStatsRes => {
   client.stats = client.stats.map((campaignStats) => {
     let datePeriod;
     switch (period) {

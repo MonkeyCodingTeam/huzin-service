@@ -1,6 +1,7 @@
 export enum TARGET_ROUTES {
   BaseClientStats = '/client-stats',
   ClientStats = '/client-stats/:id',
+  SenlerStats = '/senler-stats',
   BudgetCuts = '/target/budget-cuts',
   Companies = '/target/company',
   Invoice = 'target/invoice',

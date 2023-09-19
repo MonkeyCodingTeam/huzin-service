@@ -22,4 +22,12 @@ export interface IClient extends Model {
   basic_payment?: number;
   group_id?: number;
   is_mine?: boolean;
+  companies: Company[];
+}
+
+export interface Company extends Model {
+  name: string;
+  client_id: IClient['id'];
+  status: 0 | 1 | 2;
+  company_template_id?: number;
 }
