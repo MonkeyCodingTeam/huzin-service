@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ClientStatsAPI, IClientsStatsRes, IClientStatsRes } from '@features/clientStats';
+import { ClientsStatsRes, ClientStatsAPI, ClientStatsRes } from '@features/clientStats';
 
 export const clientStatsSlice = createSlice({
   name: 'clientStats',
-  initialState: [] as IClientStatsRes[],
+  initialState: [] as ClientStatsRes[],
   reducers: {},
   extraReducers: (builder) => {
     builder
@@ -17,7 +17,7 @@ export const clientStatsSlice = createSlice({
 
 export const clientsStatsSlice = createSlice({
   name: 'clientsStats',
-  initialState: [] as IClientsStatsRes[],
+  initialState: [] as ClientsStatsRes[],
   reducers: {},
   extraReducers: (builder) => {
     builder

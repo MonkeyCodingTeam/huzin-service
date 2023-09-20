@@ -1,16 +1,16 @@
-import { IClient } from '@entities/client';
+import { Client } from '@entities/client';
 import { baseApi } from '@shared/api/baseApi';
 
 const collator = new Intl.Collator('ru', { caseFirst: 'upper' });
 
 export const ClientAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClients: builder.query<IClient[], null>({
+    getClients: builder.query<Client[], null>({
       query: () => ({
         url: 'target/client',
         method: 'GET',
       }),
-      transformResponse: (response: IClient[]) =>
+      transformResponse: (response: Client[]) =>
         response.sort((a, b) => collator.compare(a.name, b.name)),
     }),
   }),

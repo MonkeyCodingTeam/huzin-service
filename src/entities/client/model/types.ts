@@ -1,4 +1,4 @@
-export interface IClient extends Model {
+export interface Client extends Model {
   name: string;
   balance: number;
   critical_balance: number;
@@ -27,7 +27,7 @@ export interface IClient extends Model {
 
 export interface Company extends Model {
   name: string;
-  client_id: IClient['id'];
+  client_id: Client['id'];
   status: 0 | 1 | 2;
   company_template_id?: number;
 }

@@ -1,2 +1,2 @@
-export * from './ui/SenlerDatePicker/SenlerDatePicker';
+export * from '@widgets/WeekPicker/WeekPicker';
 export * from './model/types';

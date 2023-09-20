@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ISenlerStatsRes, SenlerStatsAPI } from '@features/senlerStats';
+import { SenlerStatsAPI, SenlerStatsRes } from '@features/senlerStats';
 
 export const senlerStatsSlice = createSlice({
   name: 'senlerStats',
-  initialState: [] as ISenlerStatsRes[],
+  initialState: [] as SenlerStatsRes[],
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(

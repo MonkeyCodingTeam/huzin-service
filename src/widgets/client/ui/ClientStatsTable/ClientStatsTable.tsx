@@ -4,14 +4,14 @@ import dayjs from 'dayjs';
 import { DateTime } from 'luxon';
 import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IClientStatsReq, IStatsRes, useLazyGetClientStatsQuery } from '@features/clientStats';
+import { ClientStatsReq, StatsRes, useLazyGetClientStatsQuery } from '@features/clientStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
 import { truncValue } from '@shared/lib/truncValue';
 import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
 
 const { useBreakpoint } = Grid;
 
-const semiAnnualReport: IClientStatsReq = {
+const semiAnnualReport: ClientStatsReq = {
   id: 0,
   period: 'week',
   date_from: dayjs().subtract(6, 'month').format(),
@@ -43,7 +43,7 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
     }
   }, [selectedClientId, selectedTemplate]);
 
-  const columns: ColumnsType<IStatsRes> = [
+  const columns: ColumnsType<StatsRes> = [
     {
       title: 'Дата',
       dataIndex: 'period_date',

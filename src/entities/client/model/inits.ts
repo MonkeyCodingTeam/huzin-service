@@ -1,6 +1,6 @@
-import { IClient } from '@entities/client';
+import { Client } from '@entities/client';
 
-export const initClientState: IClient = {
+export const initClientState: Client = {
   id: 0,
   name: '',
   entrepreneur: '',

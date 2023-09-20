@@ -1,15 +1,12 @@
 import { Grid, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table/interface';
+import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { FC, useEffect, useState } from 'react';
-import { useGetClientsQuery } from '@entities/client';
-import { IClientsStatsReq, useLazyGetClientsStatsQuery } from '@features/clientStats';
-import { useLazyGetSenlerStatsQuery } from '@features/senlerStats';
+import { SenlerStatsReq, SenlerStatsRes, useLazyGetSenlerStatsQuery } from '@features/senlerStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
 import { truncValue } from '@shared/lib/truncValue';
 import { SenlerIcon } from '@shared/ui/Icons/SenlerIcon';
-import { Period, TableData } from '@widgets/senler';
-import { setTableData } from '@widgets/senler/lib/setTableData';
+import { Period } from '@widgets/senler';
 import css from './SenlerStatsTable.module.scss';
 
 const { useBreakpoint } = Grid;
@@ -20,45 +17,36 @@ interface Props {
 }
 
 export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) => {
-  const [filteredData, setFilteredData] = useState<TableData[]>([]);
-  const [triggerSenler, { isLoading: clientsStatsIsLoading, data: senlerStats = [] }] =
-    useLazyGetSenlerStatsQuery();
-  const [triggerStats, { isLoading: senlerStatsIsLoading, data: clientsStats = [] }] =
-    useLazyGetClientsStatsQuery();
-  const { isLoading: isClientLoading, data: clientsData = [] } = useGetClientsQuery(null);
+  const [filteredData, setFilteredData] = useState<SenlerStatsRes[]>([]);
+  const [period, setPeriod] = useState<SenlerStatsReq>();
+  const [triggerSenler, { isLoading, isFetching, data = [] }] = useLazyGetSenlerStatsQuery();
+
   const screens = useBreakpoint();
-  const { date_from, date_to } = selectedPeriod;
 
-  const datePeriod = {
-    date_from: date_from.startOf('day').format(),
-    date_to: date_to.endOf('day').format(),
-  };
-
-  const params: IClientsStatsReq = {
-    period: 'day',
-    ...datePeriod,
-  };
-
-  const tableData = setTableData(clientsStats, senlerStats, clientsData);
-
-  const isLoading = clientsStatsIsLoading || senlerStatsIsLoading || isClientLoading;
-
-  useEffect(() => {    
-    triggerStats(params);
-    triggerSenler(datePeriod);
+  useEffect(() => {
+    if (!selectedPeriod) return;
+    setPeriod({
+      date_from: selectedPeriod.date_from.startOf('day').format(),
+      date_to: selectedPeriod.date_to.endOf('day').format(),
+      period: 'day',
+    });
   }, [selectedPeriod]);
 
   useEffect(() => {
-    const copyData = [...tableData];
+    if (period) triggerSenler(period);
+  }, [period]);
+
+  useEffect(() => {
+    const copyData = [...data];
 
     setFilteredData(() => {
       if (!clientSearch || !clientSearch.length) return copyData;
 
       return copyData.filter((data) => {
-        return data.client_name.toLocaleLowerCase().includes(clientSearch.toLocaleLowerCase());
+        return data.client_name.toLowerCase().includes(clientSearch.toLowerCase());
       });
     });
-  }, [clientSearch, tableData]);
+  }, [clientSearch, data.length]);
 
   const spentColorAlert = (value: number) => {
     if (value) {
@@ -85,20 +73,20 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
     return '-';
   };
 
-  const columns: ColumnsType<TableData> = [
+  const columns: ColumnsType<SenlerStatsRes> = [
     {
       title: '',
-      dataIndex: 'success',
       fixed: 'left',
-      sorter: { compare: (a, b) => Number(a.success) - Number(b.success), multiple: 2 },
       defaultSortOrder: 'descend',
-      render: (value) => (
-        <Tooltip placement='top' title={value ? 'Senler подключен' : 'Senler не подключен'}>
+      dataIndex: 'success',
+      sorter: { compare: (a, b) => Number(a.success) - Number(b.success), multiple: 2 },
+      render: (record) => (
+        <Tooltip placement='top' title={record ? 'Senler подключен' : 'Senler не подключен'}>
           <SenlerIcon
             className={classNames(
               css.senlerStatsTable__cellIcon,
               css.senlerStatsTable__cellIcon_success,
-              { [css.senlerStatsTable__cellIcon_error]: !value },
+              { [css.senlerStatsTable__cellIcon_error]: !record },
             )}
           />
         </Tooltip>
@@ -119,13 +107,16 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
     },
     {
       title: 'Подписчики',
-      dataIndex: 'subscribers',
-      sorter: { compare: (a, b) => +a.subscribers - +b.subscribers, multiple: 1 },
+      dataIndex: 'count_subscribe',
+      sorter: {
+        compare: (a, b) => +a.count_subscribe - +b.count_subscribe,
+        multiple: 1,
+      },
     },
     {
       title: 'Цена подписки',
-      dataIndex: 'spentPerSub',
-      sorter: { compare: (a, b) => +a.spentPerSub - +b.spentPerSub, multiple: 1 },
+      dataIndex: 'costPerSub',
+      sorter: { compare: (a, b) => +a.costPerSub - +b.costPerSub, multiple: 1 },
       render: (value) => spentColorAlert(+setFixedValue(+value, 2)),
     },
   ];
@@ -140,8 +131,8 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
           ? 'calc(100vh - 16em)'
           : 'calc(100vh - 14em)',
       }}
-      rowKey='id'
-      loading={isLoading}
+      rowKey='client_id'
+      loading={isLoading || isFetching}
       dataSource={filteredData}
       columns={columns}
       size={screens.xs ? 'small' : 'middle'}

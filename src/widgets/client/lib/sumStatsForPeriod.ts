@@ -1,16 +1,16 @@
-import { IClientStatsRes, IStatsRes } from '@features/clientStats';
+import { ClientStatsRes, StatsRes } from '@features/clientStats';
 
-const fields: (keyof Pick<IStatsRes, 'spent' | 'impressions' | 'clicks' | 'reach'>)[] = [
+const fields: (keyof Pick<StatsRes, 'spent' | 'impressions' | 'clicks' | 'reach'>)[] = [
   'spent',
   'impressions',
   'clicks',
   'reach',
 ];
-export const sumStatsForPeriod = (stats: IClientStatsRes[]): IStatsRes[] => {
-  const result: Record<IStatsRes['period_date'], IStatsRes> = {};
+export const sumStatsForPeriod = (stats: ClientStatsRes[]): StatsRes[] => {
+  const result: Record<StatsRes['period_date'], StatsRes> = {};
 
   stats.forEach((campaign) => {
-    campaign.stats.forEach((stat: IStatsRes) => {
+    campaign.stats.forEach((stat: StatsRes) => {
       if (result[stat['period_date']]) {
         fields.forEach((field) => {
           (result[stat['period_date']][field] as number) =

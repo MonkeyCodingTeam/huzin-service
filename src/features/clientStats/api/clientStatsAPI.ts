@@ -1,8 +1,8 @@
 import {
-  IClientsStatsReq,
-  IClientsStatsRes,
-  IClientStatsReq,
-  IClientStatsRes,
+  ClientsStatsReq,
+  ClientsStatsRes,
+  ClientStatsReq,
+  ClientStatsRes,
 } from '@features/clientStats';
 import { setPeriodDate } from '@features/clientStats/lib/setPeriodDate';
 import { baseApi } from '@shared/api/baseApi';
@@ -10,7 +10,7 @@ import { baseApi } from '@shared/api/baseApi';
 const STAT_URL = 'target/statistic/client';
 export const ClientStatsAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClientStats: builder.query<IClientStatsRes[], IClientStatsReq>({
+    getClientStats: builder.query<ClientStatsRes[], ClientStatsReq>({
       query: (params) => {
         return {
           url: `${STAT_URL}/${params.id}/template`,
@@ -18,11 +18,11 @@ export const ClientStatsAPI = baseApi.injectEndpoints({
           params,
         };
       },
-      transformResponse: (response: IClientStatsRes[], fetch, request) => {
+      transformResponse: (response: ClientStatsRes[], fetch, request) => {
         return response.map((client) => setPeriodDate(client, request.period));
       },
     }),
-    getClientsStats: builder.query<IClientsStatsRes[], IClientsStatsReq>({
+    getClientsStats: builder.query<ClientsStatsRes[], ClientsStatsReq>({
       query: (params) => {
         return {
           url: `${STAT_URL}`,

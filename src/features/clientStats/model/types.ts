@@ -1,22 +1,22 @@
-import { ICampaignTemplate } from '@entities/campaignTemplate';
-import { Company, IClient } from '@entities/client';
+import { CampaignTemplate } from '@entities/campaignTemplate';
+import { Client, Company } from '@entities/client';
 
-export interface IClientStatsReq {
+export interface ClientStatsReq {
   id: number;
-  period: TPeriod;
+  period: Period;
   date_from: string;
   date_to: string;
-  company_template_ids?: ICampaignTemplate['id'][];
+  company_template_ids?: CampaignTemplate['id'][];
 }
 
-export interface IClientsStatsReq {
-  period: TPeriod;
+export interface ClientsStatsReq {
+  period: Period;
   date_from: string;
   date_to: string;
   only_field?: string[];
 }
 
-export interface IStatsRes {
+export interface StatsRes {
   clicks: number;
   ctr: number;
   day_from: string;
@@ -31,14 +31,14 @@ export interface IStatsRes {
   spent: number;
 }
 
-export interface IClientStatsRes {
+export interface ClientStatsRes {
   id: Company['id'];
-  stats: IStatsRes[];
+  stats: StatsRes[];
   type: 'ad' | 'campaign' | 'client' | 'office';
 }
 
-export interface IClientsStatsRes {
-  id: IClient['id'];
-  stats: IStatsRes[];
+export interface ClientsStatsRes {
+  id: Client['id'];
+  stats: StatsRes[];
   type: 'ad' | 'campaign' | 'client' | 'office';
 }

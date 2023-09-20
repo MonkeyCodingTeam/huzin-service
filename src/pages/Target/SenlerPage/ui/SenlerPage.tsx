@@ -1,9 +1,9 @@
-import { Typography } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { Input, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Transition } from '@shared/ui/Transition';
 import { Period } from '@widgets/senler';
-import { SenlerClientsFilter } from '@widgets/senler/ui/SenlerClientsFilter/SenlerClientsFilter';
 import { SenlerRangePicker } from '@widgets/senler/ui/SenlerRangePicker/SenlerRangePicker';
 import { SenlerStatsTable } from '@widgets/senler/ui/SenlerStatsTable/SenlerStatsTable';
 import css from './SenlerPage.module.scss';
@@ -18,12 +18,30 @@ const SenlerPage = () => {
     if (date_from && date_to) setSelectedPeriod({ date_from, date_to });
   };
 
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setKeyword(event.target.value);
+  };
+
+  // const debouncedHandler = useCallback(debounce(handleValueChange, 300), []);
+  //
+  // useEffect(() => {
+  //   return () => {
+  //     debouncedHandler.cancel();
+  //   };
+  // }, [keyword]);
+
+  console.log('test');
+
   return (
     <Transition className={css.senlerPage}>
       <section className={css.senlerPage__filters}>
         <div className={css.senlerPage__filter}>
           <Text className={css.senlerPage__text}>Клиент:</Text>
-          <SenlerClientsFilter handleValueChange={(value) => setKeyword(value)} />
+          <Input
+            suffix={<SearchOutlined />}
+            placeholder={'Поиск...'}
+            onChange={handleValueChange}
+          />
         </div>
         <div className={css.senlerPage__filter}>
           <Text className={css.senlerPage__text}>Период:</Text>

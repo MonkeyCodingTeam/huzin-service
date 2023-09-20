@@ -1,11 +1,11 @@
-export interface ICampaignTemplateTag {
+export interface CampaignTemplateTag {
   id: number;
   tag: string;
 }
 
-export interface ICampaignTemplate {
+export interface CampaignTemplate {
   id: number;
   name: string;
-  tags: ICampaignTemplateTag[];
+  tags: CampaignTemplateTag[];
   has_senler: 0 | 1;
 }

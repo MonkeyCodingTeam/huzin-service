@@ -16,14 +16,12 @@ interface Props {
 
 export const SenlerRangePicker: FC<Props> = ({ onPeriodSelect, defaultPeriod }) => {
   const { date_from, date_to } = defaultPeriod;
-
   const onRangeChange = (dates: null | (Dayjs | null)[]) => {
     if (dates) {
       onPeriodSelect(dates[0], dates[1]);
     }
   };
 
-  dayjs.extend(weekday);
   const rangePresets: TimeRangePickerProps['presets'] = [
     { label: 'Текущая неделя', value: [dayjs().weekday(0), dayjs()] },
     { label: 'Прошлая неделя', value: [dayjs().weekday(-7), dayjs().weekday(-1)] },
@@ -37,6 +35,7 @@ export const SenlerRangePicker: FC<Props> = ({ onPeriodSelect, defaultPeriod }) 
       ],
     },
   ];
+
   return (
     <RangePicker
       presets={rangePresets}

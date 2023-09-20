@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ClientAPI } from '@entities/client/api/clientAPI';
 import { initClientState } from '@entities/client/model/inits';
-import { IClient } from '@entities/client/model/types';
+import { Client } from '@entities/client/model/types';
 
 export const selectedClientSlice = createSlice({
   name: 'selectedClient',
@@ -14,7 +14,7 @@ export const selectedClientSlice = createSlice({
 
 export const clientsSlice = createSlice({
   name: 'clients',
-  initialState: [] as IClient[],
+  initialState: [] as Client[],
   reducers: {},
   extraReducers: (builder) => {
     builder
