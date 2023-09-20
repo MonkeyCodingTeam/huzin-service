@@ -22,4 +22,5 @@ export const initClientState: IClient = {
   low_balance_at: null,
   paid_at: null,
   zero_balance_at: null,
+  companies: [],
 };

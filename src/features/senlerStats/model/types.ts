@@ -15,5 +15,6 @@ export interface ISenlerSubsCountRes {
 export interface ISenlerStatsRes {
   client_id: number;
   group_id: number;
+  spent: number;
   stats: ISenlerSubsCountRes;
 }
