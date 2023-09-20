@@ -1,9 +1,8 @@
-import type { TableProps } from 'antd';
 import { Grid, Table, Tag, Tooltip } from 'antd';
-import type { ColumnsType, FilterValue } from 'antd/es/table/interface';
+import type { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { FC, useEffect, useState } from 'react';
-import { useLazyGetClientsQuery } from '@entities/client';
+import { useGetClientsQuery } from '@entities/client';
 import { IClientsStatsReq, useLazyGetClientsStatsQuery } from '@features/clientStats';
 import { useLazyGetSenlerStatsQuery } from '@features/senlerStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
@@ -17,17 +16,16 @@ const { useBreakpoint } = Grid;
 
 interface Props {
   selectedPeriod: Period;
-  keyword?: string;
+  clientSearch?: string;
 }
 
-export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, keyword }) => {
-  const [filteredInfo, setFilteredInfo] = useState<Record<string, FilterValue | null>>({});
-
-  const handleChange: TableProps<TableData>['onChange'] = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
-    setFilteredInfo(filters);
-  };
-
+export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) => {
+  const [filteredData, setFilteredData] = useState<TableData[]>([]);
+  const [triggerSenler, { isLoading: clientsStatsIsLoading, data: senlerStats = [] }] =
+    useLazyGetSenlerStatsQuery();
+  const [triggerStats, { isLoading: senlerStatsIsLoading, data: clientsStats = [] }] =
+    useLazyGetClientsStatsQuery();
+  const { isLoading: isClientLoading, data: clientsData = [] } = useGetClientsQuery(null);
   const screens = useBreakpoint();
   const { date_from, date_to } = selectedPeriod;
 
@@ -41,41 +39,26 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, keyword }) => {
     ...datePeriod,
   };
 
-  const [triggerSenler, senler] = useLazyGetSenlerStatsQuery();
-  const [triggerStats, stats] = useLazyGetClientsStatsQuery();
-  const [triggerClients, clients] = useLazyGetClientsQuery();
-
-  const {
-    isLoading: clientsStatsIsLoading,
-    isFetching: clientsStatsIsFetching,
-    data: senlerStats = [],
-  } = senler;
-  const {
-    isLoading: senlerStatsIsLoading,
-    isFetching: senlerStatsIsFetching,
-    data: clientsStats = [],
-  } = stats;
-  const {
-    isLoading: clientsIsLoading,
-    isFetching: clientsIsFetching,
-    data: clientsData = [],
-  } = clients;
-
   const tableData = setTableData(clientsStats, senlerStats, clientsData);
 
-  const isLoading =
-    clientsStatsIsLoading ||
-    clientsStatsIsFetching ||
-    senlerStatsIsLoading ||
-    senlerStatsIsFetching ||
-    clientsIsLoading ||
-    clientsIsFetching;
+  const isLoading = clientsStatsIsLoading || senlerStatsIsLoading || isClientLoading;
 
-  useEffect(() => {
+  useEffect(() => {    
     triggerStats(params);
     triggerSenler(datePeriod);
-    triggerClients(null);
   }, [selectedPeriod]);
+
+  useEffect(() => {
+    const copyData = [...tableData];
+
+    setFilteredData(() => {
+      if (!clientSearch || !clientSearch.length) return copyData;
+
+      return copyData.filter((data) => {
+        return data.client_name.toLocaleLowerCase().includes(clientSearch.toLocaleLowerCase());
+      });
+    });
+  }, [clientSearch, tableData]);
 
   const spentColorAlert = (value: number) => {
     if (value) {
@@ -159,12 +142,11 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, keyword }) => {
       }}
       rowKey='id'
       loading={isLoading}
-      dataSource={tableData}
+      dataSource={filteredData}
       columns={columns}
       size={screens.xs ? 'small' : 'middle'}
       pagination={false}
       showSorterTooltip={false}
-      onChange={handleChange}
     />
   );
 };

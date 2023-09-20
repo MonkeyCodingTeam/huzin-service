@@ -11,11 +11,11 @@ export const setTableData = (
   const tableData: TableData[] = [];
   const collator = new Intl.Collator();
 
-  clientsStats.map((clientStats) => {
+  clientsStats.forEach((clientStats) => {
     const senler = senlerStats.find((senler) => senler.client_id === clientStats.id);
     const client = clients.find((client) => client.id === clientStats.id);
 
-    const spent = clientStats.stats.reduce((spent, stat) => {
+    const spent = { ...clientStats }.stats.reduce((spent, stat) => {
       if (!stat.spent) return spent;
       return +stat.spent + +spent;
     }, 0);

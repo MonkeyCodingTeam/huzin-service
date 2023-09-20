@@ -18,18 +18,12 @@ const SenlerPage = () => {
     if (date_from && date_to) setSelectedPeriod({ date_from, date_to });
   };
 
-  const handleValueChange = (value: string | undefined) => {
-    setKeyword(value ? value : '');
-  };
-
-  console.log(keyword);
-
   return (
     <Transition className={css.senlerPage}>
       <section className={css.senlerPage__filters}>
         <div className={css.senlerPage__filter}>
           <Text className={css.senlerPage__text}>Клиент:</Text>
-          <SenlerClientsFilter handleValueChange={handleValueChange} />
+          <SenlerClientsFilter handleValueChange={(value) => setKeyword(value)} />
         </div>
         <div className={css.senlerPage__filter}>
           <Text className={css.senlerPage__text}>Период:</Text>
@@ -37,7 +31,7 @@ const SenlerPage = () => {
         </div>
       </section>
       <section className={css.senlerPage__table}>
-        <SenlerStatsTable selectedPeriod={selectedPeriod} />
+        <SenlerStatsTable clientSearch={keyword} selectedPeriod={selectedPeriod} />
       </section>
     </Transition>
   );
