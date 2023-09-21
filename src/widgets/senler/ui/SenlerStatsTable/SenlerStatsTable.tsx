@@ -1,8 +1,9 @@
+import { createSelector } from '@reduxjs/toolkit';
 import { Grid, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
-import { FC, useEffect, useState } from 'react';
-import { SenlerStatsReq, SenlerStatsRes, useLazyGetSenlerStatsQuery } from '@features/senlerStats';
+import { FC, useEffect, useMemo } from 'react';
+import { SenlerStatsReq, SenlerStatsRes, useGetSenlerStatsQuery } from '@features/senlerStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
 import { truncValue } from '@shared/lib/truncValue';
 import { SenlerIcon } from '@shared/ui/Icons/SenlerIcon';
@@ -17,70 +18,43 @@ interface Props {
 }
 
 export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) => {
-  const [period, setPeriod] = useState<SenlerStatsReq>();
-  const [triggerSenler, { isLoading, isFetching, data = [], isUninitialized }] =
-    useLazyGetSenlerStatsQuery();
-  const [filteredData, setFilteredData] = useState<SenlerStatsRes[]>([]);
-
   const screens = useBreakpoint();
+  const requestBody: SenlerStatsReq = {
+    date_from: selectedPeriod.date_from.startOf('day').format(),
+    date_to: selectedPeriod.date_to.endOf('day').format(),
+    period: 'day',
+  };
 
-  useEffect(() => {
-    if (!selectedPeriod) return;
-    setPeriod({
-      date_from: selectedPeriod.date_from.startOf('day').format(),
-      date_to: selectedPeriod.date_to.endOf('day').format(),
-      period: 'day',
-    });
-  }, [selectedPeriod]);
+  // TODO type
+  const filterData = useMemo(
+    () =>
+      createSelector(
+        [(res: SenlerStatsRes[]) => res, (_, clientName: string = '') => clientName.toLowerCase()],
+        (data, clientName) =>
+          data?.filter((item) => item.client_name.toLowerCase().includes(clientName)) ?? [],
+      ),
+    [],
+  );
 
-  useEffect(() => {
-    if (period) triggerSenler(period, true);
-  }, [period]);
-
-  useEffect(() => {
-    if (isFetching) return;
-
-    setFilteredData(data);
-
-    const copyData = [...data];
-    const debounce = setTimeout(() => {
-      setFilteredData(() => {
-        if (!clientSearch || !clientSearch.length) return copyData;
-
-        return copyData.filter((data) => {
-          return data.client_name.toLowerCase().includes(clientSearch.toLowerCase());
-        });
-      });
-    }, 200);
-
-    return () => {
-      clearTimeout(debounce);
-    };
-  }, [clientSearch, data]);
+  const { isLoading, filterByClient, isFetching } = useGetSenlerStatsQuery(requestBody, {
+    selectFromResult: (res) => ({
+      ...res,
+      filterByClient: filterData(res.data, clientSearch),
+    }),
+  });
 
   const spentColorAlert = (value: number) => {
-    if (value) {
-      if (value > 75) {
-        return (
-          <Tag color='red' style={{ fontWeight: 600 }}>
-            {value}
-          </Tag>
-        );
-      }
-      if (value > 55) {
-        return (
-          <Tag color='orange' style={{ fontWeight: 600 }}>
-            {value}
-          </Tag>
-        );
-      }
-      return (
-        <Tag color='green' style={{ fontWeight: 600 }}>
-          {value}
-        </Tag>
-      );
-    }
-    return '-';
+    if (!value) return '-';
+
+    let color = 'red';
+    if (value < 75) color = 'orange';
+    if (value < 55) color = 'green';
+
+    return (
+      <Tag color={color} style={{ fontWeight: 600 }}>
+        {value}
+      </Tag>
+    );
   };
 
   const columns: ColumnsType<SenlerStatsRes> = [
@@ -145,8 +119,8 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
           : 'calc(100vh - 14em)',
       }}
       rowKey='client_id'
-      loading={isLoading || isUninitialized}
-      dataSource={filteredData}
+      loading={isLoading || isFetching}
+      dataSource={filterByClient}
       columns={columns}
       size={screens.xs ? 'small' : 'middle'}
       pagination={false}
