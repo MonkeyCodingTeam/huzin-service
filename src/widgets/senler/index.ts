@@ -1,2 +1,2 @@
-export * from '@widgets/WeekPicker/WeekPicker';
-export * from './model/types';
+export * from './ui/SenlerClientsFilter/SenlerClientsFilter';
+export * from './ui/SenlerStatsTable/SenlerStatsTable';

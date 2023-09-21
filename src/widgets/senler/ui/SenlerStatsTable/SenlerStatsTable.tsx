@@ -5,14 +5,14 @@ import { FC, useCallback } from 'react';
 import { SenlerStatsReq, SenlerStatsRes, useGetSenlerStatsQuery } from '@features/senlerStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
 import { truncValue } from '@shared/lib/truncValue';
+import { DateRange } from '@shared/ui/DateRangePicker';
 import { SenlerIcon } from '@shared/ui/Icons/SenlerIcon';
-import { Period } from '@widgets/senler';
 import css from './SenlerStatsTable.module.scss';
 
 const { useBreakpoint } = Grid;
 
 interface Props {
-  selectedPeriod: Period;
+  selectedPeriod: DateRange;
   clientSearch?: string;
 }
 
@@ -61,13 +61,13 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
         compare: ({ success: a }, { success: b }) => (a === b ? 0 : a ? -1 : 1),
         multiple: 2,
       },
-      render: (record) => (
-        <div title={record ? 'Senler подключен' : 'Senler не подключен'}>
+      render: (value) => (
+        <div title={value ? 'Senler подключен' : 'Senler не подключен'}>
           <SenlerIcon
             className={classNames(
               css.senlerStatsTable__cellIcon,
               css.senlerStatsTable__cellIcon_success,
-              { [css.senlerStatsTable__cellIcon_error]: !record },
+              { [css.senlerStatsTable__cellIcon_error]: !value },
             )}
           />
         </div>
@@ -104,13 +104,10 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
 
   return (
     <Table
+      // ширина таблицы
       scroll={{
-        x: 1000,
-        y: screens.lg
-          ? 'calc(100vh - 18em)'
-          : screens.xs
-          ? 'calc(100vh - 16em)'
-          : 'calc(100vh - 14em)',
+        x: screens.lg ? 1024 : screens.xs ? 512 : 768,
+        y: screens.lg ? 'calc(100vh - 18em)' : 'calc(100vh - 14em)',
       }}
       rowKey='client_id'
       loading={isLoading || isFetching}

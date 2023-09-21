@@ -1,14 +1,17 @@
-import { Select } from 'antd';
+import { Grid, Select } from 'antd';
 import { FC, useState } from 'react';
 import { useGetCampaignTemplatesQuery } from '@entities/campaignTemplate';
 import { setArrayToOptionsFormat } from '@shared/lib/setArrayToOptionsFormat';
 import css from './CampaignTemplateSelect.module.scss';
+
+const { useBreakpoint } = Grid;
 
 interface Props {
   onSelect: (value: number | null | undefined) => void;
 }
 
 export const CampaignTemplateSelect: FC<Props> = ({ onSelect }) => {
+  const screens = useBreakpoint();
   const { isLoading, data = [], isFetching } = useGetCampaignTemplatesQuery(null);
   const [selectedValue, setSelectedValue] = useState<number | null>();
 
@@ -16,8 +19,6 @@ export const CampaignTemplateSelect: FC<Props> = ({ onSelect }) => {
     setSelectedValue(value);
     onSelect(value);
   };
-
-  // const ucFirst = (str: string) => str[0].toUpperCase() + str.slice(1);
 
   return (
     <Select
@@ -34,6 +35,7 @@ export const CampaignTemplateSelect: FC<Props> = ({ onSelect }) => {
         if (!option) return false;
         return option.label.toLowerCase().includes(input.toLowerCase());
       }}
+      size={screens.xs ? 'small' : 'middle'}
     />
   );
 };

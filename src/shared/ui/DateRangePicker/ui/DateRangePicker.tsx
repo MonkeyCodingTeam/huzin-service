@@ -1,20 +1,23 @@
 import type { TimeRangePickerProps } from 'antd';
-import { DatePicker } from 'antd';
+import { DatePicker, Grid } from 'antd';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
 import React, { FC } from 'react';
-import { Period } from '@widgets/senler';
+import { DateRange } from 'shared/ui/DateRangePicker';
+
+const { useBreakpoint } = Grid;
 
 const { RangePicker } = DatePicker;
 dayjs.extend(weekday);
 
 interface Props {
   onPeriodSelect: (date_from: Dayjs | null, date_to: Dayjs | null) => void;
-  defaultPeriod: Period;
+  defaultPeriod: DateRange;
 }
 
-export const SenlerRangePicker: FC<Props> = ({ onPeriodSelect, defaultPeriod }) => {
+export const DateRangePicker: FC<Props> = ({ onPeriodSelect, defaultPeriod }) => {
+  const screens = useBreakpoint();
   const { date_from, date_to } = defaultPeriod;
   const onRangeChange = (dates: null | (Dayjs | null)[]) => {
     if (dates) {
@@ -44,6 +47,7 @@ export const SenlerRangePicker: FC<Props> = ({ onPeriodSelect, defaultPeriod }) 
       format={'DD.MM.YYYY'}
       defaultValue={[date_from, date_to]}
       allowClear={false}
+      size={screens.xs ? 'small' : 'middle'}
     />
   );
 };

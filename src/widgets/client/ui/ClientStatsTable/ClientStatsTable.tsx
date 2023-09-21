@@ -91,12 +91,13 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
 
   return (
     <Table
+      // ширина таблицы
       scroll={{
-        x: 1000,
+        x: screens.lg ? 1024 : screens.xs ? 612 : 768,
         y: screens.lg
           ? 'calc(100vh - 18em)'
           : screens.xs
-          ? 'calc(100vh - 16em)'
+          ? 'calc(100vh - 13em)'
           : 'calc(100vh - 14em)',
       }}
       rowKey='day_from'
