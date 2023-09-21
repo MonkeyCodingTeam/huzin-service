@@ -1,8 +1,7 @@
-import { createSelector } from '@reduxjs/toolkit';
 import { Grid, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useCallback } from 'react';
 import { SenlerStatsReq, SenlerStatsRes, useGetSenlerStatsQuery } from '@features/senlerStats';
 import { setFixedValue } from '@shared/lib/setFixedValue';
 import { truncValue } from '@shared/lib/truncValue';
@@ -25,14 +24,9 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
     period: 'day',
   };
 
-  // TODO type
-  const filterData = useMemo(
-    () =>
-      createSelector(
-        [(res: SenlerStatsRes[]) => res, (_, clientName: string = '') => clientName.toLowerCase()],
-        (data, clientName) =>
-          data?.filter((item) => item.client_name.toLowerCase().includes(clientName)) ?? [],
-      ),
+  const filterData = useCallback(
+    (data: SenlerStatsRes[] = [], search: string = '') =>
+      data?.filter((item) => item.client_name.toLowerCase().includes(search.toLowerCase())) ?? [],
     [],
   );
 
