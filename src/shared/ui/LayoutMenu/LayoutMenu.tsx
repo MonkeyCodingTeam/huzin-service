@@ -6,7 +6,7 @@ import {
   SolutionOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, type MenuProps } from 'antd';
-import React, { type FC, type ReactNode } from 'react';
+import { type FC, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { HeaderAppCategory } from '@shared/ui';
 import css from './LayoutMenu.module.scss';

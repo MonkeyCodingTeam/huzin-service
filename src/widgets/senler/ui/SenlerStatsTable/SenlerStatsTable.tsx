@@ -1,4 +1,4 @@
-import { Grid, Table, Tag, Tooltip } from 'antd';
+import { Grid, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { FC, useEffect, useState } from 'react';
@@ -17,9 +17,10 @@ interface Props {
 }
 
 export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) => {
-  const [filteredData, setFilteredData] = useState<SenlerStatsRes[]>([]);
   const [period, setPeriod] = useState<SenlerStatsReq>();
-  const [triggerSenler, { isLoading, isFetching, data = [] }] = useLazyGetSenlerStatsQuery();
+  const [triggerSenler, { isLoading, isFetching, data = [], isUninitialized }] =
+    useLazyGetSenlerStatsQuery();
+  const [filteredData, setFilteredData] = useState<SenlerStatsRes[]>([]);
 
   const screens = useBreakpoint();
 
@@ -33,20 +34,29 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
   }, [selectedPeriod]);
 
   useEffect(() => {
-    if (period) triggerSenler(period);
+    if (period) triggerSenler(period, true);
   }, [period]);
 
   useEffect(() => {
+    if (isFetching) return;
+
+    setFilteredData(data);
+
     const copyData = [...data];
+    const debounce = setTimeout(() => {
+      setFilteredData(() => {
+        if (!clientSearch || !clientSearch.length) return copyData;
 
-    setFilteredData(() => {
-      if (!clientSearch || !clientSearch.length) return copyData;
-
-      return copyData.filter((data) => {
-        return data.client_name.toLowerCase().includes(clientSearch.toLowerCase());
+        return copyData.filter((data) => {
+          return data.client_name.toLowerCase().includes(clientSearch.toLowerCase());
+        });
       });
-    });
-  }, [clientSearch, data.length]);
+    }, 200);
+
+    return () => {
+      clearTimeout(debounce);
+    };
+  }, [clientSearch, data]);
 
   const spentColorAlert = (value: number) => {
     if (value) {
@@ -77,11 +87,14 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
     {
       title: '',
       fixed: 'left',
-      defaultSortOrder: 'descend',
+      defaultSortOrder: 'ascend',
       dataIndex: 'success',
-      sorter: { compare: (a, b) => Number(a.success) - Number(b.success), multiple: 2 },
+      sorter: {
+        compare: ({ success: a }, { success: b }) => (a === b ? 0 : a ? -1 : 1),
+        multiple: 2,
+      },
       render: (record) => (
-        <Tooltip placement='top' title={record ? 'Senler подключен' : 'Senler не подключен'}>
+        <div title={record ? 'Senler подключен' : 'Senler не подключен'}>
           <SenlerIcon
             className={classNames(
               css.senlerStatsTable__cellIcon,
@@ -89,7 +102,7 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
               { [css.senlerStatsTable__cellIcon_error]: !record },
             )}
           />
-        </Tooltip>
+        </div>
       ),
       align: 'center',
       width: 40,
@@ -132,7 +145,7 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
           : 'calc(100vh - 14em)',
       }}
       rowKey='client_id'
-      loading={isLoading || isFetching}
+      loading={isLoading || isUninitialized}
       dataSource={filteredData}
       columns={columns}
       size={screens.xs ? 'small' : 'middle'}

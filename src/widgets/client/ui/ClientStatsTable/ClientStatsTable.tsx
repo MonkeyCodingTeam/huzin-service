@@ -35,11 +35,14 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
 
   useEffect(() => {
     if (selectedClientId) {
-      trigger({
-        ...semiAnnualReport,
-        id: selectedClientId,
-        company_template_ids: selectedTemplate ? [selectedTemplate] : undefined,
-      });
+      trigger(
+        {
+          ...semiAnnualReport,
+          id: selectedClientId,
+          company_template_ids: selectedTemplate ? [selectedTemplate] : undefined,
+        },
+        true,
+      );
     }
   }, [selectedClientId, selectedTemplate]);
 

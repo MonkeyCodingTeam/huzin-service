@@ -30,8 +30,6 @@ const SenlerPage = () => {
   //   };
   // }, [keyword]);
 
-  console.log('test');
-
   return (
     <Transition className={css.senlerPage}>
       <section className={css.senlerPage__filters}>
