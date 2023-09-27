@@ -15,6 +15,7 @@ import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group'
 interface SenlerStats {
   client: Client;
   spent?: number;
+  clicks?: number;
   subscribers?: number;
   groupId?: number;
   success: boolean;
@@ -66,6 +67,7 @@ const SenlerPage = () => {
       return {
         client,
         spent: stat?.spent || 0,
+        clicks: stat?.clicks || 0,
         subscribers: senlerSubs[client.id]?.count_subscribe,
         groupId: senlerSubs[client.id]?.group_id,
         success: senlerSubs[client.id]?.success,
@@ -87,7 +89,7 @@ const SenlerPage = () => {
       date_from: DateTime.now().minus({ month: 3 }),
       date_to: DateTime.now(),
       period: 'week',
-      only_field: ['spent', 'day_from'],
+      only_field: ['spent', 'day_from', 'clicks'],
     }).then((res) => {
       setClientStats(res.data);
       setLoadingStats(false);
@@ -180,7 +182,7 @@ const SenlerPage = () => {
       date_from,
       date_to,
       period: range as GetStatisticProps['period'],
-      only_field: ['spent'],
+      only_field: ['clicks', 'spent'],
     }).then((res) => {
       if (!clients.length) return;
 
@@ -191,14 +193,17 @@ const SenlerPage = () => {
         const senler = subs.data;
 
         const stats = clients.map((client) => {
-          const spent = res.data.find((stat) => stat.id === client.id);
-          console.log(spent);
-          const stat = spent?.stats.reduce((spent, stat) => {
+          const stat = res.data.find((stat) => stat.id === client.id);
+          const spent = stat?.stats.reduce((spent, stat) => {
             return spent + (+stat.spent || 0);
+          }, 0);
+          const clicks = stat?.stats.reduce((click, stat) => {
+            return click + (+stat.clicks || 0);
           }, 0);
           return {
             client,
-            spent: stat,
+            spent,
+            clicks,
             subscribers: senler[client.id]?.count_subscribe,
             groupId: senler[client.id]?.group_id,
             success: !!senler[client.id]?.success,
@@ -259,6 +264,25 @@ const SenlerPage = () => {
             header='Цена подписки'
             body={spentPerSubTemplate}
             bodyClassName={spentColorAlert}
+          />
+          <Column
+            header='Клики'
+            body={(stat: SenlerStats) => {
+              if (loadingStats) {
+                return <Skeleton width='10rem' />;
+              }
+              return <span>{stat.clicks || 0}</span>;
+            }}
+          />
+          <Column
+            header='Цена клика'
+            body={(stat: SenlerStats) => {
+              if (loadingStats) {
+                return <Skeleton width='10rem' />;
+              }
+              if (!stat.spent) return '-';
+              return <span>{stat.clicks ? (stat.spent / stat.clicks).toFixed(2) : '-'}</span>;
+            }}
           />
         </DataTable>
       </TableLoader>
