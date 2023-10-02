@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 *.local
-.env2
+.env
 public_html
 
 # Editor directories and files
