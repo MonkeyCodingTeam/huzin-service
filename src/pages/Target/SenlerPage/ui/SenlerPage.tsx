@@ -8,7 +8,6 @@ import { Period, SenlerHeader } from '@pages/Target/SenlerPage/ui/SenlerHeader/u
 import { DateTime } from 'luxon';
 import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
-import classNames from 'classnames';
 import { Client, ClientAPI, ClientsStatisticResponse, GetStatisticProps } from '@entities/client';
 import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group';
 
@@ -19,7 +18,15 @@ interface SenlerStats {
   subscribers?: number;
   groupId?: number;
   success: boolean;
+  responsible?: { id: number; name: string };
 }
+
+const responsibleEmployees = [
+  { id: 1, name: 'Анастасия' },
+  { id: 2, name: 'Евгения' },
+  { id: 3, name: 'Татьяна' },
+  { id: 4, name: 'Галина' },
+];
 
 const SenlerPage = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -59,7 +66,17 @@ const SenlerPage = () => {
   useEffect(() => {
     if (!clients.length) return;
 
+    const part = Math.ceil(clients.length / responsibleEmployees.length);
+    let userIndex = 0;
+    let count = 0;
+
     const stats = clients.map((client) => {
+      if (count >= part) {
+        count = 0;
+        userIndex++;
+      }
+      count++;
+
       const spent = clientStats.find((stat) => stat.id === client.id);
       const stat = spent?.stats
         ? spent.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'))
@@ -71,6 +88,7 @@ const SenlerPage = () => {
         subscribers: senlerSubs[client.id]?.count_subscribe,
         groupId: senlerSubs[client.id]?.group_id,
         success: senlerSubs[client.id]?.success,
+        responsible: responsibleEmployees[userIndex],
       };
     });
     setSenlerStats(stats);
@@ -216,14 +234,8 @@ const SenlerPage = () => {
     });
   };
 
-  const groupHeaderTemplate = (stat: SenlerStats) => {
-    return (
-      <span
-        className={classNames(css.groupHeader, !stat.subscribers ? css.groupHeader__warning : '')}
-      >
-        Senler {stat.success ? 'указан' : 'не указан'}
-      </span>
-    );
+  const groupHeaderTemplate = (data: SenlerStats) => {
+    return <span className={css.groupHeader}>{data.responsible ? data.responsible.name : ''}</span>;
   };
 
   return (
@@ -232,8 +244,8 @@ const SenlerPage = () => {
         <DataTable
           value={senlerStats}
           selectionMode='single'
-          sortField='success'
-          sortOrder={-1}
+          sortField='responsible.name'
+          sortOrder={1}
           tableStyle={{
             borderCollapse: 'separate',
             alignItems: 'center',
@@ -245,7 +257,7 @@ const SenlerPage = () => {
           filters={filters}
           globalFilterFields={['client.name']}
           rowGroupMode='subheader'
-          groupRowsBy='success'
+          groupRowsBy='responsible.name'
           rowGroupHeaderTemplate={groupHeaderTemplate}
           scrollable
           scrollHeight='calc(100% - 56px)'
