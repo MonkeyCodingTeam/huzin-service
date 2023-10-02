@@ -27,4 +27,15 @@ export const userSlice = createSlice({
   },
 });
 
+export const usersSlice = createSlice({
+  name: 'users',
+  initialState: [] as User[],
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(UserAPI.endpoints.getUsers.matchFulfilled, (state, { payload }) => payload)
+      .addMatcher(UserAPI.endpoints.getUsers.matchFulfilled, () => []);
+  },
+});
+
 export const { clearUser } = userSlice.actions;

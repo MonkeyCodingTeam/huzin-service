@@ -1,0 +1,50 @@
+.budgetCutsTable {
+  &__cell {
+    display: flex;
+    gap: .5rem;
+    justify-content: space-between;
+  }
+
+  &__zeroDayWarn {
+    padding: .2rem .5rem;
+
+    color: #d46b08;
+    white-space: nowrap;
+
+    background: #fff7e6;
+    border-radius: 4px;
+  }
+
+  &__amount {
+    padding: .2rem .5rem;
+
+    font-size: 14px;
+    white-space: nowrap;
+    vertical-align: middle;
+
+    border-radius: 4px;
+
+    &_lowWarn {
+      background: #ffffe1;
+    }
+
+    &_warn {
+      background: #ffefc3;
+    }
+
+    &_criticalWarn {
+      background: #ffe1e1;
+    }
+  }
+
+  &__buttons {
+    &_middle {
+      width: 68px;
+      transition: width .2s ease-in-out;
+    }
+
+    &_small {
+      width: 38px;
+    }
+  }
+}

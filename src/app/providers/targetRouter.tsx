@@ -1,8 +1,9 @@
+import { BudgetCutsPage } from '@pages/Target/BudgetCutsPage';
 import { SenlerPage } from '@pages/Target/SenlerPage';
 import { TARGET_ROUTES } from '@shared/const';
 import { ClientsPage } from 'pages/Target/ClientsPage';
 
-const { BaseClientStats, ClientStats, SenlerStats } = TARGET_ROUTES;
+const { BaseClientStats, ClientStats, SenlerStats, BudgetCuts } = TARGET_ROUTES;
 
 export const targetRouter = [
   {
@@ -16,5 +17,9 @@ export const targetRouter = [
   {
     path: SenlerStats,
     element: <SenlerPage />,
+  },
+  {
+    path: BudgetCuts,
+    element: <BudgetCutsPage />,
   },
 ];

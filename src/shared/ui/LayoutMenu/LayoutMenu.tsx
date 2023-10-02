@@ -25,8 +25,8 @@ const items: MenuProps['items'] = [
     icon: <SolutionOutlined rev={undefined} />,
   },
   {
-    label: 'Открут',
-    key: 'budget',
+    label: <Link to='/budget-cuts'>Открут</Link>,
+    key: 'budget-cuts',
     icon: <MonitorOutlined rev={undefined} />,
   },
   {

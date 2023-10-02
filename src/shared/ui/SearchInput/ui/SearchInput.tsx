@@ -8,10 +8,11 @@ interface Props {
   handleValueChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const SenlerClientsFilter: FC<Props> = ({ handleValueChange }) => {
+export const SearchInput: FC<Props> = ({ handleValueChange }) => {
   const screens = useBreakpoint();
   return (
     <Input
+      allowClear
       suffix={<SearchOutlined />}
       placeholder={'Поиск...'}
       onChange={handleValueChange}
