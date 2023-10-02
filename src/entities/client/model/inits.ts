@@ -23,4 +23,5 @@ export const initClientState: Client = {
   paid_at: null,
   zero_balance_at: null,
   companies: [],
+  users: [],
 };
