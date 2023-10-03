@@ -10,7 +10,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import { Client, ClientAPI, ClientsStatisticResponse, GetStatisticProps } from '@entities/client';
 import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group';
-import { SenlerModal } from '@widgets/senler/ui/SenlerModal/SenlerModal';
+import {SenlerModal} from "@widgets/senler";
 
 interface SenlerStats {
   client: Client;
