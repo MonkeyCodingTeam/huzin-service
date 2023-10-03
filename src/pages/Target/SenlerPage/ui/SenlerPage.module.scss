@@ -23,6 +23,10 @@
         background-color: #ff8a8a;
       }
     }
+
+    & :global(.p-rowgroup-header) {
+      background-color: #e6f4ff !important;
+    }
   }
 }
 
@@ -30,9 +34,11 @@
 .groupHeader {
   display: flex;
   font-weight: bolder;
-  color: var(--primary-color);
+  color: #0958d9;
 
   &__warning {
     color: var(--danger-color);
   }
 }
+
+
