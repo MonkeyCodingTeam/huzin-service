@@ -23,12 +23,14 @@ interface SenlerStats {
 
 const responsibleEmployees = [
   { id: 1, name: 'Анастасия' },
+  { id: 4, name: 'Галина' },
   { id: 2, name: 'Евгения' },
   { id: 3, name: 'Татьяна' },
-  { id: 4, name: 'Галина' },
 ];
 
 const SenlerPage = () => {
+  const [clientsWithSenler, setClientsWithSenler] = useState<SenlerStats[]>([]);
+
   const [clients, setClients] = useState<Client[]>([]);
   const [clientStats, setClientStats] = useState<ClientsStatisticResponse[]>([]);
   const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
@@ -66,17 +68,7 @@ const SenlerPage = () => {
   useEffect(() => {
     if (!clients.length) return;
 
-    const part = Math.ceil(clients.length / responsibleEmployees.length);
-    let userIndex = 0;
-    let count = 0;
-
     const stats = clients.map((client) => {
-      if (count >= part) {
-        count = 0;
-        userIndex++;
-      }
-      count++;
-
       const spent = clientStats.find((stat) => stat.id === client.id);
       const stat = spent?.stats
         ? spent.stats.find((stat) => stat.day_from === week?.toFormat('yyyyLLdd'))
@@ -88,7 +80,6 @@ const SenlerPage = () => {
         subscribers: senlerSubs[client.id]?.count_subscribe,
         groupId: senlerSubs[client.id]?.group_id,
         success: senlerSubs[client.id]?.success,
-        responsible: responsibleEmployees[userIndex],
       };
     });
     setSenlerStats(stats);
@@ -235,14 +226,38 @@ const SenlerPage = () => {
   };
 
   const groupHeaderTemplate = (data: SenlerStats) => {
+    if (!data) return '';
     return <span className={css.groupHeader}>{data.responsible ? data.responsible.name : ''}</span>;
   };
+
+  const setResponsible = (stats: SenlerStats[]) => {
+    const part = Math.ceil(stats.length / responsibleEmployees.length);
+    let userIndex = 0;
+    let count = 0;
+    return stats.map((stat) => {
+      if (count >= part) {
+        count = 0;
+        userIndex++;
+      }
+      count++;
+
+      return {
+        ...stat,
+        responsible: responsibleEmployees[userIndex],
+      };
+    });
+  };
+
+  useEffect(() => {
+    if (senlerStats.length)
+      setClientsWithSenler(setResponsible(senlerStats.filter((stat) => stat.success)));
+  }, [senlerStats]);
 
   return (
     <Transition className={css.container}>
       <TableLoader isLoading={loading}>
         <DataTable
-          value={senlerStats}
+          value={clientsWithSenler.length ? clientsWithSenler : senlerStats}
           selectionMode='single'
           sortField='responsible.name'
           sortOrder={1}
