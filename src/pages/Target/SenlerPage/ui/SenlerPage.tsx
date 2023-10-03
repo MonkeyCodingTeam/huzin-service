@@ -10,6 +10,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import { Client, ClientAPI, ClientsStatisticResponse, GetStatisticProps } from '@entities/client';
 import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group';
+import { SenlerModal } from '@widgets/senler/ui/SenlerModal/SenlerModal';
 
 interface SenlerStats {
   client: Client;
@@ -36,7 +37,7 @@ const SenlerPage = () => {
   const [senlerSubs, setSenlerSubs] = useState<GetAllSubscribersCountResponse>([]);
   const [senlerStats, setSenlerStats] = useState<SenlerStats[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadingSenler, setLoadingSenler] = useState(true);
+  const [loadingSenler, setLoadingSenler] = useState(false);
   const [loadingStats, setLoadingStats] = useState(true);
   const [week, setWeek] = useState<DateTime>();
   const [filters, setFilters] = useState<
@@ -234,6 +235,7 @@ const SenlerPage = () => {
     const part = Math.ceil(stats.length / responsibleEmployees.length);
     let userIndex = 0;
     let count = 0;
+
     return stats.map((stat) => {
       if (count >= part) {
         count = 0;
@@ -249,8 +251,7 @@ const SenlerPage = () => {
   };
 
   useEffect(() => {
-    if (senlerStats.length)
-      setClientsWithSenler(setResponsible(senlerStats.filter((stat) => stat.success)));
+    setClientsWithSenler(setResponsible(senlerStats.filter((stat) => stat.success)));
   }, [senlerStats]);
 
   return (
@@ -259,7 +260,7 @@ const SenlerPage = () => {
         <DataTable
           value={clientsWithSenler.length ? clientsWithSenler : senlerStats}
           selectionMode='single'
-          sortField='responsible.name'
+          sortField={'responsible.name'}
           sortOrder={1}
           tableStyle={{
             borderCollapse: 'separate',
@@ -271,17 +272,23 @@ const SenlerPage = () => {
           key='id'
           filters={filters}
           globalFilterFields={['client.name']}
-          rowGroupMode='subheader'
-          groupRowsBy='responsible.name'
+          rowGroupMode={loadingSenler || loadingStats || loading ? undefined : 'subheader'}
+          groupRowsBy={'responsible.name'}
           rowGroupHeaderTemplate={groupHeaderTemplate}
           scrollable
           scrollHeight='calc(100% - 56px)'
           header={
-            <SenlerHeader
-              filterChange={handleFilterChange}
-              onWeekChange={handleWeekChange}
-              onRangeChange={handleRangeChange}
-            />
+            <div className={css.container__table__header}>
+              <SenlerHeader
+                filterChange={handleFilterChange}
+                onWeekChange={handleWeekChange}
+                onRangeChange={handleRangeChange}
+              />
+              <SenlerModal
+                senlerStats={senlerStats.filter((stat) => !stat.success)}
+                isLoading={loadingSenler || loadingStats || loading}
+              />
+            </div>
           }
         >
           <Column header='Клиенты' body={nameTemplate} />

@@ -1,0 +1,11 @@
+.badge {
+  margin: 0 14px;
+  max-height: 32px;
+  border-radius: 4px;
+
+  &__text {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+  }
+}
