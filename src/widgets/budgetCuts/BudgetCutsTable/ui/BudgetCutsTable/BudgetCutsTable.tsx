@@ -50,6 +50,7 @@ export const BudgetCutsTable: FC<Props> = ({
     isFetching,
     filteredData = [],
   } = useGetClientsQuery(null, {
+    pollingInterval: 1000 * 60 * 5,
     selectFromResult: (res) => ({
       ...res,
       filteredData: filterData(res.data, clientSearch, selectedUser),

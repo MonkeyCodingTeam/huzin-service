@@ -26,7 +26,7 @@ const BudgetCutsPage = () => {
   };
 
   const handleWatch = (client: Client, user: User) => {
-    toggle({ client, user });
+    toggle({ clientId: client.id, userId: user.id });
   };
 
   return (
