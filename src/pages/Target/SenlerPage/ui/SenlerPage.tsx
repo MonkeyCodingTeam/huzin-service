@@ -24,8 +24,8 @@ interface SenlerStats {
 
 const responsibleEmployees = [
   { id: 1, name: 'Анастасия' },
-  { id: 4, name: 'Галина' },
   { id: 2, name: 'Евгения' },
+    { id: 4, name: 'Любовь' },
   { id: 3, name: 'Татьяна' },
 ];
 
