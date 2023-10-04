@@ -1,32 +1,48 @@
 import { Typography } from 'antd';
 import { ChangeEvent, useState } from 'react';
-import { Client } from '@entities/client';
+import { Client, ClientUpdateReq, useUpdateClientMutation } from '@entities/client';
 import { User } from '@entities/user';
 import { useToggleWatcherMutation } from '@features/budgetCuts';
 import { SearchInput } from '@shared/ui';
 import { Transition } from '@shared/ui/Transition';
-import { BudgetCutsEditModal, BudgetCutsUserSelect } from '@widgets/budgetCuts';
-import { BudgetCutsTable } from '@widgets/budgetCuts/BudgetCutsTable/ui/BudgetCutsTable/BudgetCutsTable';
+import { BudgetCutsEditModal, BudgetCutsTable, BudgetCutsUserSelect } from '@widgets/budgetCuts';
 import css from './BudgetCutsPage.module.scss';
 
 const { Text } = Typography;
 
 const BudgetCutsPage = () => {
-  const [toggle] = useToggleWatcherMutation();
+  const [toggle, { isLoading: toggleIsLoading }] = useToggleWatcherMutation();
+  const [update, { isLoading: updateIsLoading }] = useUpdateClientMutation();
   const [keyword, setKeyword] = useState<string>('');
-  const [selectedUserId, setSelectedUserId] = useState<number>(0);
+  const [selectedUserId, setSelectedUserId] = useState<number | undefined>();
   const [editedClient, setEditedClient] = useState<Client>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
   };
 
-  const handleSelect = (userId: number) => {
+  const handleSelect = (userId: number | undefined) => {
     setSelectedUserId(userId);
   };
 
   const handleWatch = (client: Client, user: User) => {
     toggle({ clientId: client.id, userId: user.id });
+  };
+
+  const handleEdit = (client: Client) => {
+    setEditedClient(client);
+    setIsModalOpen(true);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalOpen(false);
+    setEditedClient(undefined);
+  };
+
+  const handleModalSubmit = (payload: ClientUpdateReq) => {
+    update(payload);
+    handleModalCancel();
   };
 
   return (
@@ -41,15 +57,21 @@ const BudgetCutsPage = () => {
           <BudgetCutsUserSelect onSelect={handleSelect} />
         </div>
       </section>
-      <BudgetCutsEditModal editedClient={editedClient} cancelEdit={setEditedClient} />
       <section className={css.budgetCutsPage__table}>
         <BudgetCutsTable
           selectedUser={selectedUserId}
           clientSearch={keyword}
-          handleEdit={setEditedClient}
+          handleEdit={handleEdit}
           handleWatch={handleWatch}
+          isUpdating={toggleIsLoading || updateIsLoading}
         />
       </section>
+      <BudgetCutsEditModal
+        editedClient={editedClient}
+        open={isModalOpen}
+        onCancel={handleModalCancel}
+        onSubmit={handleModalSubmit}
+      />
     </Transition>
   );
 };

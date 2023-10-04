@@ -1,4 +1,4 @@
-import { StarTwoTone } from '@ant-design/icons';
+import { StarFilled, StarTwoTone } from '@ant-design/icons';
 import { Button, Tooltip } from 'antd';
 import { FC } from 'react';
 import { Client } from '@entities/client';
@@ -15,7 +15,11 @@ export const WatchButton: FC<Props> = ({ handleWatch, record }) => {
   return (
     <Tooltip title={record.is_mine ? 'Перестать отслеживать' : 'Отслеживать'}>
       <Button type='text' size='small' shape='circle' onClick={() => handleWatch(record, user)}>
-        <StarTwoTone twoToneColor={record.is_mine ? '#faad14' : '#1677ff'} />
+        {record.is_mine ? (
+          <StarFilled style={{ color: '#1677ff' }} />
+        ) : (
+          <StarTwoTone twoToneColor={'#1677ff'} />
+        )}
       </Button>
     </Tooltip>
   );

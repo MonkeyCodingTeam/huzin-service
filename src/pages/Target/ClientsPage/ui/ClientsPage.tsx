@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { CampaignTemplateSelect } from '@widgets/client/ui/CampaignTemplateSelect/CampaignTemplateSelect';
-import { ClientSelect, ClientStatsTable } from 'widgets/client';
+import { CampaignTemplateSelect, ClientSelect, ClientStatsTable } from 'widgets/client';
 import css from './ClientsPage.module.scss';
 
 const { Text } = Typography;

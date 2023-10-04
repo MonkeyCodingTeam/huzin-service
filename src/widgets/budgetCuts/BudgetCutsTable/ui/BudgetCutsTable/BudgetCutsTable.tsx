@@ -7,18 +7,16 @@ import { Client, useGetClientsQuery } from '@entities/client';
 import { User } from '@entities/user';
 import { EditButton, WatchButton } from '@features/budgetCuts';
 import {
+  balanceAlert,
+  daySpentAlert,
   getDayPlan,
   getMonthdayPlan,
   getNecessaryAmount,
   getNecessaryExpenses,
   getWeekdayPlan,
-} from '@widgets/budgetCuts';
-import {
-  balanceAlert,
-  daySpentAlert,
   monthSpentAlert,
   weekSpentAlert,
-} from '@widgets/budgetCuts/BudgetCutsTable/lib/alerts';
+} from '@widgets/budgetCuts';
 import css from './BudgetCutsTable.module.scss';
 
 const { useBreakpoint } = Grid;
@@ -29,6 +27,7 @@ interface Props {
   selectedUser?: number;
   handleEdit: (client: Client) => void;
   handleWatch: (client: Client, user: User) => void;
+  isUpdating: boolean;
 }
 
 export const BudgetCutsTable: FC<Props> = ({
@@ -36,6 +35,7 @@ export const BudgetCutsTable: FC<Props> = ({
   selectedUser,
   handleEdit,
   handleWatch,
+  isUpdating,
 }) => {
   const screens = useBreakpoint();
   const filterData = useCallback((data: Client[] = [], search: string = '', userId: number = 0) => {
@@ -44,6 +44,8 @@ export const BudgetCutsTable: FC<Props> = ({
       : data;
     return clientsData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
   }, []);
+
+  console.log(selectedUser);
 
   const {
     isLoading,
@@ -170,7 +172,10 @@ export const BudgetCutsTable: FC<Props> = ({
     },
     {
       shouldCellUpdate: (prevRecord, nextRecord) =>
-        prevRecord.month_spent != nextRecord.month_spent,
+        prevRecord.month_spent != nextRecord.month_spent ||
+        prevRecord.budget_adjustment != nextRecord.budget_adjustment ||
+        prevRecord.zero_days != nextRecord.zero_days ||
+        prevRecord.month_plan != nextRecord.month_plan,
       title: 'Рек. открут',
       width: 100,
       render: (record) => getNecessaryExpenses(record),
@@ -198,7 +203,7 @@ export const BudgetCutsTable: FC<Props> = ({
           : 'calc(100vh - 16em)',
       }}
       rowKey='id'
-      loading={isLoading || isFetching}
+      loading={isLoading || isFetching || isUpdating}
       dataSource={filteredData}
       columns={columns}
       size={'small'}

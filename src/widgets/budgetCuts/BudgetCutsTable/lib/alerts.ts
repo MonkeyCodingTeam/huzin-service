@@ -1,6 +1,6 @@
 import { Client } from '@entities/client';
 import { getDayDiff, getMonthdayDiff, getWeekdayDiff } from '@widgets/budgetCuts';
-import css from '@widgets/budgetCuts/BudgetCutsTable/ui/BudgetCutsTable/BudgetCutsTable.module.scss';
+import css from '../ui/BudgetCutsTable/BudgetCutsTable.module.scss';
 
 export const alertStyle = (
   difference: number,

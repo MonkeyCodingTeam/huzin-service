@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { FC, useCallback } from 'react';
 import { SenlerStatsReq, SenlerStatsRes, useGetSenlerStatsQuery } from '@features/senlerStats';
-import { setFixedValue } from '@shared/lib/setFixedValue';
+import { toFixed } from '@shared/lib/toFixed';
 import { truncValue } from '@shared/lib/truncValue';
 import { DateRange } from '@shared/ui/DateRangePicker';
 import { SenlerIcon } from '@shared/ui/Icons/SenlerIcon';
@@ -98,7 +98,7 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
       title: 'Цена подписки',
       dataIndex: 'costPerSub',
       sorter: { compare: (a, b) => +a.costPerSub - +b.costPerSub, multiple: 1 },
-      render: (value) => spentColorAlert(+setFixedValue(+value, 2)),
+      render: (value) => spentColorAlert(+toFixed(+value, 2)),
     },
   ];
 

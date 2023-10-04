@@ -1,2 +1,4 @@
-export { ClientSelect } from '@widgets/client/ui/ClientSelect/ClientSelect';
-export { ClientStatsTable } from 'widgets/client/ui/ClientStatsTable/ClientStatsTable';
+export * from './lib/sumStatsForPeriod';
+export * from './ui/ClientSelect/ClientSelect';
+export * from './ui/ClientStatsTable/ClientStatsTable';
+export * from './ui/CampaignTemplateSelect/CampaignTemplateSelect';

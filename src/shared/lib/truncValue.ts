@@ -1,1 +1,1 @@
-export const truncValue = (value: number) => `${value ? Math.trunc(value).toLocaleString() : '-'}`;
+export const truncValue = (value: number) => Math.trunc(value).toLocaleString();
