@@ -25,7 +25,13 @@
     }
 
     & :global(.p-rowgroup-header) {
-      background-color: #e6f4ff !important;
+      background-color: #D8DEE9 !important;
+    }
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 }
@@ -34,7 +40,7 @@
 .groupHeader {
   display: flex;
   font-weight: bolder;
-  color: #0958d9;
+  color: #2E3440;
 
   &__warning {
     color: var(--danger-color);
