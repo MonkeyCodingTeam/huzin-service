@@ -11,6 +11,8 @@ declare global {
 
   export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
+  export type Period = 'day' | 'week' | 'month' | 'year';
+
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   declare type RootState = import('../src/app/store/lib/store').RootState;
   // eslint-disable-next-line @typescript-eslint/consistent-type-imports

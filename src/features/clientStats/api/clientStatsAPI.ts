@@ -1,23 +1,37 @@
-import { IClientStatsResp, IStatsReq } from '@features/clientStats';
+import {
+  ClientsStatsReq,
+  ClientsStatsRes,
+  ClientStatsReq,
+  ClientStatsRes,
+} from '@features/clientStats';
 import { setPeriodDate } from '@features/clientStats/lib/setPeriodDate';
 import { baseApi } from '@shared/api/baseApi';
 
-const STAT_URL = 'statistic/client';
+const STAT_URL = 'target/statistic/client';
 export const ClientStatsAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClientStats: builder.query<IClientStatsResp[], IStatsReq>({
+    getClientStats: builder.query<ClientStatsRes[], ClientStatsReq>({
       query: (params) => {
         return {
-          url: `target/${STAT_URL}/${params.id}/template`,
+          url: `${STAT_URL}/${params.id}/template`,
           method: 'GET',
           params,
         };
       },
-      transformResponse: (response: IClientStatsResp[], fetch, request) => {
+      transformResponse: (response: ClientStatsRes[], fetch, request) => {
         return response.map((client) => setPeriodDate(client, request.period));
+      },
+    }),
+    getClientsStats: builder.query<ClientsStatsRes[], ClientsStatsReq>({
+      query: (params) => {
+        return {
+          url: `${STAT_URL}`,
+          method: 'GET',
+          params,
+        };
       },
     }),
   }),
 });
 
-export const { useLazyGetClientStatsQuery } = ClientStatsAPI;
+export const { useLazyGetClientStatsQuery, useLazyGetClientsStatsQuery } = ClientStatsAPI;

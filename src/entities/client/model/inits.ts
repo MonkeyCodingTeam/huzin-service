@@ -1,6 +1,6 @@
-import { IClient } from '@entities/client';
+import { Client } from '@entities/client';
 
-export const initClientState: IClient = {
+export const initClientState: Client = {
   id: 0,
   name: '',
   entrepreneur: '',
@@ -22,4 +22,5 @@ export const initClientState: IClient = {
   low_balance_at: null,
   paid_at: null,
   zero_balance_at: null,
+  companies: [],
 };

@@ -18,7 +18,7 @@ export const AuthLayout = () => {
   }
 
   if (isError) {
-    return <Navigate to='/login' state={{from: location}} replace />;
+    return <Navigate to='/login' state={{ from: location }} replace />;
   }
 
   return (

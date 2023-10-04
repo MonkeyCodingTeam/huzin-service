@@ -6,8 +6,8 @@ import {
   SolutionOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, type MenuProps } from 'antd';
-import React, { type FC, type ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { type FC, type ReactNode } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { HeaderAppCategory } from '@shared/ui';
 import css from './LayoutMenu.module.scss';
 
@@ -16,12 +16,12 @@ const { Sider, Header, Footer, Content } = Layout;
 const items: MenuProps['items'] = [
   {
     label: <Link to='/client-stats'>Клиенты</Link>,
-    key: 'clients',
+    key: 'client-stats',
     icon: <ProjectOutlined rev={undefined} />,
   },
   {
-    label: 'Senler',
-    key: 'senler',
+    label: <Link to='/senler-stats'>Senler</Link>,
+    key: 'senler-stats',
     icon: <SolutionOutlined rev={undefined} />,
   },
   {
@@ -46,11 +46,22 @@ interface Props {
 }
 
 export const LayoutMenu: FC<Props> = ({ profileBlock }) => {
+  const location = useLocation();
+
+  const baseUrl = location.pathname.match(/(?<!\?.\+)(?<=\/)[\w-]+(?=[\/\r\n?]|$)/);
+  const defaultSelect = baseUrl ? baseUrl[0] : '';
+
   return (
     <>
       <Header className={css.menu__desktop}>
         <HeaderAppCategory />
-        <Menu style={{ width: '100%' }} theme='light' mode='horizontal' items={items} />
+        <Menu
+          selectedKeys={[defaultSelect]}
+          style={{ width: '100%' }}
+          theme='light'
+          mode='horizontal'
+          items={items}
+        />
         {profileBlock}
       </Header>
       <Layout className={css.menu__mobile}>
@@ -65,7 +76,7 @@ export const LayoutMenu: FC<Props> = ({ profileBlock }) => {
               <HeaderAppCategory />
             </Header>
             <Content>
-              <Menu theme='light' mode='inline' items={items} />
+              <Menu selectedKeys={[location.pathname]} theme='light' mode='inline' items={items} />
             </Content>
             <Footer style={{ alignItems: 'end' }}>{profileBlock}</Footer>
           </Layout>

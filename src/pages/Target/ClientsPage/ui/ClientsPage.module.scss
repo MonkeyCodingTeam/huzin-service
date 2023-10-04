@@ -20,6 +20,7 @@
 
     @media screen and (max-width: 576px){
       flex-direction: column;
+      align-items: flex-start;
     }
   }
 
@@ -32,9 +33,10 @@
 
   &__text {
     min-width: fit-content;
+    white-space: nowrap;
 
     @media screen and (max-width: 576px){
-      min-width: 48px;
+      min-width: 52px;
     }
   }
 
@@ -42,5 +44,9 @@
     padding: 1rem;
     background-color: var(--light-color);
     border-radius: var(--large-border-radius);
+
+    @media screen and (max-width: 576px){
+      padding: 0
+    }
   }
 }
