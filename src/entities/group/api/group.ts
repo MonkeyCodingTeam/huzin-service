@@ -9,7 +9,7 @@ import type {
   Group,
   GroupCreate,
   GroupGetByProps,
-  GroupGetByResponse,
+  GroupGetInfo,
 } from '@entities/group';
 
 const VKAPI_GROUP = 'vk_method/groups';
@@ -50,7 +50,7 @@ export const GroupApi = {
   getAll: async (): AxiosPromise<Group[]> => axiosAppInstance.get('group'),
   get: async (groupId: Group['id']): AxiosPromise<Group> =>
     axiosAppInstance.get(`group/${groupId}`),
-  getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetByResponse> =>
+  getBy: async (payload: GroupGetByProps): AxiosPromise<GroupGetInfo[]> =>
     axiosAppInstance.post(ROUTE.getById, {
       ...payload,
       fields: payload.fields?.join(','),

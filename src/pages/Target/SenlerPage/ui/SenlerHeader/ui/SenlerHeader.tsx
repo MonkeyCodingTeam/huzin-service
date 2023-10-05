@@ -38,7 +38,7 @@ export const SenlerHeader: FC<SenlerHeaderProps> = (props) => {
     if (Array.isArray(dates) && dates[0] && dates[1]) {
       const range = {
         date_from: DateTime.fromJSDate(dates[0]),
-        date_to: DateTime.fromJSDate(dates[1]),
+        date_to: DateTime.fromJSDate(dates[1]).endOf('day'),
       };
       setPeriod({
         ...range,

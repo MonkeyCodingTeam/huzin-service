@@ -63,7 +63,7 @@ export const GroupSettings = () => {
         group_id: screenName,
         fields: ['city', 'site'],
       }).then((res) => {
-        const { id, city, place, screen_name, name, photo_200, site } = res.data.groups[0];
+        const { id, city, place, screen_name, name, photo_200, site } = res.data[0];
         const group = {
           id,
           name,

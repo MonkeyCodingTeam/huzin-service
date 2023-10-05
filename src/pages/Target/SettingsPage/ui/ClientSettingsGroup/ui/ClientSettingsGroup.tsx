@@ -31,7 +31,9 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
         group_id: screenName,
         fields: ['city', 'public_date_label', 'site'],
       }).then((res) => {
-        const groupVk = res.data.groups[0];
+        console.log(res);
+
+        const groupVk = res.data[0];
         const group = {
           ...groupVk,
           photo: groupVk?.photo_200,

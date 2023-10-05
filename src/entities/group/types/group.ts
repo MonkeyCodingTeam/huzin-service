@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { Client } from '@entities/client';
 
@@ -84,7 +83,7 @@ export interface GroupGetByProps {
   fields?: (keyof GroupOptionalProps)[];
 }
 
-interface GroupGetInfo extends Partial<GroupOptionalProps> {
+export interface GroupGetInfo extends Partial<GroupOptionalProps> {
   id: number;
   name: string;
   screen_name: string;
@@ -98,11 +97,6 @@ interface GroupGetInfo extends Partial<GroupOptionalProps> {
   photo_50: string;
   photo_100: string;
   photo_200: string;
-}
-
-export interface GroupGetByResponse {
-  groups: GroupGetInfo[];
-  profiles: [];
 }
 
 export type GroupCreate = Omit<Group, 'created_at' | 'updated_at' | 'senler_token' | 'timezone'> &
