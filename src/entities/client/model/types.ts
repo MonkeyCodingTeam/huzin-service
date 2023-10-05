@@ -23,6 +23,13 @@ export interface Client extends Model {
   group_id?: number;
   is_mine?: boolean;
   companies: Company[];
+  users: User[];
+}
+
+// TODO Вопрос юзерам, нужно ли что-то менять в моделях
+
+export interface User extends Model {
+  name: string;
 }
 
 export interface Company extends Model {
@@ -30,4 +37,10 @@ export interface Company extends Model {
   client_id: Client['id'];
   status: 0 | 1 | 2;
   company_template_id?: number;
+}
+
+export interface ClientUpdateReq extends Model {
+  critical_balance: number;
+  month_plan: number;
+  budget_adjustment: number;
 }

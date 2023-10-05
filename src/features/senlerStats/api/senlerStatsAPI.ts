@@ -1,10 +1,9 @@
-import { SenlerStatsReq, SenlerStatsRes } from '@features/senlerStats';
-import { setCostPerSub } from '@features/senlerStats/lib/setCostPerSub';
+import { SenlerStatsReq, SenlerStatsRes, setCostPerSub } from '@features/senlerStats';
 import { baseApi } from '@shared/api/baseApi';
 
 const collator = new Intl.Collator();
-
 const SENLER_URL = 'target/senler/subscribers_count';
+
 export const SenlerStatsAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getSenlerStats: builder.query<SenlerStatsRes[], SenlerStatsReq>({

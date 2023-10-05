@@ -5,9 +5,9 @@ import { DateTime } from 'luxon';
 import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientStatsReq, StatsRes, useLazyGetClientStatsQuery } from '@features/clientStats';
-import { setFixedValue } from '@shared/lib/setFixedValue';
+import { toFixed } from '@shared/lib/toFixed';
 import { truncValue } from '@shared/lib/truncValue';
-import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
+import { sumStatsForPeriod } from '@widgets/client';
 
 const { useBreakpoint } = Grid;
 
@@ -80,12 +80,12 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
     {
       title: 'CPC',
       dataIndex: 'effective_cost_per_click',
-      render: (value) => setFixedValue(+value, 1),
+      render: (value) => toFixed(+value, 1),
     },
     {
       title: 'CPM',
       dataIndex: 'effective_cost_per_mille',
-      render: (value) => setFixedValue(+value, 1),
+      render: (value) => toFixed(+value, 1),
     },
   ];
 

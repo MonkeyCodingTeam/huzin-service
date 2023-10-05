@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ClientAPI } from '@entities/client/api/clientAPI';
-import { initClientState } from '@entities/client/model/inits';
-import { Client } from '@entities/client/model/types';
+import { Client, ClientAPI, initClientState } from '@entities/client';
 
 export const selectedClientSlice = createSlice({
   name: 'selectedClient',

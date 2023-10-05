@@ -20,8 +20,17 @@ export const ClientSelect = () => {
   const handleValueChange = (value: number) => {
     setSelectedValue(value);
   };
+
   const checkId = (id: number): boolean => {
     return data.some((client) => client.id === id);
+  };
+
+  const filterOption = (
+    input: string,
+    option: { label: string; value: number } | undefined,
+  ): boolean => {
+    if (!option) return false;
+    return option.label.toLowerCase().includes(input.toLowerCase());
   };
 
   useEffect(() => {
@@ -52,10 +61,7 @@ export const ClientSelect = () => {
       options={setArrayToOptionsFormat(data, 'id', 'name')}
       onChange={(value) => handleValueChange(value)}
       value={selectedValue}
-      filterOption={(input, option): boolean => {
-        if (!option) return false;
-        return option.label.toLowerCase().includes(input.toLowerCase());
-      }}
+      filterOption={filterOption}
       size={screens.xs ? 'small' : 'middle'}
     />
   );

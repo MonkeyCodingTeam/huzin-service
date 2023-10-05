@@ -2,7 +2,7 @@ export enum TARGET_ROUTES {
   BaseClientStats = '/client-stats',
   ClientStats = '/client-stats/:id',
   SenlerStats = '/senler-stats',
-  BudgetCuts = '/target/budget-cuts',
+  BudgetCuts = '/budget-cuts',
   Companies = '/target/company',
   Invoice = '/target/invoice',
   Settings = '/target/settings',

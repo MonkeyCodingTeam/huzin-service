@@ -12,7 +12,13 @@ export const UserAPI = baseAuthApi.injectEndpoints({
       },
       providesTags: [USER_TAG],
     }),
+    getUsers: builder.query<User[], null>({
+      query: () => ({
+        url: 'api/user',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetMeQuery } = UserAPI;
+export const { useGetMeQuery, useGetUsersQuery } = UserAPI;

@@ -3,8 +3,8 @@ import {
   ClientsStatsRes,
   ClientStatsReq,
   ClientStatsRes,
+  setPeriodDate,
 } from '@features/clientStats';
-import { setPeriodDate } from '@features/clientStats/lib/setPeriodDate';
 import { baseApi } from '@shared/api/baseApi';
 
 const STAT_URL = 'target/statistic/client';

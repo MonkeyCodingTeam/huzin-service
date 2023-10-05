@@ -31,14 +31,16 @@ export interface StatsRes {
   spent: number;
 }
 
+type StatsType = 'ad' | 'campaign' | 'client' | 'office';
+
 export interface ClientStatsRes {
   id: Company['id'];
   stats: StatsRes[];
-  type: 'ad' | 'campaign' | 'client' | 'office';
+  type: StatsType;
 }
 
 export interface ClientsStatsRes {
   id: Client['id'];
   stats: StatsRes[];
-  type: 'ad' | 'campaign' | 'client' | 'office';
+  type: StatsType;
 }
