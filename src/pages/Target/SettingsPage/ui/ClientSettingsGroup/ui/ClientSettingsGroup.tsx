@@ -33,7 +33,7 @@ export const ClientSettingsGroup: FC<ClientSettingsGroup> = ({ client }) => {
       }).then((res) => {
         console.log(res);
 
-        const groupVk = res.data[0];
+        const groupVk = res.data.groups[0];
         const group = {
           ...groupVk,
           photo: groupVk?.photo_200,
