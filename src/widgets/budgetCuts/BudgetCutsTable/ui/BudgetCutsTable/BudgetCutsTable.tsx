@@ -4,7 +4,6 @@ import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
 import { FC, useCallback } from 'react';
 import { Client, useGetClientsQuery } from '@entities/client';
-import { User } from '@entities/user';
 import { EditButton, WatchButton } from '@features/budgetCuts';
 import {
   balanceAlert,
@@ -26,17 +25,9 @@ interface Props {
   clientSearch?: string;
   selectedUser?: number;
   handleEdit: (client: Client) => void;
-  handleWatch: (client: Client, user: User) => void;
-  isUpdating: boolean;
 }
 
-export const BudgetCutsTable: FC<Props> = ({
-  clientSearch,
-  selectedUser,
-  handleEdit,
-  handleWatch,
-  isUpdating,
-}) => {
+export const BudgetCutsTable: FC<Props> = ({ clientSearch, selectedUser, handleEdit }) => {
   const screens = useBreakpoint();
   const filterData = useCallback((data: Client[] = [], search: string = '', userId: number = 0) => {
     let clientsData = userId
@@ -44,8 +35,6 @@ export const BudgetCutsTable: FC<Props> = ({
       : data;
     return clientsData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
   }, []);
-
-  console.log(selectedUser);
 
   const {
     isLoading,
@@ -71,7 +60,7 @@ export const BudgetCutsTable: FC<Props> = ({
           <>
             <EditButton handleEdit={handleEdit} record={record} />
             <Divider type='vertical' style={{ margin: '2px' }} />
-            <WatchButton handleWatch={handleWatch} record={record} />
+            <WatchButton client={record} />
           </>
         );
       },
@@ -203,7 +192,7 @@ export const BudgetCutsTable: FC<Props> = ({
           : 'calc(100vh - 16em)',
       }}
       rowKey='id'
-      loading={isLoading || isFetching || isUpdating}
+      loading={isLoading || isFetching}
       dataSource={filteredData}
       columns={columns}
       size={'small'}

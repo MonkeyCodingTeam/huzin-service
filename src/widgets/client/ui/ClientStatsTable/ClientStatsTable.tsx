@@ -59,19 +59,19 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
       title: 'Расход',
       dataIndex: 'spent',
       sorter: (a, b) => +a.spent - +b.spent,
-      render: (value) => truncValue(+value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'Клики',
       dataIndex: 'clicks',
       sorter: (a, b) => +a.clicks - +b.clicks,
-      render: (value) => truncValue(+value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'Охват',
       dataIndex: 'impressions',
       sorter: (a, b) => +a.impressions - +b.impressions,
-      render: (value) => truncValue(+value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'CTR',
@@ -80,12 +80,12 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
     {
       title: 'CPC',
       dataIndex: 'effective_cost_per_click',
-      render: (value) => toFixed(+value, 1),
+      render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
     {
       title: 'CPM',
       dataIndex: 'effective_cost_per_mille',
-      render: (value) => toFixed(+value, 1),
+      render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
   ];
 
