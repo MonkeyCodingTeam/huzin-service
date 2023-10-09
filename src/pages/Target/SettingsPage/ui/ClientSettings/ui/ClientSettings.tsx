@@ -14,6 +14,7 @@ import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
 import { ROUTES } from '@app/providers/RouterProvider';
+import { MonitoringTypeSelect } from '@feature/client/monitoring_type';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -113,12 +114,19 @@ export const ClientSettings = () => {
             <Loader />
           ) : (
             <>
+              <Divider id='client' align='left'>
+                <a className={css.settings__list__anchor} href='#main'>
+                  # Клиент
+                </a>
+              </Divider>
               <p className={css.settings__title}>{selectedClient.name}</p>
               <Link href={`/client_report/${selectedClient.id}/${selectedClient.token}`}>
                 <p>Ссылка на отчёт</p>
               </Link>
+              <span>Тип расчёта статистики:</span>
+              <MonitoringTypeSelect />
               <div>
-                <Divider style={{ marginTop: 0 }} id='main' align='left'>
+                <Divider id='main' align='left'>
                   <a className={css.settings__list__anchor} href='#main'>
                     # Группы
                   </a>
@@ -160,6 +168,9 @@ export const ClientSettings = () => {
         </div>
         <Divider layout='vertical' />
         <div className={css.settings__panel}>
+          <a href='#client' className={css.settings__panel__anchor}>
+            # Клиент
+          </a>
           <a href='#main' className={css.settings__panel__anchor}>
             # Группы
           </a>

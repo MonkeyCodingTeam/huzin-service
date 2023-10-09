@@ -10,7 +10,7 @@ import { Skeleton } from 'primereact/skeleton';
 import { Link } from '@shared/ui';
 import { Client, ClientAPI, ClientsStatisticResponse, GetStatisticProps } from '@entities/client';
 import { ClientGroupAPI, GetAllSubscribersCountResponse } from '@entities/group';
-import {SenlerModal} from "@widgets/senler";
+import { SenlerModal } from '@widgets/senler';
 
 interface SenlerStats {
   client: Client;
@@ -25,7 +25,7 @@ interface SenlerStats {
 const responsibleEmployees = [
   { id: 1, name: 'Анастасия' },
   { id: 2, name: 'Евгения' },
-    { id: 4, name: 'Любовь' },
+  { id: 4, name: 'Любовь' },
   { id: 3, name: 'Татьяна' },
 ];
 
@@ -160,8 +160,8 @@ const SenlerPage = () => {
     return <span>-</span>;
   };
 
-  const spentColorAlert = (stat: SenlerStats) => {
-    if (loadingSenler) return '';
+  const spentSenlerColorAlert = (stat: SenlerStats) => {
+    if (loadingSenler || stat.client.monitoring_type_id !== 1) return '';
 
     if (stat.spent && stat.subscribers !== undefined) {
       const def = Math.round(stat.subscribers === 0 ? +stat.spent : +stat.spent / stat.subscribers);
@@ -250,6 +250,22 @@ const SenlerPage = () => {
     });
   };
 
+  const spentClicksColor = (stat: SenlerStats) => {
+    if (stat.client.monitoring_type_id !== 2 || !stat.spent || !stat.clicks) return '';
+
+    const def = Math.round(+stat.spent / stat.clicks);
+
+    if (def > 35) {
+      return css.container__table__column_danger;
+    }
+
+    if (def > 25) {
+      return css.container__table__column_warning;
+    }
+
+    return css.container__table__column_success;
+  };
+
   useEffect(() => {
     setClientsWithSenler(setResponsible(senlerStats.filter((stat) => stat.success)));
   }, [senlerStats]);
@@ -297,7 +313,7 @@ const SenlerPage = () => {
           <Column
             header='Цена подписки'
             body={spentPerSubTemplate}
-            bodyClassName={spentColorAlert}
+            bodyClassName={spentSenlerColorAlert}
           />
           <Column
             header='Клики'
@@ -310,6 +326,7 @@ const SenlerPage = () => {
           />
           <Column
             header='Цена клика'
+            bodyClassName={spentClicksColor}
             body={(stat: SenlerStats) => {
               if (loadingStats) {
                 return <Skeleton width='10rem' />;

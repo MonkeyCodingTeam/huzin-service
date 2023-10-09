@@ -29,6 +29,7 @@ export interface Client extends Model, ClientRelations {
   basic_payment?: number;
   group_id?: number;
   is_mine?: boolean;
+  monitoring_type_id: number;
 }
 
 interface ClientRelations {

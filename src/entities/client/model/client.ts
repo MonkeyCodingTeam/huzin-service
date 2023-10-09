@@ -27,6 +27,7 @@ export const emptyClientState: Client = {
   low_balance_at: null,
   paid_at: null,
   zero_balance_at: null,
+  monitoring_type_id: 0,
 };
 
 export const selectedClient = createSlice({
