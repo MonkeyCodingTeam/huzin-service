@@ -1,46 +1,47 @@
 import { Form, InputNumber, Modal } from 'antd';
-import React, { useEffect } from 'react';
-import { Client, ClientUpdateReq } from '@entities/client';
+import React, { useEffect, useState } from 'react';
+import { Client, useUpdateClientMutation } from '@entities/client';
 import css from './BudgetCutsEditModal.module.scss';
 
 interface Props {
-  open: boolean;
-  editedClient?: Client;
-  onSubmit: (values: ClientUpdateReq) => void;
+  client?: Client;
   onCancel: () => void;
 }
 
-export const BudgetCutsEditModal: React.FC<Props> = ({
-  open,
-  onSubmit,
-  onCancel,
-  editedClient,
-}) => {
+export const BudgetCutsEditModal: React.FC<Props> = ({ client, onCancel }) => {
+  const [update] = useUpdateClientMutation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (editedClient) form.setFieldsValue(editedClient);
-  }, [editedClient]);
+    if (client) form.setFieldsValue(client);
+  }, [client]);
 
   const onFormSubmit = () => {
-    if (!editedClient) {
-      console.log('Error, check edited client exist ');
+    if (!client) {
+      console.log('Error, check client exist: ', client);
       return;
     }
     form
       .validateFields()
       .then((values) => {
-        onSubmit({ id: editedClient.id, ...values });
+        update({ id: client.id, ...values });
+        onCancel();
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
       });
   };
 
+  useEffect(() => {
+    if (!client) return setIsModalOpen(false);
+    setIsModalOpen(true);
+  }, [client]);
+
   return (
     <Modal
-      open={open}
-      title={editedClient?.name}
+      open={isModalOpen}
+      title={client?.name}
       okText='Сохранить'
       cancelText='Отмена'
       onCancel={onCancel}

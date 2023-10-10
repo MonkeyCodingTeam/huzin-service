@@ -24,7 +24,6 @@ interface Props {
 
 export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
   const screens = useBreakpoint();
-
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
