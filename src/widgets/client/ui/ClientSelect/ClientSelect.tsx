@@ -1,12 +1,14 @@
-import { Grid, Select } from 'antd';
+import { Badge, Grid, Select, Typography } from 'antd';
+import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { setSelectedClient, useGetClientsQuery } from '@entities/client';
-import { setArrayToOptionsFormat } from '@shared/lib/setArrayToOptionsFormat';
+import { Client, setSelectedClient, useGetClientsQuery } from '@entities/client';
 import css from './ClientSelect.module.scss';
 
 const { useBreakpoint } = Grid;
+const { Text } = Typography;
+const { Option } = Select;
 
 export const ClientSelect = () => {
   const params = useParams();
@@ -51,6 +53,31 @@ export const ClientSelect = () => {
     }
   }, [selectedValue]);
 
+  const setOptions = (values: Client[]) => {
+    if (!values.length) return;
+    return values.map((client) => {
+      // Указываются условия через ||
+      const haveCriticalError = !client.group_id;
+      const haveError = !client.has_telegram;
+
+      return (
+        <Option value={client.id} label={client.name} key={client.id}>
+          {(haveCriticalError || haveError) && (
+            <Badge status={haveCriticalError ? 'error' : 'warning'} />
+          )}
+          <Text
+            title={client.name}
+            className={classNames(css.clientsSelect__text, {
+              [css.clientsSelect__text_badged]: haveCriticalError || haveError,
+            })}
+          >
+            {client.name}
+          </Text>
+        </Option>
+      );
+    });
+  };
+
   return (
     <Select
       className={css.clientsSelect}
@@ -58,11 +85,13 @@ export const ClientSelect = () => {
       loading={isLoading && isFetching}
       placeholder='Выберите клиента'
       optionFilterProp='children'
-      options={setArrayToOptionsFormat(data, 'id', 'name')}
       onChange={(value) => handleValueChange(value)}
-      value={selectedValue}
       filterOption={filterOption}
       size={screens.xs ? 'small' : 'middle'}
-    />
+      value={selectedValue}
+      optionLabelProp='label'
+    >
+      {setOptions(data)}
+    </Select>
   );
 };
