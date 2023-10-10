@@ -63,21 +63,16 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
               ({mskDate})
             </span>
           </div>
-          <div>
-            {story.content.link && (
-              <CopyToClipboardButton
-                text={story.content.link}
-                title='Скопировать ссылку на контент'
-              />
-            )}
-            <i
-              onClick={(e) => {
-                removeStory(e, story);
-              }}
-              className={classNames(PrimeIcons.TIMES, css.card__block__tools__close)}
-            />
-          </div>
+          <i
+            onClick={(e) => {
+              removeStory(e, story);
+            }}
+            className={classNames(PrimeIcons.TIMES, css.card__block__tools__close)}
+          />
         </div>
+        {story.content.link && (
+          <CopyToClipboardButton text={story.content.link} title='Скопировать ссылку на контент' />
+        )}
         {content()}
         {alert()}
       </div>
