@@ -21,7 +21,23 @@ export const ClientAPI = baseApi.injectEndpoints({
         method: 'PATCH',
         body,
       }),
-      invalidatesTags: [CLIENT_TAG],
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            ClientAPI.util.updateQueryData('getClients', null, (draft) => {
+              // update
+              const client = draft?.find((item) => item?.id === args?.id);
+              if (!client) return;
+              client.critical_balance = args.critical_balance;
+              client.month_plan = args.month_plan;
+              client.budget_adjustment = args.budget_adjustment;
+            }),
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
   }),
 });

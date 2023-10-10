@@ -1,4 +1,6 @@
+import { User } from '@entities/user';
+
 export interface WatcherReq {
   clientId: number;
-  userId: number;
+  user: User;
 }

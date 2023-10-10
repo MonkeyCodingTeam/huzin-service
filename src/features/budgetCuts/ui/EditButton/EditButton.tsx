@@ -1,5 +1,5 @@
 import { EditTwoTone } from '@ant-design/icons';
-import { Button, Tooltip } from 'antd';
+import { Button } from 'antd';
 import { FC } from 'react';
 import { Client } from '@entities/client';
 
@@ -10,10 +10,14 @@ interface Props {
 
 export const EditButton: FC<Props> = ({ handleEdit, record }) => {
   return (
-    <Tooltip title={'Редактировать'}>
-      <Button type='text' onClick={() => handleEdit(record)} size='small' shape='circle'>
-        <EditTwoTone twoToneColor={'#1677ff'} />
-      </Button>
-    </Tooltip>
+    <Button
+      title={'Редактировать'}
+      type='text'
+      onClick={() => handleEdit(record)}
+      size='small'
+      shape='circle'
+    >
+      <EditTwoTone twoToneColor={'#1677ff'} />
+    </Button>
   );
 };
