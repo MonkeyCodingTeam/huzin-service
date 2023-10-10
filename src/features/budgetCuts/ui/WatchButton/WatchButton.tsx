@@ -4,14 +4,13 @@ import { FC, useEffect, useState } from 'react';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
 import { useToggleWatcherMutation } from '@features/budgetCuts';
-import { useAppSelector } from '@shared/lib';
 
 interface Props {
   client: Client;
+  user: User;
 }
 
-export const WatchButton: FC<Props> = ({ client }) => {
-  const user = useAppSelector((state) => state.user);
+export const WatchButton: FC<Props> = ({ client, user }) => {
   const [toggle, { isLoading }] = useToggleWatcherMutation();
 
   const [isMine, setIsMine] = useState(client.is_mine);

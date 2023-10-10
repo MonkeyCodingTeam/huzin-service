@@ -28,11 +28,10 @@ export const ClientAPI = baseApi.injectEndpoints({
             ClientAPI.util.updateQueryData('getClients', null, (draft) => {
               // update
               const client = draft?.find((item) => item?.id === args?.id);
-              if (client) {
-                client.critical_balance = args.critical_balance;
-                client.month_plan = args.month_plan;
-                client.budget_adjustment = args.budget_adjustment;
-              }
+              if (!client) return;
+              client.critical_balance = args.critical_balance;
+              client.month_plan = args.month_plan;
+              client.budget_adjustment = args.budget_adjustment;
             }),
           );
         } catch (error) {
