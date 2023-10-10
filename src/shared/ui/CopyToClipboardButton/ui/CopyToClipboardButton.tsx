@@ -3,14 +3,15 @@ import { Button } from 'primereact/button';
 
 interface CopyToClipboardButtonProps {
   text: string;
+  title?: string;
 }
 
-export const CopyToClipboardButton: FC<CopyToClipboardButtonProps> = ({ text }) => {
+export const CopyToClipboardButton: FC<CopyToClipboardButtonProps> = ({ text, title }) => {
   const [isCopied, setIsCopied] = useState(false);
 
   return (
     <Button
-      title='Скопировать'
+      title={title || 'Скопировать'}
       severity={isCopied ? 'success' : undefined}
       icon='pi pi-copy'
       onClick={() => {

@@ -5,6 +5,7 @@ import css from './StoryCard.module.scss';
 import { DateTime } from 'luxon';
 import { PrimeIcons } from 'primereact/api';
 import classNames from 'classnames';
+import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
 
 interface StoryCardProps {
   story: Story;
@@ -62,12 +63,20 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
               ({mskDate})
             </span>
           </div>
-          <i
-            onClick={(e) => {
-              removeStory(e, story);
-            }}
-            className={classNames(PrimeIcons.TIMES, css.card__block__tools__close)}
-          />
+          <div>
+            {story.content.link && (
+              <CopyToClipboardButton
+                text={story.content.link}
+                title='Скопировать ссылку на контент'
+              />
+            )}
+            <i
+              onClick={(e) => {
+                removeStory(e, story);
+              }}
+              className={classNames(PrimeIcons.TIMES, css.card__block__tools__close)}
+            />
+          </div>
         </div>
         {content()}
         {alert()}
