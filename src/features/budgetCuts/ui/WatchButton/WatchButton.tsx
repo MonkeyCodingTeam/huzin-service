@@ -12,7 +12,6 @@ interface Props {
 
 export const WatchButton: FC<Props> = ({ client, user }) => {
   const [toggle, { isLoading }] = useToggleWatcherMutation();
-
   const [isMine, setIsMine] = useState(client.is_mine);
 
   const handleWatch = (client: Client, user: User) => {

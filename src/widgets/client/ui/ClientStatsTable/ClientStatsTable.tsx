@@ -1,4 +1,4 @@
-import { Grid, Table } from 'antd';
+import { Grid, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
 import { DateTime } from 'luxon';
@@ -73,16 +73,16 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
       render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
-      title: 'CTR',
+      title: <Tooltip title={'Коэффициент кликабельности'}>CTR</Tooltip>,
       dataIndex: 'ctr',
     },
     {
-      title: 'CPC',
+      title: <Tooltip title={'Эффективная цена за клик'}>CPC</Tooltip>,
       dataIndex: 'effective_cost_per_click',
       render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
     {
-      title: 'CPM',
+      title: <Tooltip title={'Эффективная цена за тыс. показов'}>CPM</Tooltip>,
       dataIndex: 'effective_cost_per_mille',
       render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
