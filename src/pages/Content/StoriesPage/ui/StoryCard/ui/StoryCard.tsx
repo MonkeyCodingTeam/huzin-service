@@ -57,6 +57,12 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
     <div className={css.card}>
       <div className={css.card__block}>
         <div className={css.card__block__tools}>
+          {story.content.link && (
+            <CopyToClipboardButton
+              text={story.content.link}
+              title='Скопировать ссылку на контент'
+            />
+          )}
           <div className={css.card__block__date}>
             <span>{publishDate}</span>
             <span title='Время публикации по МСК' className={css.card__block__date_secondary}>
@@ -70,9 +76,6 @@ export const StoryCard: FC<StoryCardProps> = ({ story, removeStory }) => {
             className={classNames(PrimeIcons.TIMES, css.card__block__tools__close)}
           />
         </div>
-        {story.content.link && (
-          <CopyToClipboardButton text={story.content.link} title='Скопировать ссылку на контент' />
-        )}
         {content()}
         {alert()}
       </div>
