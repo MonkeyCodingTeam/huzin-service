@@ -45,8 +45,6 @@ export const BudgetCutsTable: FC<Props> = ({
     return clientsData.filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
   }, []);
 
-  console.log(selectedUser);
-
   const {
     isLoading,
     isFetching,

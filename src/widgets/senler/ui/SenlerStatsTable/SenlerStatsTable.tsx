@@ -84,7 +84,7 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
       title: 'Потрачено',
       dataIndex: 'spent',
       sorter: { compare: (a, b) => +a.spent - +b.spent, multiple: 1 },
-      render: (value) => truncValue(+value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'Подписчики',

@@ -35,8 +35,8 @@ const items: MenuProps['items'] = [
     icon: <DollarOutlined rev={undefined} />,
   },
   {
-    label: 'Настройки',
-    key: 'settings',
+    label: <Link to='/client-settings'>Настройки</Link>,
+    key: 'client-settings',
     icon: <SettingOutlined rev={undefined} />,
   },
 ];
