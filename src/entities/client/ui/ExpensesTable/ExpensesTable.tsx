@@ -1,8 +1,8 @@
 import { WarningOutlined } from '@ant-design/icons';
-import { Divider, Grid, Table, Tooltip, Typography } from 'antd';
+import { Grid, Table, Tooltip, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import classNames from 'classnames';
-import { FC, useCallback, useMemo } from 'react';
+import { FC, ReactNode, useCallback, useMemo } from 'react';
 import {
   balanceAlert,
   Client,
@@ -16,10 +16,6 @@ import {
   useGetClientsQuery,
   weekSpentAlert,
 } from '@entities/client';
-// пропс таблицы
-import { EditButton, WatchButton } from '@features/client/stats';
-// пропс таблицы
-import { useAppSelector } from '@shared/lib';
 import css from './ExpensesTable.module.scss';
 
 const { useBreakpoint } = Grid;
@@ -28,12 +24,12 @@ const { Text } = Typography;
 interface Props {
   clientSearch?: string;
   selectedUser?: number;
-  handleEdit: (client: Client) => void;
+  actions?: (client: Client) => ReactNode;
 }
 
-export const ExpensesTable: FC<Props> = ({ clientSearch, selectedUser, handleEdit }) => {
+export const ExpensesTable: FC<Props> = ({ clientSearch, selectedUser, actions }) => {
   const screens = useBreakpoint();
-  const user = useAppSelector((state) => state.user);
+
   const filterData = useCallback((data: Client[] = [], search: string = '', userId: number = 0) => {
     let clientsData = userId
       ? data.filter((item) => item.users.find((user) => user.id === userId))
@@ -56,20 +52,13 @@ export const ExpensesTable: FC<Props> = ({ clientSearch, selectedUser, handleEdi
   const columns = useMemo<ColumnsType<Client>>(() => {
     return [
       {
-        hidden: true,
         shouldCellUpdate: (prevRecord, nextRecord) => prevRecord != nextRecord,
         width: 68,
         title: '',
         fixed: 'left',
         align: 'center',
         render: (record) => {
-          return (
-            <div>
-              <EditButton handleEdit={handleEdit} record={record} />
-              <Divider type='vertical' style={{ margin: '2px' }} />
-              <WatchButton client={record} user={user} />
-            </div>
-          );
+          if (actions) return actions(record);
         },
       },
       {

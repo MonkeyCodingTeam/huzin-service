@@ -5,15 +5,15 @@ import { Client } from '@entities/client';
 
 interface Props {
   handleEdit: (record: Client) => void;
-  record: Client;
+  client: Client;
 }
 
-export const EditButton: FC<Props> = ({ handleEdit, record }) => {
+export const EditButton: FC<Props> = ({ handleEdit, client }) => {
   return (
     <Button
       title={'Редактировать'}
       type='text'
-      onClick={() => handleEdit(record)}
+      onClick={() => handleEdit(client)}
       size='small'
       shape='circle'
     >
