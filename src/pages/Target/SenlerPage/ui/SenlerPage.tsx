@@ -1,10 +1,10 @@
 import { Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
 import { ChangeEvent, useState } from 'react';
+import { SenlerStatsTable } from '@entities/client';
 import { SearchInput } from '@shared/ui';
 import { DateRange, DateRangePicker } from '@shared/ui/DateRangePicker';
 import { Transition } from '@shared/ui/Transition';
-import { SenlerStatsTable } from '@widgets/senler';
 import css from './SenlerPage.module.scss';
 
 const { Text } = Typography;

@@ -25,8 +25,8 @@ const items: MenuProps['items'] = [
     icon: <SolutionOutlined rev={undefined} />,
   },
   {
-    label: <Link to='/budget-cuts'>Открут</Link>,
-    key: 'budget-cuts',
+    label: <Link to='/expenses'>Расходы</Link>,
+    key: 'expenses',
     icon: <MonitorOutlined rev={undefined} />,
   },
   {
@@ -36,7 +36,7 @@ const items: MenuProps['items'] = [
   },
   {
     label: <Link to='/client-settings'>Настройки</Link>,
-    key: 'client-settings',
+    key: 'client.ts-settings',
     icon: <SettingOutlined rev={undefined} />,
   },
 ];

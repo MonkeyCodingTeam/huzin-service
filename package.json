@@ -13,7 +13,8 @@
     "type-check": "tsc",
     "lint:eslint": "eslint . --fix",
     "lint:stylelint": "stylelint \"**/*.scss\" --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@ant-design/icons": "5.2.5",
@@ -70,6 +71,7 @@
     "eslint-plugin-react": "7.32.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "husky": "8.0.3",
+    "patch-package": "8.0.0",
     "postcss": "8.4.21",
     "prettier": "2.8.4",
     "react-redux": "8.0.5",

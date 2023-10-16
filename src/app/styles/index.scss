@@ -11,6 +11,8 @@
 
 html,
 body {
+  scroll-behavior: smooth !important;
+
   overflow-y: scroll;
   overflow-y: overlay;
   display: flex;

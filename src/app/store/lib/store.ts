@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import logger from 'redux-logger';
-import { campaignTemplatesSlice } from '@entities/campaignTemplate';
-import { clientsSlice, selectedClientSlice } from '@entities/client';
+import { campaignTemplatesSlice } from '@entities/campaign';
+import {
+  clientsSlice,
+  clientsStatsSlice,
+  clientStatsSlice,
+  selectedClientSlice,
+  senlerStatsSlice,
+} from '@entities/client';
 import { userSlice, usersSlice } from '@entities/user';
 import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
-import { clientsStatsSlice, clientStatsSlice } from '@features/clientStats';
-import { senlerStatsSlice } from '@features/senlerStats';
 import { baseApi } from '@shared/api/baseApi';
 import { baseAuthApi } from '@shared/api/baseAuthApi';
 import { env } from '@shared/const';
