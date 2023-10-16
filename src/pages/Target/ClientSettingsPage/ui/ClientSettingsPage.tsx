@@ -1,11 +1,12 @@
-import { Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ClientSelect } from '@features/client/stats';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { ClientSettingsTabs } from 'widgets/ClientSettingsTabs';
+import { InfoBar } from '@widgets/settings';
+import { SettingsTabs } from '@widgets/settings/ui/SettingsTabs/SettingsTabs';
 import css from './ClientSettingsPage.module.scss';
 
 const { Text } = Typography;
@@ -28,8 +29,19 @@ const ClientSettingsPage = () => {
           <ClientSelect />
         </div>
       </section>
-      <section className={css.clientSettingsPage__content}>
-        <ClientSettingsTabs />
+      <section>
+        <Row gutter={16}>
+          <Col span={16}>
+            <div className={css.clientSettingsPage__content}>
+              <SettingsTabs />
+            </div>
+          </Col>
+          <Col span={8}>
+            <div className={css.clientSettingsPage__content}>
+              <InfoBar />
+            </div>
+          </Col>
+        </Row>
       </section>
     </Transition>
   );

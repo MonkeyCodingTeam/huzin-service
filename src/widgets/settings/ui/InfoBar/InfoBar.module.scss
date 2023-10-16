@@ -1,0 +1,40 @@
+.infoBar {
+  &__image {
+    width: 68px;
+    border-radius: 4px;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+
+    padding: 8px 6px;
+
+    border: 1px solid rgb(5 5 5 / 5.88%);
+    border-radius: 4px;
+  }
+
+  &__element {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__copyText {
+    cursor: pointer;
+
+    margin-left: 4px;
+
+    font-family: IBMPlexMono, serif;
+    font-size: 12px;
+
+    transition: color .1s ease-out;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+
+  }
+}
