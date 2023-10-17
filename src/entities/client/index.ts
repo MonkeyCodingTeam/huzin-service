@@ -13,6 +13,7 @@ export * from './lib/sumStatsForPeriod';
 export * from './lib/setExpansesTableAlerts';
 export * from './lib/expenses';
 
-export * from './ui/ClientStatsTable/ClientStatsTable';
-export * from './ui/SenlerStatsTable/SenlerStatsTable';
-export * from './ui/ExpensesTable/ExpensesTable';
+export { ClientStatsTable } from './ui/ClientStatsTable/ClientStatsTable';
+export { SenlerStatsTable } from './ui/SenlerStatsTable/SenlerStatsTable';
+export { ExpensesTable } from './ui/ExpensesTable/ExpensesTable';
+export { ClientInfo } from './ui/ClientInfo/ClientInfo';

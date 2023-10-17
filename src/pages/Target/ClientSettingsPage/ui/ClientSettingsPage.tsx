@@ -2,11 +2,12 @@ import { Col, Row, Typography } from 'antd';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { ClientInfo } from '@entities/client';
+import { TelegramBotInfo } from '@entities/telegram';
 import { ClientSelect } from '@features/client/stats';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { InfoBar } from '@widgets/settings';
-import { SettingsTabs } from '@widgets/settings/ui/SettingsTabs/SettingsTabs';
+import { SettingsTabs } from '@widgets/settings';
 import css from './ClientSettingsPage.module.scss';
 
 const { Text } = Typography;
@@ -38,7 +39,9 @@ const ClientSettingsPage = () => {
           </Col>
           <Col span={8}>
             <div className={css.clientSettingsPage__content}>
-              <InfoBar />
+              <ClientInfo>
+                <TelegramBotInfo />
+              </ClientInfo>
             </div>
           </Col>
         </Row>

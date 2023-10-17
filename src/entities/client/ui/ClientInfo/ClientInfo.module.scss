@@ -1,0 +1,20 @@
+.clientInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__title {
+    cursor: pointer;
+    transition: color .1s ease-out;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

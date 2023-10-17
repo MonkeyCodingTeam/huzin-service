@@ -6,6 +6,7 @@ import css from './SettingsTabs.module.scss';
 export const SettingsTabs = () => {
   return (
     <Tabs
+      style={{ height: 'calc(100vh - 14em' }}
       defaultActiveKey='1'
       items={[
         {
