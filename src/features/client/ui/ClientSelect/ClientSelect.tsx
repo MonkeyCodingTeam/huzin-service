@@ -3,7 +3,8 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { Client, setSelectedClient, useGetClientsQuery } from '@entities/client';
+import { Client, useGetClientsQuery } from '@entities/client';
+import { setSelectedClient } from '@features/client';
 import css from './ClientSelect.module.scss';
 
 const { useBreakpoint } = Grid;
@@ -57,7 +58,7 @@ export const ClientSelect = () => {
     if (!values.length) return;
     return values.map((client) => {
       // Указываются условия через ||
-      const haveCriticalError = !client.group_id;
+      const haveCriticalError = !client.group_id || !client.entrepreneur;
       const haveError = !client.has_telegram;
 
       return (

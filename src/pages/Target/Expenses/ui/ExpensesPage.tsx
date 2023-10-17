@@ -1,7 +1,7 @@
 import { Divider, Typography } from 'antd';
 import { ChangeEvent, useState } from 'react';
 import { Client, ExpensesTable } from '@entities/client';
-import { EditButton, WatchButton } from '@features/client/stats';
+import { EditButton, WatchButton } from '@features/client';
 import { useAppSelector } from '@shared/lib';
 import { SearchInput } from '@shared/ui';
 import { Transition } from '@shared/ui/Transition';

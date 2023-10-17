@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import { FC, useEffect, useState } from 'react';
 import { Client } from '@entities/client';
 import { User } from '@entities/user';
-import { useToggleWatcherMutation } from '@features/client/stats';
+import { useToggleWatcherMutation } from '@features/client';
 
 interface Props {
   client: Client;

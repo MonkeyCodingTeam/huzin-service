@@ -1,5 +1,5 @@
 import { Client, ClientAPI } from '@entities/client';
-import { ClientUpdateReq, WatcherReq } from '@features/client/stats';
+import { ClientUpdateReq, setSelectedClient, WatcherReq } from '@features/client';
 import { baseApi } from '@shared/api/baseApi';
 
 export const UpdateClientAPI = baseApi.injectEndpoints({
@@ -41,15 +41,14 @@ export const UpdateClientAPI = baseApi.injectEndpoints({
       }),
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
         try {
-          await queryFulfilled;
+          const { data } = await queryFulfilled;
+          dispatch(setSelectedClient(data));
           dispatch(
-            ClientAPI.util.updateQueryData('getClients', null, (draft) => {
-              // update
-              const client = draft?.find((item) => item?.id === args?.id);
-              if (!client) return;
-              client.critical_balance = args.critical_balance;
-              client.month_plan = args.month_plan;
-              client.budget_adjustment = args.budget_adjustment;
+            ClientAPI.util.updateQueryData('getClients', null, (clients) => {
+              return clients.map((client) => {
+                if (client.id === data.id) return data;
+                return client;
+              });
             }),
           );
         } catch (error) {

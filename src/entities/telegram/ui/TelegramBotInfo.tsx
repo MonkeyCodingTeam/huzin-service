@@ -30,15 +30,14 @@ export const TelegramBotInfo = () => {
             alt='telegram icon'
           />
           <div className={css.telegram__status}>
-            <Badge status={client.has_telegram ? 'success' : 'warning'} />
-            <Text className={css.telegram__statusText}>Бот</Text>
+            <Badge status={client.has_telegram ? 'success' : 'warning'} text={'Бот'} />
           </div>
         </div>
       </Tooltip>
 
       <div className={css.telegram__container}>
         <div className={css.telegram__element}>
-          <Text className={css.telegram__text}>Telegram Бот:</Text>
+          <Text>Telegram Бот:</Text>
           <Text
             className={classNames(css.telegram__text, css.telegram__copyText)}
             onClick={() => handleOnClick('huzin_notify_bot')}
@@ -48,7 +47,7 @@ export const TelegramBotInfo = () => {
         </div>
 
         <div className={css.telegram__element}>
-          <Text className={css.telegram__text}>Добавление бота:</Text>
+          <Text>Добавление бота:</Text>
           <Text
             className={classNames(css.telegram__text, css.telegram__copyText)}
             onClick={() => handleOnClick(`/register ${client.id}`)}
@@ -58,7 +57,7 @@ export const TelegramBotInfo = () => {
         </div>
 
         <div className={css.telegram__element}>
-          <Text className={css.telegram__text}>Удаление бота:</Text>
+          <Text>Удаление бота:</Text>
           <Text
             className={classNames(css.telegram__text, css.telegram__copyText)}
             onClick={() => handleOnClick(`/forget ${client.id}`)}

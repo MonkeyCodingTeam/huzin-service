@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ClientStatsTable } from '@entities/client';
 import { CampaignTemplateSelect } from '@features/campaign';
-import { ClientSelect } from '@features/client/stats';
+import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
 import css from './ClientsPage.module.scss';

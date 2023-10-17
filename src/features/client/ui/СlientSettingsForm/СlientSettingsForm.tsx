@@ -1,21 +1,24 @@
-import { Button, Divider, Form, Input, InputNumber } from 'antd';
+import { Button, Divider, Form, InputNumber } from 'antd';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import css from './GeneralSettingsForm.module.scss';
+import { useUpdateExpensesMutation } from '@features/client';
+import css from './СlientSettingsForm.module.scss';
 
-export const GeneralSettingsForm = () => {
+export const ClientSettingsForm = () => {
+  const [update] = useUpdateExpensesMutation();
   const [form] = Form.useForm();
   const client = useSelector((state: RootState) => state.selectedClient);
 
   const onFormSubmit = () => {
     if (!client) {
-      console.log('Error, check client.ts exist: ', client);
+      console.log('Error, check client exist: ', client);
       return;
     }
     form
       .validateFields()
       .then((values) => {
-        console.log(values);
+        Object.keys(values).forEach((k) => values[k] == null && delete values[k]);
+        update({ id: client.id, ...values });
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -36,15 +39,27 @@ export const GeneralSettingsForm = () => {
       onFinish={onFormSubmit}
       autoComplete='off'
     >
-      <Divider orientation='left'>Счет</Divider>
-      <Form.Item name={'entrepreneur'} label='Владелец' rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
+      <Divider orientation='left' style={{ marginTop: '0' }}>
+        Счет
+      </Divider>
+
       <Form.Item name={'basic_payment'} label='Сумма для оплаты'>
-        <InputNumber placeholder={'Введите сумму'} controls={false} style={{ width: '100%' }} />
+        <InputNumber
+          placeholder={
+            client.entrepreneur
+              ? 'Введите сумму'
+              : 'Поле заблокировано, так как не указана организация'
+          }
+          controls={false}
+          style={{ width: '100%' }}
+          disabled={!client.entrepreneur}
+        />
       </Form.Item>
 
-      <Divider orientation='left'>Расходы</Divider>
+      <Divider orientation='left' style={{ marginTop: '0' }}>
+        Расходы
+      </Divider>
+
       <Form.Item
         name='month_plan'
         label='План на месяц'
@@ -68,6 +83,7 @@ export const GeneralSettingsForm = () => {
           controls={false}
         />
       </Form.Item>
+
       <Form.Item
         name='budget_adjustment'
         label='Корректировка бюджета'
@@ -80,10 +96,19 @@ export const GeneralSettingsForm = () => {
         />
       </Form.Item>
 
-      <Form.Item>
-        <Button type='primary' htmlType='submit'>
-          Сохранить
-        </Button>
+      <Form.Item shouldUpdate>
+        {() => (
+          <Button
+            type='primary'
+            htmlType='submit'
+            disabled={
+              !form.isFieldsTouched(true) ||
+              !!form.getFieldsError().filter(({ errors }) => errors.length).length
+            }
+          >
+            Сохранить
+          </Button>
+        )}
       </Form.Item>
     </Form>
   );

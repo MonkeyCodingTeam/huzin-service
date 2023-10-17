@@ -5,19 +5,9 @@ import {
   ClientsStatsRes,
   ClientStatsAPI,
   ClientStatsRes,
-  initClientState,
   SenlerStatsAPI,
   SenlerStatsRes,
 } from '@entities/client';
-
-export const selectedClientSlice = createSlice({
-  name: 'selectedClient',
-  initialState: initClientState,
-  reducers: {
-    setSelectedClient: (state, { payload }) => payload,
-  },
-  extraReducers: {},
-});
 
 export const clientsSlice = createSlice({
   name: 'clients',
@@ -70,5 +60,3 @@ export const senlerStatsSlice = createSlice({
     builder.addMatcher(SenlerStatsAPI.endpoints.getSenlerStats.matchRejected, () => []);
   },
 });
-
-export const { setSelectedClient } = selectedClientSlice.actions;

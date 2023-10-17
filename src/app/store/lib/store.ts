@@ -6,11 +6,11 @@ import {
   clientsSlice,
   clientsStatsSlice,
   clientStatsSlice,
-  selectedClientSlice,
   senlerStatsSlice,
 } from '@entities/client';
 import { userSlice, usersSlice } from '@entities/user';
 import { invalidateAccessTokenListener } from '@features/auth/invalidateAccessToken/model/listener';
+import { selectedClientSlice } from '@features/client';
 import { baseApi } from '@shared/api/baseApi';
 import { baseAuthApi } from '@shared/api/baseAuthApi';
 import { env } from '@shared/const';

@@ -1,12 +1,13 @@
-import { Tabs } from 'antd';
+import { Button, Form, Input, Space, Tabs } from 'antd';
 import React from 'react';
-import { GeneralSettingsForm } from '@features/client/settings';
+import { ClientSettingsForm } from '@features/client';
 import css from './SettingsTabs.module.scss';
 
 export const SettingsTabs = () => {
+  const [form] = Form.useForm();
   return (
     <Tabs
-      style={{ height: 'calc(100vh - 14em' }}
+      className={css.tabs}
       defaultActiveKey='1'
       items={[
         {
@@ -14,15 +15,36 @@ export const SettingsTabs = () => {
           key: '1',
           children: (
             <div className={css.tabs__element}>
-              <GeneralSettingsForm />
+              <ClientSettingsForm />
             </div>
           ),
         },
         {
           label: 'Настройки группы',
           key: '2',
-          children: 'Tab 2',
-          disabled: true,
+          children: (
+            <Form form={form} onFinish={() => console.log('submited')}>
+              <Space.Compact style={{ width: '100%' }}>
+                <Form.Item
+                  style={{ width: '100%' }}
+                  name={'link'}
+                  rules={[
+                    {
+                      pattern: /vk.com\/\w+/,
+                      message: 'Некорректный формат ссылки',
+                    },
+                    {
+                      required: true,
+                      message: 'Ссылка не должна быть пустой',
+                    },
+                  ]}
+                >
+                  <Input placeholder='Ссылка на группу' />
+                </Form.Item>
+                <Button type={'primary'} htmlType='submit' icon={'+'} />
+              </Space.Compact>
+            </Form>
+          ),
         },
       ]}
     />

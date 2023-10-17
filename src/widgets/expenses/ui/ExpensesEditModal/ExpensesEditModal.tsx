@@ -1,7 +1,7 @@
 import { Form, InputNumber, Modal } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Client } from '@entities/client';
-import { useUpdateExpensesMutation } from '@features/client/stats';
+import { useUpdateExpensesMutation } from '@features/client';
 import css from './ExpensesEditModal.module.scss';
 
 interface Props {
