@@ -5,6 +5,7 @@ import { Field, Form, Formik, FormikValues } from 'formik';
 import { confirmPopup } from 'primereact/confirmpopup';
 import css from './GroupSettings.module.scss';
 import { Button } from 'primereact/button';
+import { GroupTitle } from '@entities/group/ui/GroupTitle/GroupTitle';
 
 interface GroupSettingsProps {
   group: Group;
@@ -30,14 +31,7 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave, ope
   return (
     <div className={css.groupItem}>
       <div className={css.groupItem__header}>
-        <a
-          target={'_blank'}
-          href={`https://vk.com/public${group.id}`}
-          className={css.groupItem__header__title}
-          rel='noreferrer'
-        >
-          {group.name}
-        </a>
+        <GroupTitle group={group} />
         <Button
           type='button'
           icon='pi pi-trash'

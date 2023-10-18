@@ -1,0 +1,8 @@
+.root {
+  display: flex;
+  gap: 8px;
+
+  &__title {
+    font-size: var(--large-font-size);
+  }
+}

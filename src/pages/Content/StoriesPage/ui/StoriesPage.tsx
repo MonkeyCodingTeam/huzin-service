@@ -12,6 +12,7 @@ import { Story } from '@entities/story';
 import { StoryCard } from '@pages/Content/StoriesPage/ui/StoryCard';
 import { Toast } from 'primereact/toast';
 import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup';
+import { GroupTitle } from '@entities/group/ui/GroupTitle/GroupTitle';
 
 const StoriesPage = () => {
   const selectedGroup = useAppSelector((state: RootState) => state.selectedGroup);
@@ -108,7 +109,7 @@ const StoriesPage = () => {
       />
       <div className={css.stories}>
         <div className={css.stories__header}>
-          <span className={css.stories__header__title}>{selectedGroup?.name}</span>
+          <GroupTitle group={selectedGroup} />
           <div className={css.stories__header__tools}>
             <Button label='Добавить сторис' severity='success' onClick={() => setOpenModal(true)} />
             <a
