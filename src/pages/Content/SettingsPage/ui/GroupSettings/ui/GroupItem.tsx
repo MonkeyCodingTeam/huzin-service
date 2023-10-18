@@ -30,7 +30,14 @@ export const GroupItem: FC<GroupSettingsProps> = ({ group, onDelete, onSave, ope
   return (
     <div className={css.groupItem}>
       <div className={css.groupItem__header}>
-        <span className={css.groupItem__header__title}>{group.name}</span>
+        <a
+          target={'_blank'}
+          href={`https://vk.com/public${group.id}`}
+          className={css.groupItem__header__title}
+          rel='noreferrer'
+        >
+          {group.name}
+        </a>
         <Button
           type='button'
           icon='pi pi-trash'
