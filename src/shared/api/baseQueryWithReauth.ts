@@ -4,8 +4,10 @@ import {
 } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { type FetchBaseQueryMeta } from '@reduxjs/toolkit/dist/query/fetchBaseQuery';
 import type { FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { message } from 'antd';
 import { invalidateAccessToken } from '@shared/api/invalideTokenEvent';
 import { baseQuery } from './baseQuery';
+import { isFetchBaseQueryError } from './isFetchBaseQueryError';
 
 const AUTH_ERROR_CODES = new Set([401]);
 
@@ -15,13 +17,15 @@ export const baseQueryWithReauth = async (
   extraOptions: {},
 ): Promise<QueryReturnValue<unknown, FetchBaseQueryError, FetchBaseQueryMeta>> => {
   const result = await baseQuery(args, api, extraOptions);
+  const { error } = result;
 
-  if (
-    result.error &&
-    typeof result.error?.status === 'number' &&
-    AUTH_ERROR_CODES.has(result.error.status)
-  ) {
-    api.dispatch(invalidateAccessToken);
+  if (error && typeof error?.status === 'number' && AUTH_ERROR_CODES.has(error.status)) {
+    api.dispatch(invalidateAccessToken());
+  }
+
+  if (isFetchBaseQueryError(error) && error.data?.message) {
+    console.warn('We got a rejected action!', error);
+    message.error(error.data.message);
   }
 
   return result;

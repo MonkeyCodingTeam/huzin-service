@@ -1,31 +1,45 @@
-import { IClient, IClientStatsResp, IStatsReq } from '@entities/client';
-import { setPeriodDate } from '@entities/client/lib/setPeriodDate';
+import { Client, ClientUpdateReq } from '@entities/client';
 import { baseApi } from '@shared/api/baseApi';
+import { CLIENT_TAG } from '@shared/api/tags';
 
-const STAT_URL = 'statistic/client';
 const collator = new Intl.Collator('ru', { caseFirst: 'upper' });
 
 export const ClientAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getClients: builder.query<IClient[], null>({
+    getClients: builder.query<Client[], null>({
       query: () => ({
         url: 'target/client',
         method: 'GET',
       }),
-      transformResponse: (response: IClient[]) =>
+      providesTags: [CLIENT_TAG],
+      transformResponse: (response: Client[]) =>
         response.sort((a, b) => collator.compare(a.name, b.name)),
     }),
-    getClientStats: builder.query<IClientStatsResp[], IStatsReq>({
-      query: (params) => ({
-        url: `target/${STAT_URL}/${params.id}/template`,
-        method: 'GET',
-        params,
+    updateClient: builder.mutation<Client, ClientUpdateReq>({
+      query: (body) => ({
+        url: `target/client/${body.id}`,
+        method: 'PATCH',
+        body,
       }),
-      transformResponse: (response: IClientStatsResp[], fetch, request) => {
-        return response.map((client) => setPeriodDate(client, request.period));
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        try {
+          await queryFulfilled;
+          dispatch(
+            ClientAPI.util.updateQueryData('getClients', null, (draft) => {
+              // update
+              const client = draft?.find((item) => item?.id === args?.id);
+              if (!client) return;
+              client.critical_balance = args.critical_balance;
+              client.month_plan = args.month_plan;
+              client.budget_adjustment = args.budget_adjustment;
+            }),
+          );
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
   }),
 });
 
-export const { useGetClientsQuery, useGetClientStatsQuery, useLazyGetClientStatsQuery } = ClientAPI;
+export const { useGetClientsQuery, useLazyGetClientsQuery, useUpdateClientMutation } = ClientAPI;

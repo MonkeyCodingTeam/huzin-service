@@ -1,14 +1,14 @@
+import { Layout } from 'antd';
 import { LoginForm } from '@features/auth/login';
 import { Logo } from '@shared/ui';
-import { Transition } from 'shared/ui/Transition';
 import css from './LoginPage.module.scss';
 
 const LoginPage = () => {
   return (
-    <Transition className={css.container}>
+    <Layout className={css.container}>
       <Logo size='xl' />
       <LoginForm />
-    </Transition>
+    </Layout>
   );
 };
 

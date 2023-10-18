@@ -1,17 +1,19 @@
 import { Button } from 'antd';
 import { useCallback } from 'react';
-import { logoutThunk } from '@features/auth/logout';
-import { useAppDispatch } from '@shared/lib';
+import { useLazyCsrfQuery, useLogoutMutation } from '@entities/user';
 
 export const LogoutButton = () => {
-  const dispatch = useAppDispatch();
+  const [csrf] = useLazyCsrfQuery();
+  const [logout, { isLoading }] = useLogoutMutation();
 
   const handleClick = useCallback(() => {
-    dispatch(logoutThunk());
+    csrf(null).then(async () => {
+      await logout(null);
+    });
   }, []);
 
   return (
-    <Button type='text' onClick={handleClick}>
+    <Button type='text' onClick={handleClick} loading={isLoading}>
       Выйти
     </Button>
   );

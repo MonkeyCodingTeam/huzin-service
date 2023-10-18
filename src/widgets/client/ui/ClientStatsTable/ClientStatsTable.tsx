@@ -1,36 +1,51 @@
-import { Table } from 'antd';
+import { Grid, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import { DateTime } from 'luxon';
-import { useEffect } from 'react';
+import { FC, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IStatsReq, IStatsResp, useLazyGetClientStatsQuery } from '@entities/client';
-import { sumStatsForPeriod } from '@widgets/client/lib/sumStatsForPeriod';
-import css from './ClientsStatsTable.module.scss';
+import { ClientStatsReq, StatsRes, useLazyGetClientStatsQuery } from '@features/clientStats';
+import { toFixed } from '@shared/lib/toFixed';
+import { truncValue } from '@shared/lib/truncValue';
+import { sumStatsForPeriod } from '@widgets/client';
 
-const semiAnnualReport: IStatsReq = {
+const { useBreakpoint } = Grid;
+
+const semiAnnualReport: ClientStatsReq = {
   id: 0,
   period: 'week',
-  date_from: DateTime.now().minus({ month: 5 }).toISODate(),
-  date_to: DateTime.now().toISODate(),
+  date_from: dayjs().subtract(6, 'month').format(),
+  date_to: dayjs().format(),
 };
 
-export const ClientStatsTable = () => {
+interface Props {
+  selectedTemplate: number | null | undefined;
+}
+
+export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
+  const screens = useBreakpoint();
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
   const [trigger, result] = useLazyGetClientStatsQuery();
   const { isLoading, isFetching, data = [] } = result;
-  const truncValue = (value: number) => `${value ? Math.trunc(value).toLocaleString() : '-'}`;
-  const toFixedValue = (value: number) => `${value ? +value.toFixed(1).toLocaleString() : '-'}`;
+  const dataSource = sumStatsForPeriod(data);
+
   const toDateFormat = (value: string) =>
     `${DateTime.fromFormat(value, 'yyyy-MM-dd').toFormat('dd.MM.yyyy')}`;
 
   useEffect(() => {
     if (selectedClientId) {
-      trigger({ ...semiAnnualReport, id: selectedClientId });
+      trigger(
+        {
+          ...semiAnnualReport,
+          id: selectedClientId,
+          company_template_ids: selectedTemplate ? [selectedTemplate] : undefined,
+        },
+        true,
+      );
     }
-  }, [selectedClientId]);
+  }, [selectedClientId, selectedTemplate]);
 
-  const dataSource = sumStatsForPeriod(data);
-  const columns: ColumnsType<IStatsResp> = [
+  const columns: ColumnsType<StatsRes> = [
     {
       title: 'Дата',
       dataIndex: 'period_date',
@@ -43,19 +58,19 @@ export const ClientStatsTable = () => {
       title: 'Расход',
       dataIndex: 'spent',
       sorter: (a, b) => +a.spent - +b.spent,
-      render: (value) => truncValue(value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'Клики',
       dataIndex: 'clicks',
       sorter: (a, b) => +a.clicks - +b.clicks,
-      render: (value) => truncValue(value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'Охват',
       dataIndex: 'impressions',
       sorter: (a, b) => +a.impressions - +b.impressions,
-      render: (value) => truncValue(value),
+      render: (value) => (value ? truncValue(+value) : '-'),
     },
     {
       title: 'CTR',
@@ -64,24 +79,31 @@ export const ClientStatsTable = () => {
     {
       title: 'CPC',
       dataIndex: 'effective_cost_per_click',
-      render: (value) => toFixedValue(+value),
+      render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
     {
       title: 'CPM',
       dataIndex: 'effective_cost_per_mille',
-      render: (value) => toFixedValue(+value),
+      render: (value) => (value ? toFixed(+value, 1) : '-'),
     },
   ];
 
   return (
     <Table
-      scroll={{ x: 658, y: 768 }}
-      className={css.clientsStats_table}
+      // ширина таблицы
+      scroll={{
+        x: screens.lg ? 1024 : screens.xs ? 612 : 768,
+        y: screens.lg
+          ? 'calc(100vh - 18em)'
+          : screens.xs
+          ? 'calc(100vh - 13em)'
+          : 'calc(100vh - 14em)',
+      }}
       rowKey='day_from'
       loading={isLoading || isFetching}
       dataSource={dataSource}
       columns={columns}
-      size='middle'
+      size={screens.xs ? 'small' : 'middle'}
       pagination={false}
       showSorterTooltip={false}
     />

@@ -1,6 +1,6 @@
-import { IClient, IClientStatsResp } from '@entities/client';
+import { Client } from '@entities/client';
 
-export const initClientState: IClient = {
+export const initClientState: Client = {
   id: 0,
   name: '',
   entrepreneur: '',
@@ -22,25 +22,6 @@ export const initClientState: IClient = {
   low_balance_at: null,
   paid_at: null,
   zero_balance_at: null,
-};
-
-// export const initStatState: IStatResp = {
-//   clicks: 0,
-//   ctr: 0,
-//   day_from: '',
-//   day_to: '',
-//   month: '',
-//   period: '',
-//   effective_cost_per_click: 0,
-//   effective_cost_per_mille: 0,
-//   impressions: 0,
-//   reach: 0,
-//   join_rate: 0,
-//   spent: 0,
-// };
-
-export const initClientStatsState: IClientStatsResp = {
-  id: 0,
-  type: 'client',
-  stats: [],
+  companies: [],
+  users: [],
 };

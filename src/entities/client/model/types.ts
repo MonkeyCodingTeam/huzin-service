@@ -1,4 +1,4 @@
-export interface IClient extends Model {
+export interface Client extends Model {
   name: string;
   balance: number;
   critical_balance: number;
@@ -22,32 +22,25 @@ export interface IClient extends Model {
   basic_payment?: number;
   group_id?: number;
   is_mine?: boolean;
+  companies: Company[];
+  users: User[];
 }
 
-export interface IStatsReq {
-  id: number;
-  period: 'day' | 'week' | 'month' | 'year';
-  date_from: string;
-  date_to: string;
+// TODO Вопрос юзерам, нужно ли что-то менять в моделях
+
+export interface User extends Model {
+  name: string;
 }
 
-export interface IStatsResp {
-  clicks: number;
-  ctr: number;
-  day_from: string;
-  day_to: string;
-  month: string;
-  period_date: string;
-  effective_cost_per_click: number;
-  effective_cost_per_mille: number;
-  impressions: number;
-  reach: number;
-  join_rate: number;
-  spent: number;
+export interface Company extends Model {
+  name: string;
+  client_id: Client['id'];
+  status: 0 | 1 | 2;
+  company_template_id?: number;
 }
 
-export interface IClientStatsResp {
-  id: IClient['id'];
-  stats: IStatsResp[];
-  type: 'ad' | 'campaign' | 'client' | 'office';
+export interface ClientUpdateReq extends Model {
+  critical_balance: number;
+  month_plan: number;
+  budget_adjustment: number;
 }

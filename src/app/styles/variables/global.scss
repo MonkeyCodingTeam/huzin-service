@@ -6,10 +6,14 @@
   --light-dark-color: #8a8e98;
   --secondary-color: #b3b9c4;
   --background-color: #f9f7f6;
-  --danger-color: #fdac9a;
-  --warning-color: #ffcda2;
-  --low-warning-color: #fff1b8;
-  --success-color: #7fa366;
+  --danger-color-fill: #fdac9a;
+  --warning-color-fill: #ffcda2;
+  --low-warning-color-fill: #fff1b8;
+  --success-color-fill: #7fa366;
+  --danger-color: #ff4d4f;
+  --warning-color: #faad14;
+  --success-color: #52c41a;
+
 
   // fonts
   --font-family: 'Roboto';
@@ -32,4 +36,12 @@
 
   // shadows
   --shadow: 0px 0px 8px 0px rgb(34 60 80 / 20%);
+
+  // breakpoint width
+  --xs: 480px;
+  --sm: 576px;
+  --md: 768px;
+  --lg: 992px;
+  --xl: 1200px;
+  --xxl: 1600px;
 }
