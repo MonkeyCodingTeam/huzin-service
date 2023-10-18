@@ -4,6 +4,7 @@ import { useGetMeQuery } from '@entities/user';
 import { LogoutButton } from '@features/auth/logout/ui/LogoutButton';
 import { FullscreenLoader, LayoutMenu } from '@shared/ui';
 import css from './AuthLayout.module.scss';
+import { Suspense } from 'react';
 
 const { Content } = Layout;
 
@@ -24,7 +25,9 @@ export const AuthLayout = () => {
     <Layout className={css.layout}>
       <LayoutMenu profileBlock={<LogoutButton />} />
       <Content className={css.layout__content}>
-        <Outlet />
+        <Suspense fallback={<FullscreenLoader />}>
+          <Outlet />
+        </Suspense>
       </Content>
     </Layout>
   );

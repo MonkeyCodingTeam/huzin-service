@@ -2,6 +2,8 @@ import { Layout } from 'antd';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAppSelector } from '@shared/lib';
 import css from './GuestLayout.module.scss';
+import { Suspense } from 'react';
+import { FullscreenLoader } from '@shared/ui';
 
 export const GuestLayout = () => {
   const { id } = useAppSelector((state) => state.user);
@@ -12,7 +14,9 @@ export const GuestLayout = () => {
 
   return (
     <Layout className={css.layout}>
-      <Outlet />
+      <Suspense fallback={<FullscreenLoader />}>
+        <Outlet />
+      </Suspense>
     </Layout>
   );
 };

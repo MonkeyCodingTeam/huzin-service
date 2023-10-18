@@ -1,10 +1,9 @@
 import '@app/styles/index.scss';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider as ReduxProvider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
 import { appStore } from '@app/store';
-import { FullscreenLoader } from '@shared/ui';
 import { AntdProvider } from './providers/antdProvider';
 import { appRouter } from './providers/appRouter';
 
@@ -13,11 +12,9 @@ export function App() {
     <React.StrictMode>
       <ReduxProvider store={appStore}>
         <HelmetProvider>
-          <Suspense fallback={<FullscreenLoader />}>
-            <AntdProvider>
-              <RouterProvider router={appRouter} />
-            </AntdProvider>
-          </Suspense>
+          <AntdProvider>
+            <RouterProvider router={appRouter} />
+          </AntdProvider>
         </HelmetProvider>
       </ReduxProvider>
     </React.StrictMode>
