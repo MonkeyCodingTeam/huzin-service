@@ -1,11 +1,10 @@
 import { Layout } from 'antd';
+import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useGetMeQuery } from '@entities/user';
 import { useAppSelector } from '@shared/lib';
 import { FullscreenLoader } from '@shared/ui';
 import css from './GuestLayout.module.scss';
-import { Suspense } from 'react';
-import { FullscreenLoader } from '@shared/ui';
 
 export const GuestLayout = () => {
   const { isLoading, isSuccess } = useGetMeQuery(null);

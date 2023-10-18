@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
+import { Suspense } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useGetMeQuery } from '@entities/user';
 import { LogoutButton } from '@features/auth/logout/ui/LogoutButton';
 import { FullscreenLoader, LayoutMenu } from '@shared/ui';
 import css from './AuthLayout.module.scss';
-import { Suspense } from 'react';
 
 const { Content } = Layout;
 
