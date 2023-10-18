@@ -61,7 +61,9 @@ export const AddStoriesDialog: FC<AddStoriesDialogProps> = ({
   useEffect(() => {
     setStory((prevState) => ({
       ...prevState,
-      publish_date: prevState.publish_date.set({ hour: DateTime.now().hour + group.timezone }),
+      publish_date: prevState.publish_date.set({
+        hour: DateTime.now().hour + (group.timezone || 0),
+      }),
     }));
   }, [group]);
 

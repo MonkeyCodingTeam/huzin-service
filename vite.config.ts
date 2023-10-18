@@ -19,6 +19,7 @@ export default ({ mode }) => {
       __APP_API_URL__: JSON.stringify(process.env.VITE_APP_API_URL),
       __APP_DOMAIN__: JSON.stringify(process.env.VITE_APP_DOMAIN),
       __VK_API_URL__: JSON.stringify(process.env.VITE_VK_API_URL),
+      __VK_CLIENT_ID__: JSON.stringify(process.env.VITE_VK_CLIENT_ID),
       __VK_TOKEN__: JSON.stringify(process.env.VITE_VK_TOKEN),
       __VK_AGENCY__: JSON.stringify(process.env.VITE_VK_AGENCY),
       __TELEGRAM_BOT__: JSON.stringify(process.env.VITE_TELEGRAM_BOT),

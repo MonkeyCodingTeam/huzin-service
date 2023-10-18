@@ -14,7 +14,7 @@ import { InputText } from 'primereact/inputtext';
 import classNames from 'classnames';
 import { CopyToClipboardButton } from '@shared/ui/CopyToClipboardButton';
 import { ROUTES } from '@app/providers/RouterProvider';
-import { MonitoringTypeSelect } from '@feature/client/monitoring_type';
+import { MonitoringTypeSelect } from '@features/client/monitoring_type';
 
 export const ClientSettings = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -92,7 +92,6 @@ export const ClientSettings = () => {
     );
   };
 
-  // @ts-ignore
   return (
     <div className={css.container}>
       <ListBox

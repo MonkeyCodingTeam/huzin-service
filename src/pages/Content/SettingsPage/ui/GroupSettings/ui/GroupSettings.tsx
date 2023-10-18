@@ -5,12 +5,11 @@ import { useNavigate, useParams } from 'react-router';
 import { ROUTES } from '@app/providers/RouterProvider';
 import { ListBox, ListBoxChangeEvent } from 'primereact/listbox';
 import { GroupItem } from '@pages/Content/SettingsPage/ui/GroupSettings';
-import { Field, Form, Formik, FormikHelpers, FormikValues } from 'formik';
-import { InputText } from 'primereact/inputtext';
-import { Button } from 'primereact/button';
+import { FormikValues } from 'formik';
 import css from './GroupSettings.module.scss';
 import { ConfirmPopup } from 'primereact/confirmpopup';
 import { Toast } from 'primereact/toast';
+import { GroupAdd } from '@features/group';
 
 export const GroupSettings = () => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -22,7 +21,7 @@ export const GroupSettings = () => {
   const toast = useRef<Toast>(null);
 
   useEffect(() => {
-    GroupApi.getAll().then((res) => {
+    GroupApi.getAll({ content_only: true }).then((res) => {
       setGroups(res.data);
       if (!res.data.length || selectedGroup.id) {
         return;
@@ -49,58 +48,27 @@ export const GroupSettings = () => {
   };
 
   const handleGroupDelete = (groupId: Group['id']) => {
-    GroupApi.delete(groupId).then(({ data }) => {
+    GroupApi.delete(groupId, { from_content: true }).then(({ data }) => {
       dispatch(selectGroup(groups[0]));
       setGroups((prevState) => prevState.filter((group) => group.id !== data.id));
     });
   };
 
-  const handleSubmit = (value: FormikValues, helpers: FormikHelpers<{ link: string }>) => {
-    const screenName = value.link.match(/vk.com\/(?<screen_name>[\w_.]+)/)?.groups?.screen_name;
-
-    if (screenName) {
-      GroupApi.getBy({
-        group_id: screenName,
-        fields: ['city', 'site'],
-      }).then((res) => {
-        const { id, city, place, screen_name, name, photo_200, site } = res.data.groups[0];
-        const group = {
-          id,
-          name,
-          site,
-          screen_name,
-          photo: photo_200,
-          link: `https://vk.com/${screenName}`,
-          city: city?.title,
-        };
-
-        GroupApi.create(group).then((res) => {
-          const newGroup = res.data;
-          setGroups((prevState) => {
-            if (!prevState.find((item) => item.id === newGroup.id)) {
-              prevState.push(newGroup);
-              prevState.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-            }
-            dispatch(selectGroup(res.data));
-            return prevState;
-          });
-          helpers.setValues({ link: '' });
-        });
-      });
-    }
+  const updateClients = (group: Group) => {
+    setGroups((prevState) =>
+      prevState.map((item) => {
+        if (item.id === group.id) {
+          dispatch(selectGroup(group));
+          return group;
+        }
+        return item;
+      }),
+    );
   };
 
   const handleSaveGroup = (values: FormikValues) => {
     GroupApi.update(selectedGroup.id, values).then(({ data }) => {
-      setGroups((prevState) =>
-        prevState.map((group) => {
-          if (group.id === data.id) {
-            return data;
-          }
-          return group;
-        }),
-      );
-      dispatch(selectGroup(data));
+      updateClients(data);
       toast.current!.show({
         severity: 'success',
         detail: 'Сохранено!',
@@ -121,20 +89,10 @@ export const GroupSettings = () => {
       />
       <ConfirmPopup />
       <div className={css.container__left}>
-        <Formik initialValues={{ link: '' }} onSubmit={handleSubmit}>
-          <Form className='p-inputgroup'>
-            <Field as={InputText} name='link' placeholder='Ссылка на группу' />
-            <Button
-              title='Добавить группу'
-              icon='pi pi-plus'
-              type='submit'
-              className='p-button-success'
-            />
-          </Form>
-        </Formik>
+        <GroupAdd afterAdd={updateClients} />
         <ListBox
-          listStyle={{ height: 'calc(100% - 48px)', overflow: 'auto' }}
-          style={{ height: 'calc(100% - 48px)' }}
+          listStyle={{ height: 'calc(100% - 60px)', overflow: 'auto' }}
+          style={{ height: 'calc(100% - 60px)' }}
           value={selectedGroup.id}
           filter
           filterPlaceholder='Поиск'

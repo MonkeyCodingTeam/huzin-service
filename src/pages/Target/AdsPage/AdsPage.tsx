@@ -1,7 +1,7 @@
-import { ClientAdsTable, DataType, ErrorsModal } from '@feature/ads';
+import { ClientAdsTable, DataType, ErrorsModal } from '@features/ads';
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Client, ClientAPI } from '@entities/client';
-import css from '@feature/ads/ui/ClientAdsTable/ClientAdsTable.module.scss';
+import css from './AdsPage.module.scss';
 import { Period, SenlerHeader } from '../SenlerPage/ui/SenlerHeader';
 import { DateTime } from 'luxon';
 import { Ads } from '@entities/ads';

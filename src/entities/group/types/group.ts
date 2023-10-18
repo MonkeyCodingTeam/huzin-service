@@ -4,13 +4,15 @@ import { Client } from '@entities/client';
 export interface Group extends Model {
   name: string;
   link: string;
-  site?: string;
   screen_name: string;
+  timezone?: number;
+  is_target_only?: boolean;
+  site?: string;
   city?: string;
-  timezone: number;
   photo?: string;
   senler_token_protected?: string;
   senler_token?: string;
+  has_access_token?: boolean;
 }
 
 export interface GroupOptionalProps {

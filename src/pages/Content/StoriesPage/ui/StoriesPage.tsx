@@ -40,7 +40,7 @@ const StoriesPage = () => {
   };
 
   useEffect(() => {
-    GroupApi.getAll().then((res) => {
+    GroupApi.getAll({ content_only: true }).then((res) => {
       setGroups(res.data);
       if (!res.data.length) {
         return;
