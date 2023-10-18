@@ -40,20 +40,16 @@ export const UpdateClientAPI = baseApi.injectEndpoints({
         body,
       }),
       async onQueryStarted(args, { queryFulfilled, dispatch }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setSelectedClient(data));
-          dispatch(
-            ClientAPI.util.updateQueryData('getClients', null, (clients) => {
-              return clients.map((client) => {
-                if (client.id === data.id) return data;
-                return client;
-              });
-            }),
-          );
-        } catch (error) {
-          console.log(error);
-        }
+        const { data } = await queryFulfilled;
+        dispatch(setSelectedClient(data));
+        dispatch(
+          ClientAPI.util.updateQueryData('getClients', null, (clients) => {
+            return clients.map((client) => {
+              if (client.id === data.id) return data;
+              return client;
+            });
+          }),
+        );
       },
     }),
   }),

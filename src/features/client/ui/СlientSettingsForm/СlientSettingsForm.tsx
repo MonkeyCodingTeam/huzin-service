@@ -1,27 +1,33 @@
-import { Button, Divider, Form, InputNumber } from 'antd';
+import { App, Button, Divider, Form, InputNumber } from 'antd';
+import { forEach } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useUpdateExpensesMutation } from '@features/client';
 import css from './СlientSettingsForm.module.scss';
 
+interface FormValues {
+  critical_balance: number;
+  month_plan: number;
+  budget_adjustment: number;
+
+  basic_payment?: number;
+}
+
 export const ClientSettingsForm = () => {
   const [update] = useUpdateExpensesMutation();
-  const [form] = Form.useForm();
+  const [form] = Form.useForm<FormValues>();
+  const { message } = App.useApp();
   const client = useSelector((state: RootState) => state.selectedClient);
 
-  const onFormSubmit = () => {
-    if (!client) {
-      console.log('Error, check client exist: ', client);
-      return;
-    }
-    form
-      .validateFields()
-      .then((values) => {
-        Object.keys(values).forEach((k) => values[k] == null && delete values[k]);
-        update({ id: client.id, ...values });
+  const onFinish = (values: FormValues) => {
+    forEach(values);
+    update({ id: client.id, ...values })
+      .unwrap()
+      .then(() => {
+        message.success('Success!');
       })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
+      .catch((test1) => {
+        console.log(test1);
       });
   };
 
@@ -34,9 +40,7 @@ export const ClientSettingsForm = () => {
       form={form}
       layout={'vertical'}
       className={css.form}
-      name='basic'
-      initialValues={{ remember: true }}
-      onFinish={onFormSubmit}
+      onFinish={onFinish}
       autoComplete='off'
     >
       <Divider orientation='left' style={{ marginTop: '0' }}>

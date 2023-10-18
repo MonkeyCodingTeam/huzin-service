@@ -1,8 +1,7 @@
 import { Badge, Tooltip, Typography } from 'antd';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import telegram_active from '@shared/assets/telegram-active.svg';
-import telegram from '@shared/assets/telegram.svg';
+import { TelegramIcon } from '@shared/ui/Icons/TelegramIcon';
 import css from './TelegramBotInfo.module.scss';
 
 const { Text } = Typography;
@@ -24,10 +23,10 @@ export const TelegramBotInfo = () => {
         placement='bottomLeft'
       >
         <div className={css.telegram__imageContainer}>
-          <img
-            className={css.telegram__image}
-            src={client.has_telegram ? telegram_active : telegram}
-            alt='telegram icon'
+          <TelegramIcon
+            className={classNames(css.telegram__icon, {
+              [css.telegram__icon_active]: client.has_telegram,
+            })}
           />
           <div className={css.telegram__status}>
             <Badge status={client.has_telegram ? 'success' : 'warning'} text={'Бот'} />

@@ -9,6 +9,16 @@ declare global {
     updated_at?: string;
   }
 
+  interface Error<T extends {}> {
+    error: {
+      status: number;
+      data: {
+        message: string;
+        errors: Partial<Record<keyof T, string[]>>;
+      };
+    };
+  }
+
   export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
 
   export type Period = 'day' | 'week' | 'month' | 'year';

@@ -6,7 +6,7 @@
 
   padding: 8px 6px;
 
-  border: 1px solid #0505050f;
+  border: 1px solid var(--border-color);
   border-radius: 4px;
 
   &__imageContainer {
@@ -16,8 +16,12 @@
     align-items: center;
   }
 
-  &__image {
+  &__icon {
     width: 48px;
+
+    &_active {
+      color: var(--primary-color);
+    }
   }
 
   &__status {
@@ -26,7 +30,7 @@
 
     padding: 0 3px;
 
-    border: 1px solid #b8b8b8;
+    border: 1px solid var(--secondary-border-color);
     border-radius: 6px;
   }
 
