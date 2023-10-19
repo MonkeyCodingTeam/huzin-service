@@ -29,7 +29,8 @@ export const TelegramBotInfo = () => {
             })}
           />
           <div className={css.telegram__status}>
-            <Badge status={client.has_telegram ? 'success' : 'warning'} text={'Бот'} />
+            <Badge status={client.has_telegram ? 'success' : 'warning'} />
+            <Text>Бот</Text>
           </div>
         </div>
       </Tooltip>
