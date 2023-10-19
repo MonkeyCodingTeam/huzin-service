@@ -59,17 +59,17 @@ export const ClientSelect = () => {
     return values.map((client) => {
       // Указываются условия через ||
       const haveCriticalError = !client.group_id || !client.entrepreneur;
-      const haveError = !client.has_telegram;
+      const haveError = !client.has_telegram || haveCriticalError;
 
       return (
         <Option value={client.id} label={client.name} key={client.id}>
-          {(haveCriticalError || haveError) && (
+          {(haveError) && (
             <Badge status={haveCriticalError ? 'error' : 'warning'} />
           )}
           <Text
             title={client.name}
             className={classNames(css.clientsSelect__text, {
-              [css.clientsSelect__text_badged]: haveCriticalError || haveError,
+              [css.clientsSelect__text_badged]: haveError,
             })}
           >
             {client.name}
