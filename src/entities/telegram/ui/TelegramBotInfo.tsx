@@ -1,4 +1,4 @@
-import { Badge, Tooltip, Typography } from 'antd';
+import { App, Badge, Tooltip, Typography } from 'antd';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { TelegramIcon } from '@shared/ui/Icons/TelegramIcon';
@@ -7,12 +7,12 @@ import css from './TelegramBotInfo.module.scss';
 const { Text } = Typography;
 
 export const TelegramBotInfo = () => {
+  const { message } = App.useApp();
   const client = useSelector((state: RootState) => state.selectedClient);
 
   const handleOnClick = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      // TODO Добавить обработчик
-      console.log(text, 'copied');
+      message.info(`Текст: ${text} скопирован`);
     });
   };
 

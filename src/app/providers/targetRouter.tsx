@@ -1,8 +1,8 @@
-import { ClientSettingsPage } from '@pages/Target/ClientSettingsPage';
 import { ExpensesPage } from '@pages/Target/Expenses';
 import { SenlerPage } from '@pages/Target/SenlerPage';
 import { TARGET_ROUTES } from '@shared/const';
 import { ClientsPage } from 'pages/Target/ClientsPage';
+import { ClientSettingsPage } from 'pages/Target/SettingsPage';
 
 const { BaseClientStats, ClientStats, SenlerStats, Expenses, BaseClientSettings, ClientSettings } =
   TARGET_ROUTES;

@@ -8,11 +8,11 @@ import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
 import { SettingsTabs } from '@widgets/settings';
-import css from './ClientSettingsPage.module.scss';
+import css from './SettingsPage.module.scss';
 
 const { Text } = Typography;
 
-const ClientSettingsPage = () => {
+const SettingsPage = () => {
   const navigate = useNavigate();
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
 
@@ -23,22 +23,22 @@ const ClientSettingsPage = () => {
   }, [selectedClientId]);
 
   return (
-    <Transition className={css.clientSettingsPage}>
-      <section className={css.clientSettingsPage__filters}>
-        <div className={css.clientSettingsPage__filter}>
-          <Text className={css.clientSettingsPage__text}>Клиент:</Text>
+    <Transition className={css.settingsPage}>
+      <section className={css.settingsPage__filters}>
+        <div className={css.settingsPage__filter}>
+          <Text className={css.settingsPage__text}>Клиент:</Text>
           <ClientSelect />
         </div>
       </section>
       <section>
         <Row gutter={16}>
           <Col span={16}>
-            <div className={css.clientSettingsPage__content}>
+            <div className={css.settingsPage__content}>
               <SettingsTabs />
             </div>
           </Col>
           <Col span={8}>
-            <div className={css.clientSettingsPage__content}>
+            <div className={css.settingsPage__content}>
               <ClientInfo>
                 <TelegramBotInfo />
               </ClientInfo>
@@ -50,4 +50,4 @@ const ClientSettingsPage = () => {
   );
 };
 
-export default ClientSettingsPage;
+export default SettingsPage;

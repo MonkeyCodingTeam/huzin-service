@@ -1,17 +1,33 @@
-import { Button, Form, Input, Space, Tabs } from 'antd';
-import React from 'react';
+import { Tabs } from 'antd';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
+import { GroupAdd } from '@features/group';
+import { SettingsTab } from '@widgets/settings/ui/SettingsTab';
+import { StatusBadge } from 'shared/ui/StatusBadge';
 import css from './SettingsTabs.module.scss';
 
 export const SettingsTabs = () => {
-  const [form] = Form.useForm();
+  const [activeTab, setActiveTab] = useState<string>('1');
+  const client = useSelector((state: RootState) => state.selectedClient);
+
+  const onChangeTab = (activeKey: string) => {
+    console.log(activeKey);
+    setActiveTab(activeKey);
+  };
+
   return (
     <Tabs
       className={css.tabs}
-      defaultActiveKey='1'
+      defaultActiveKey={'1'}
+      onChange={onChangeTab}
       items={[
         {
-          label: 'Настройки клиента',
+          label: (
+            <StatusBadge isError={false}>
+              <SettingsTab text={'Настройки клиента'} activeTab={activeTab} activeKey={'1'} />
+            </StatusBadge>
+          ),
           key: '1',
           children: (
             <div className={css.tabs__element}>
@@ -20,30 +36,16 @@ export const SettingsTabs = () => {
           ),
         },
         {
-          label: 'Настройки группы',
+          label: (
+            <StatusBadge isError={!client.group_id}>
+              <SettingsTab text={'Настройки группы'} activeTab={activeTab} activeKey={'2'} />
+            </StatusBadge>
+          ),
           key: '2',
           children: (
-            <Form form={form} onFinish={() => console.log('submited')}>
-              <Space.Compact style={{ width: '100%' }}>
-                <Form.Item
-                  style={{ width: '100%' }}
-                  name={'link'}
-                  rules={[
-                    {
-                      pattern: /vk.com\/\w+/,
-                      message: 'Некорректный формат ссылки',
-                    },
-                    {
-                      required: true,
-                      message: 'Ссылка не должна быть пустой',
-                    },
-                  ]}
-                >
-                  <Input placeholder='Ссылка на группу' />
-                </Form.Item>
-                <Button type={'primary'} htmlType='submit' icon={'+'} />
-              </Space.Compact>
-            </Form>
+            <div className={css.tabs__element}>
+              <GroupAdd />
+            </div>
           ),
         },
       ]}

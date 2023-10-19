@@ -1,0 +1,12 @@
+.tab {
+  color: var(--black-color);
+  transition: color .2s ease-out;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+
+  &_active {
+    color: var(--primary-color);
+  }
+}
