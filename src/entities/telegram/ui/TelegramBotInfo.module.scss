@@ -1,0 +1,76 @@
+.telegram {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+
+  padding: 8px 6px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+
+  &__imageContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+  }
+
+  &__icon {
+    width: 48px;
+
+    &_active {
+      color: var(--primary-color);
+    }
+  }
+
+  &__status {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+
+    padding: 0 3px;
+
+    border: 1px solid var(--secondary-border-color);
+    border-radius: 6px;
+  }
+
+  &__statusText {
+    margin-left: 3px;
+    font-family: IBMPlexMono, serif;
+    font-size: 12px;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__element {
+    display: flex;
+    gap: 4px;
+    align-items: flex-end;
+  }
+
+  &__text {
+    font-family: IBMPlexMono, serif;
+    font-size: 14px;
+  }
+
+  &__copyText {
+    cursor: pointer;
+
+    width: fit-content;
+    padding: 0 4px;
+
+    border: 1px solid #b8b8b8;
+    border-radius: 6px;
+
+    transition: color .1s ease-out;
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

@@ -9,6 +9,11 @@
   src: url("/src/shared/assets/fonts/Roboto-Regular.ttf");
 }
 
+@font-face {
+  font-family: IBMPlexMono;
+  src: url("/src/shared/assets/fonts/IBMPlexMono-Regular.ttf");
+}
+
 html,
 body {
   overflow-y: scroll;

@@ -2,9 +2,11 @@ import { Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { ClientStatsTable } from '@entities/client';
+import { CampaignTemplateSelect } from '@features/campaign';
+import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { CampaignTemplateSelect, ClientSelect, ClientStatsTable } from 'widgets/client';
 import css from './ClientsPage.module.scss';
 
 const { Text } = Typography;

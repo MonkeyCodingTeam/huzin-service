@@ -1,4 +1,4 @@
-import { ConfigProvider, Empty } from 'antd';
+import { App, ConfigProvider, Empty } from 'antd';
 import { ConfigProviderProps } from 'antd/es/config-provider';
 import ru from 'antd/locale/ru_RU';
 import dayjs from 'dayjs';
@@ -15,7 +15,7 @@ export const AntdProvider: FC<ConfigProviderProps> = (props) => {
   const { children, ...rest } = props;
   return (
     <ConfigProvider locale={ru} renderEmpty={customizeRenderEmpty} {...rest}>
-      {children}
+      <App message={{ maxCount: 1 }}>{children}</App>
     </ConfigProvider>
   );
 };

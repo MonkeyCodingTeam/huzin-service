@@ -1,0 +1,16 @@
+.tabs {
+  height: calc(100vh - 14em);
+
+  & :global(.ant-tabs-content-holder) {
+    overflow: auto !important;
+  }
+
+  &__element {
+    display: block;
+    padding: 0 8px ;
+  }
+}
+
+
+
+
