@@ -19,7 +19,7 @@ export const GroupInfo = () => {
   const client = useSelector((state: RootState) => state.selectedClient);
 
   useEffect(() => {
-    if (!client) return;
+    if (!client?.id) return;
     trigger({ clientId: client.id }, true);
   }, [client]);
 
