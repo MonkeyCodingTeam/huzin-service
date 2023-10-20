@@ -1,22 +1,15 @@
+import { GetClientGroupReq, Group } from '@entities/group';
 import { baseApi } from '@shared/api/baseApi';
-import { GetGroupReq, GetGroupRes } from '../model/group';
 
-const VK_API_GROUP = 'vk_method/groups';
-const ROUTE = {
-  getById: `${VK_API_GROUP}.getById`,
-};
-
-const VKGroupAPI = baseApi.injectEndpoints({
+const GroupAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getVKGroupBy: builder.query<GetGroupRes, GetGroupReq>({
-      query: (payload) => ({
-        url: ROUTE.getById,
-        method: 'POST',
-        ...payload,
-        fields: payload.fields?.join(','),
+    getClientGroup: builder.query<Group, GetClientGroupReq>({
+      query: (req) => ({
+        url: `target/client/${req.clientId}/group`,
+        method: 'GET',
       }),
     }),
   }),
 });
 
-export const { useLazyGetVKGroupByQuery } = VKGroupAPI;
+export const { useLazyGetClientGroupQuery } = GroupAPI;

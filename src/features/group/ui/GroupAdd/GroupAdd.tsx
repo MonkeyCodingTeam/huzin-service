@@ -1,6 +1,6 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { App, Button, Form, Input, Space } from 'antd';
-import { Group, useLazyGetVKGroupByQuery } from '@entities/group';
+import { useLazyGetVKGroupByQuery } from '@features/group';
 
 interface LinkProps {
   link: string;
@@ -18,22 +18,10 @@ export const GroupAdd = () => {
     trigger({ group_id: screenName, fields: ['city', 'site'] })
       .unwrap()
       .then((res) => {
-        message.success('Группа успешно добавлена!');
-        // TODO перенести в transformResponse
-        const { id, city, screen_name, name, photo_200, site } = res.groups[0];
-        const group: Group = {
-          id,
-          name,
-          site,
-          screen_name,
-          photo: photo_200,
-          link: `https://vk.com/${screenName}`,
-          city: city?.title,
-        };
-        console.log(group);
+        console.log(res);
       })
       .catch((err) => {
-        message.error('Произошла ошибка: ' + err);
+        message.error('Произошла ошибка: ' + JSON.stringify(err));
         console.log(err);
       })
       .finally(() => {

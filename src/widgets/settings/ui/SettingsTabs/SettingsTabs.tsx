@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
 import { GroupAdd } from '@features/group';
-import { SettingsTab } from '@widgets/settings/ui/SettingsTab';
 import { StatusBadge } from 'shared/ui/StatusBadge';
+import { SettingsTabLabel } from 'widgets/settings/ui/SettingsTabLabel';
 import css from './SettingsTabs.module.scss';
 
 export const SettingsTabs = () => {
@@ -25,7 +25,7 @@ export const SettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={false}>
-              <SettingsTab text={'Настройки клиента'} activeTab={activeTab} activeKey={'1'} />
+              <SettingsTabLabel text={'Настройки клиента'} activeTab={activeTab} activeKey={'1'} />
             </StatusBadge>
           ),
           key: '1',
@@ -38,7 +38,7 @@ export const SettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={!client.group_id}>
-              <SettingsTab text={'Настройки группы'} activeTab={activeTab} activeKey={'2'} />
+              <SettingsTabLabel text={'Настройки группы'} activeTab={activeTab} activeKey={'2'} />
             </StatusBadge>
           ),
           key: '2',

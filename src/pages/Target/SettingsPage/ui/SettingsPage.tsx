@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { ClientInfo } from '@entities/client';
+import { GroupInfo } from '@entities/group';
 import { TelegramBotInfo } from '@entities/telegram';
 import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
@@ -41,6 +42,7 @@ const SettingsPage = () => {
             <div className={css.settingsPage__content}>
               <ClientInfo>
                 <TelegramBotInfo />
+                <GroupInfo />
               </ClientInfo>
             </div>
           </Col>

@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import classNames from 'classnames';
 import React from 'react';
-import css from './SettingsTab.module.scss';
+import css from './SettingsTabLabel.module.scss';
 
 const { Text } = Typography;
 
@@ -11,11 +11,11 @@ interface Props {
   activeKey: string;
 }
 
-export const SettingsTab = ({ text, activeTab, activeKey }: Props) => {
+export const SettingsTabLabel = ({ text, activeTab, activeKey }: Props) => {
   return (
     <Text
-      className={classNames(css.tab, {
-        [css.tab_active]: activeTab === activeKey,
+      className={classNames(css.label, {
+        [css.label_active]: activeTab === activeKey,
       })}
     >
       {text}
