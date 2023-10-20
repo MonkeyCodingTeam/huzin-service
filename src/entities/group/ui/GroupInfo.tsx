@@ -48,14 +48,10 @@ export const GroupInfo = () => {
             <Text className={css.groupInfo__type}>Группа</Text>
           </div>
           <div className={css.groupInfo__infoContainer}>
-            <Title
-              title={group.name}
-              ellipsis={true}
-              level={5}
-              className={css.groupInfo__title}
-              onClick={() => window.open(group.link, '_blank')}
-            >
-              {group.name}
+            <Title title={group.name} ellipsis={true} level={5} className={css.groupInfo__title}>
+              <a href={group.link} target={'_blank'} rel='noreferrer'>
+                {group.name}
+              </a>
             </Title>
 
             <Text>Город: {group.city}</Text>

@@ -13,8 +13,10 @@ const GroupAPI = baseApi.injectEndpoints({
       query: (payload) => ({
         url: ROUTE.getById,
         method: 'POST',
-        ...payload,
-        fields: payload.fields?.join(','),
+        body: {
+          ...payload,
+          fields: payload.fields?.join(','),
+        },
       }),
       transformResponse: (response: GetGroupRes) => {
         // TODO переделать после обновления бэка
@@ -32,10 +34,10 @@ const GroupAPI = baseApi.injectEndpoints({
       },
     }),
     createGroup: builder.query<Group, CreateGroupReq>({
-      query: (payload) => ({
+      query: (body) => ({
         url: 'target/group',
         method: 'POST',
-        payload,
+        body,
       }),
     }),
   }),
