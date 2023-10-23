@@ -44,73 +44,69 @@ export const ClientSettingsForm = () => {
       onFinish={onFinish}
       autoComplete='off'
     >
-      <section>
-        <Divider orientation='left' style={{ marginTop: '0' }}>
-          Счет
-        </Divider>
+      <Divider orientation='left' style={{ marginTop: '0' }}>
+        Счет
+      </Divider>
 
-        <Form.Item name={'basic_payment'} label='Сумма для оплаты'>
-          <InputNumber
-            placeholder={
-              client.entrepreneur
-                ? 'Введите сумму'
-                : 'Поле заблокировано, так как не указана организация'
-            }
-            controls={false}
-            style={{ width: '100%' }}
-            disabled={!client.entrepreneur || isLoading}
-            suffix={isLoading && <LoadingOutlined spin />}
-          />
-        </Form.Item>
-      </section>
+      <Form.Item name={'basic_payment'} label='Сумма для оплаты'>
+        <InputNumber
+          placeholder={
+            client.entrepreneur
+              ? 'Введите сумму'
+              : 'Поле заблокировано, так как не указана организация'
+          }
+          controls={false}
+          style={{ width: '100%' }}
+          disabled={!client.entrepreneur || isLoading}
+          suffix={isLoading && <LoadingOutlined spin />}
+        />
+      </Form.Item>
 
-      <section>
-        <Divider orientation='left' style={{ marginTop: '0' }}>
-          Расходы
-        </Divider>
+      <Divider orientation='left' style={{ marginTop: '0' }}>
+        Расходы
+      </Divider>
 
-        <Form.Item
-          name='month_plan'
-          label='План на месяц'
-          rules={[{ required: true, message: 'Введите плановую сумму расходов!' }]}
-        >
-          <InputNumber
-            style={{ width: '100%' }}
-            placeholder={'Введите плановую сумму расходов'}
-            controls={false}
-            disabled={isLoading}
-            suffix={isLoading && <LoadingOutlined spin />}
-          />
-        </Form.Item>
+      <Form.Item
+        name='month_plan'
+        label='План на месяц'
+        rules={[{ required: true, message: 'Введите плановую сумму расходов!' }]}
+      >
+        <InputNumber
+          style={{ width: '100%' }}
+          placeholder={'Введите плановую сумму расходов'}
+          controls={false}
+          disabled={isLoading}
+          suffix={isLoading && <LoadingOutlined spin />}
+        />
+      </Form.Item>
 
-        <Form.Item
-          name='critical_balance'
-          label='Критический остаток'
-          rules={[{ required: true, message: 'Введите критический остаток!' }]}
-        >
-          <InputNumber
-            style={{ width: '100%' }}
-            placeholder={'Введите критический остаток'}
-            controls={false}
-            disabled={isLoading}
-            suffix={isLoading && <LoadingOutlined spin />}
-          />
-        </Form.Item>
+      <Form.Item
+        name='critical_balance'
+        label='Критический остаток'
+        rules={[{ required: true, message: 'Введите критический остаток!' }]}
+      >
+        <InputNumber
+          style={{ width: '100%' }}
+          placeholder={'Введите критический остаток'}
+          controls={false}
+          disabled={isLoading}
+          suffix={isLoading && <LoadingOutlined spin />}
+        />
+      </Form.Item>
 
-        <Form.Item
-          name='budget_adjustment'
-          label='Корректировка бюджета'
-          rules={[{ required: true, message: 'Введите корректировку!' }]}
-        >
-          <InputNumber
-            placeholder={'Введите корректировку +/-'}
-            controls={false}
-            style={{ width: '100%' }}
-            disabled={isLoading}
-            suffix={isLoading && <LoadingOutlined spin />}
-          />
-        </Form.Item>
-      </section>
+      <Form.Item
+        name='budget_adjustment'
+        label='Корректировка бюджета'
+        rules={[{ required: true, message: 'Введите корректировку!' }]}
+      >
+        <InputNumber
+          placeholder={'Введите корректировку +/-'}
+          controls={false}
+          style={{ width: '100%' }}
+          disabled={isLoading}
+          suffix={isLoading && <LoadingOutlined spin />}
+        />
+      </Form.Item>
 
       <Form.Item shouldUpdate>
         {() => (

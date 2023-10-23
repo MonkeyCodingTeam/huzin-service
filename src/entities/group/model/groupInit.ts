@@ -1,6 +1,6 @@
 import { Group } from '@entities/group';
 
-export const emptyGroupState: Group = {
+export const GroupInit: Group = {
   city: '',
   id: 0,
   link: '',

@@ -1,10 +1,9 @@
 import { Tabs } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
-import { GroupAdd } from '@features/group';
+import { GroupSettingsTab, SettingsTabLabel } from '@widgets/settings';
 import { StatusBadge } from 'shared/ui/StatusBadge';
-import { SettingsTabLabel } from 'widgets/settings/ui/SettingsTabLabel';
 import css from './SettingsTabs.module.scss';
 
 export const SettingsTabs = () => {
@@ -12,15 +11,20 @@ export const SettingsTabs = () => {
   const client = useSelector((state: RootState) => state.selectedClient);
 
   const onChangeTab = (activeKey: string) => {
-    console.log(activeKey);
     setActiveTab(activeKey);
+    localStorage.setItem('selected-tab', `${activeKey}`);
   };
+
+  useEffect(() => {
+    const localTab = localStorage.getItem('selected-tab');
+    if (localTab) setActiveTab(localTab);
+  }, []);
 
   return (
     <Tabs
       className={css.tabs}
-      defaultActiveKey={'1'}
       onChange={onChangeTab}
+      activeKey={activeTab}
       items={[
         {
           label: (
@@ -35,6 +39,7 @@ export const SettingsTabs = () => {
             </div>
           ),
         },
+
         {
           label: (
             <StatusBadge isError={!client.group_id}>
@@ -44,7 +49,7 @@ export const SettingsTabs = () => {
           key: '2',
           children: (
             <div className={css.tabs__element}>
-              <GroupAdd />
+              <GroupSettingsTab />
             </div>
           ),
         },

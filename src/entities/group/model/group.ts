@@ -1,3 +1,5 @@
+import { Client } from '@entities/client/@x/group';
+
 export interface Group extends Model {
   name: string;
   link: string;
@@ -13,5 +15,5 @@ export interface Group extends Model {
 }
 
 export type GetClientGroupReq = {
-  clientId: number;
+  clientId: Client['id'];
 };
