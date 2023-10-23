@@ -13,7 +13,6 @@ import { GuestAPI } from '@shared/lib/api/target/guest';
 import { CompanyTemplate } from '@shared/lib/api/target/types';
 import { GetSubscribersCountResponse } from '@entities/group';
 import { sumStatsForPeriod } from '@shared/lib/util';
-import { TableSkeleton } from '@shared/ui';
 
 interface GuestStatsTableProps {
   client: Client;
@@ -152,6 +151,14 @@ export const GuestStatsTable: FC<GuestStatsTableProps> = ({
         header='Просмотры'
         field='impressions'
         body={(value) => (value.impressions ? Math.round(value.impressions).toLocaleString() : '-')}
+      />
+      <Column
+        header='CTR'
+        field='ctr'
+        headerTooltip='Коэффициент кликабельности'
+        headerTooltipOptions={{
+          position: 'bottom',
+        }}
       />
     </DataTable>
   );
