@@ -23,32 +23,33 @@ export const GroupInfo: FC<Props> = ({ group, actions }) => {
     setTime(time);
   }, [group]);
 
+  if (!group?.id) {
+    return (
+      <div className={css.groupInfo}>
+        <div className={css.groupInfo__withoutGroup}>
+          <Title level={5} type={'secondary'}>
+            Группа не указана
+          </Title>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={css.groupInfo} style={{ justifyContent: group ? 'space-between' : 'center' }}>
       <div className={css.groupInfo__container}>
-        {!group?.id ? (
-          <div className={css.groupInfo__withoutGroup}>
-            <Title level={5} type={'secondary'}>
-              Группа не указана
-            </Title>
-          </div>
-        ) : (
-          <>
-            <div className={css.groupInfo__imageContainer}>
-              <Avatar shape='square' size={80} src={group.photo} />
-            </div>
-
-            <div className={css.groupInfo__infoContainer}>
-              <Title title={group.name} ellipsis={true} level={5} className={css.groupInfo__title}>
-                <a href={group.link} target={'_blank'} rel='noreferrer'>
-                  {group.name}
-                </a>
-              </Title>
-              <Text>Город: {group.city || 'Не указан'}</Text>
-              <Text>Местное время: {time}</Text>
-            </div>
-          </>
-        )}
+        <div className={css.groupInfo__imageContainer}>
+          <Avatar shape='square' size={80} src={group.photo} />
+        </div>
+        <div className={css.groupInfo__infoContainer}>
+          <Title title={group.name} ellipsis={true} level={5} className={css.groupInfo__title}>
+            <a href={group.link} target={'_blank'} rel='noreferrer'>
+              {group.name}
+            </a>
+          </Title>
+          <Text>Город: {group.city || 'Не указан'}</Text>
+          <Text>Местное время: {time}</Text>
+        </div>
       </div>
       {group && actions}
     </div>

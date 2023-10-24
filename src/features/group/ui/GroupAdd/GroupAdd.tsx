@@ -53,6 +53,7 @@ export const GroupAdd = () => {
 
       <Space.Compact style={{ width: '100%' }}>
         <Form.Item
+          extra={'Для доступа к настройкам необходимо указать ссылку на группу'}
           style={{ width: '100%' }}
           name={'link'}
           rules={[

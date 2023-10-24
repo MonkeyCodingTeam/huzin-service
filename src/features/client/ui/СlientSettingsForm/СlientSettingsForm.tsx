@@ -1,9 +1,9 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { App, Button, Divider, Form, InputNumber } from 'antd';
+import { App, Divider, Form, InputNumber } from 'antd';
 import { forEach } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useUpdateExpensesMutation } from '@features/client';
+import { SubmitFormButton } from '@shared/ui';
 import css from './СlientSettingsForm.module.scss';
 
 interface FormValues {
@@ -27,8 +27,8 @@ export const ClientSettingsForm = () => {
       .then(() => {
         message.success('Сохранено!');
       })
-      .catch((test1) => {
-        console.log(test1);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -58,7 +58,6 @@ export const ClientSettingsForm = () => {
           controls={false}
           style={{ width: '100%' }}
           disabled={!client.entrepreneur || isLoading}
-          suffix={isLoading && <LoadingOutlined spin />}
         />
       </Form.Item>
 
@@ -76,7 +75,6 @@ export const ClientSettingsForm = () => {
           placeholder={'Введите плановую сумму расходов'}
           controls={false}
           disabled={isLoading}
-          suffix={isLoading && <LoadingOutlined spin />}
         />
       </Form.Item>
 
@@ -90,7 +88,6 @@ export const ClientSettingsForm = () => {
           placeholder={'Введите критический остаток'}
           controls={false}
           disabled={isLoading}
-          suffix={isLoading && <LoadingOutlined spin />}
         />
       </Form.Item>
 
@@ -104,26 +101,13 @@ export const ClientSettingsForm = () => {
           controls={false}
           style={{ width: '100%' }}
           disabled={isLoading}
-          suffix={isLoading && <LoadingOutlined spin />}
         />
       </Form.Item>
 
-      <Form.Item shouldUpdate>
-        {() => (
-          <div className={css.form__buttons}>
-            <Button
-              type='primary'
-              htmlType='submit'
-              disabled={
-                !form.isFieldsTouched(true) ||
-                !!form.getFieldsError().filter(({ errors }) => errors.length).length
-              }
-              loading={isLoading}
-            >
-              Сохранить
-            </Button>
-          </div>
-        )}
+      <Form.Item>
+        <div className={css.form__buttons}>
+          <SubmitFormButton form={form} isLoading={isLoading} text={'Сохранить'} />
+        </div>
       </Form.Item>
     </Form>
   );

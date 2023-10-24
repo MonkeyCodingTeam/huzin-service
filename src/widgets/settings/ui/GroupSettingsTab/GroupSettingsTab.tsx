@@ -14,25 +14,27 @@ export const GroupSettingsTab = () => {
     if (client.id) getGroup({ clientId: client.id });
   }, [client]);
 
+  if (isFetching) {
+    return (
+      <div className={css.groupSettingsTab__loading}>
+        <LoadingOutlined spin={true} style={{ fontSize: '24px' }} />
+      </div>
+    );
+  }
+
+  if (!group?.id) {
+    return <GroupAdd />;
+  }
+
   return (
     <>
-      {isFetching ? (
-        <div className={css.groupSettingsTab__loading}>
-          <LoadingOutlined spin={true} style={{ fontSize: '24px' }} />
-        </div>
-      ) : group?.id ? (
-        <>
-          <Divider orientation='left' style={{ marginTop: '0' }}>
-            Группа
-          </Divider>
-          <GroupInfo group={group} actions={<GroupDelete />} />
+      <Divider orientation='left' style={{ marginTop: '0' }}>
+        Группа
+      </Divider>
+      <GroupInfo group={group} actions={<GroupDelete />} />
 
-          <Divider orientation='left'>Основные настройки</Divider>
-          <GroupSettingsForm group={group} isLoading={isFetching} />
-        </>
-      ) : (
-        <GroupAdd />
-      )}
+      <Divider orientation='left'>Основные настройки</Divider>
+      <GroupSettingsForm group={group} isLoading={isFetching} />
     </>
   );
 };

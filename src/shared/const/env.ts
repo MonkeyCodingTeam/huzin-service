@@ -24,6 +24,7 @@ export const env = {
   TELEGRAM_BOT: import.meta.env.VITE_TELEGRAM_BOT,
 
   VK_API_URL: import.meta.env.VITE_VK_API_URL,
-  VK_VK_CLIENT_ID: import.meta.env.VITE_VK_CLIENT_ID,
-  VK_VK_AGENCY: import.meta.env.VITE_VK_AGENCY,
+  VK_CLIENT_ID: import.meta.env.VITE_VK_CLIENT_ID,
+  VK_VERSION: import.meta.env.VITE_VK_VERSION,
+  VK_AGENCY: import.meta.env.VITE_VK_AGENCY,
 } as const;

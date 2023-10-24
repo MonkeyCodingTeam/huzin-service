@@ -24,9 +24,9 @@ export const getOauthLink = (groupId: Group['id'], options: Options) => {
     redirect_uri,
   } = options;
 
-  url.searchParams.append('client_id', env.VK_VK_CLIENT_ID);
+  url.searchParams.append('client_id', env.VK_CLIENT_ID);
   url.searchParams.append('redirect_uri', redirect_uri);
-  url.searchParams.append('v', '5.131');
+  url.searchParams.append('v', env.VK_VERSION);
 
   url.searchParams.append('display', display);
   url.searchParams.append('group_ids', groupId.toString());
