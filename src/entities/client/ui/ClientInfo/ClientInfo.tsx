@@ -1,5 +1,5 @@
 import { Badge, Tooltip, Typography } from 'antd';
-import { ReactNode } from 'react';
+import { FC, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import css from './ClientInfo.module.scss';
 
@@ -10,18 +10,15 @@ interface Props {
   children?: ReactNode;
 }
 
-export const ClientInfo = ({ children }: Props) => {
+export const ClientInfo: FC<Props> = ({ children }) => {
   const client = useSelector((state: RootState) => state.selectedClient);
   return (
     <div className={css.clientInfo}>
       <div className={css.clientInfo__container}>
-        <Title
-          className={css.clientInfo__title}
-          level={4}
-          style={{ margin: 0 }}
-          onClick={() => window.open(VK_URL + client.id, '_blank')}
-        >
-          {client.name}
+        <Title className={css.clientInfo__title} level={4} style={{ margin: 0 }}>
+          <a href={VK_URL + client.id} target='_blank' rel='noreferrer'>
+            {client.name}
+          </a>
         </Title>
 
         {!client.entrepreneur ? (

@@ -1,0 +1,52 @@
+.groupInfo {
+  display: flex;
+  flex-direction: row;
+
+  min-height: 98px;
+  padding: 8px 6px;
+
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+
+  &__container {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+
+  &__withoutGroup {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+  }
+
+  &__imageContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
+  }
+
+  &__type {
+    padding: 0 3px;
+    border: 1px solid var(--secondary-border-color);
+    border-radius: 6px;
+  }
+
+  &__infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px
+  }
+
+  &__title {
+    cursor: pointer;
+    margin: 0 !important;
+    transition: color .1s ease-out;
+
+
+    &:hover {
+      color: var(--primary-color);
+    }
+  }
+}

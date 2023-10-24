@@ -1,5 +1,6 @@
 .tabs {
-  height: calc(100vh - 14em);
+  min-height: 214px;
+  max-height: calc(100vh - 14em);
 
   & :global(.ant-tabs-content-holder) {
     overflow: auto !important;

@@ -1,8 +1,9 @@
-import { App, Button, Divider, Form, InputNumber } from 'antd';
+import { App, Divider, Form, InputNumber } from 'antd';
 import { forEach } from 'lodash';
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useUpdateExpensesMutation } from '@features/client';
+import { SubmitFormButton } from '@shared/ui';
 import css from './СlientSettingsForm.module.scss';
 
 interface FormValues {
@@ -14,7 +15,7 @@ interface FormValues {
 }
 
 export const ClientSettingsForm = () => {
-  const [update] = useUpdateExpensesMutation();
+  const [update, { isLoading }] = useUpdateExpensesMutation();
   const [form] = Form.useForm<FormValues>();
   const { message } = App.useApp();
   const client = useSelector((state: RootState) => state.selectedClient);
@@ -24,10 +25,10 @@ export const ClientSettingsForm = () => {
     update({ id: client.id, ...values })
       .unwrap()
       .then(() => {
-        message.success('Success!');
+        message.success('Сохранено!');
       })
-      .catch((test1) => {
-        console.log(test1);
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -56,7 +57,7 @@ export const ClientSettingsForm = () => {
           }
           controls={false}
           style={{ width: '100%' }}
-          disabled={!client.entrepreneur}
+          disabled={!client.entrepreneur || isLoading}
         />
       </Form.Item>
 
@@ -73,6 +74,7 @@ export const ClientSettingsForm = () => {
           style={{ width: '100%' }}
           placeholder={'Введите плановую сумму расходов'}
           controls={false}
+          disabled={isLoading}
         />
       </Form.Item>
 
@@ -85,6 +87,7 @@ export const ClientSettingsForm = () => {
           style={{ width: '100%' }}
           placeholder={'Введите критический остаток'}
           controls={false}
+          disabled={isLoading}
         />
       </Form.Item>
 
@@ -97,22 +100,14 @@ export const ClientSettingsForm = () => {
           placeholder={'Введите корректировку +/-'}
           controls={false}
           style={{ width: '100%' }}
+          disabled={isLoading}
         />
       </Form.Item>
 
-      <Form.Item shouldUpdate>
-        {() => (
-          <Button
-            type='primary'
-            htmlType='submit'
-            disabled={
-              !form.isFieldsTouched(true) ||
-              !!form.getFieldsError().filter(({ errors }) => errors.length).length
-            }
-          >
-            Сохранить
-          </Button>
-        )}
+      <Form.Item>
+        <div className={css.form__buttons}>
+          <SubmitFormButton form={form} isLoading={isLoading} text={'Сохранить'} />
+        </div>
       </Form.Item>
     </Form>
   );
