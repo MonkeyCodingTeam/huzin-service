@@ -30,12 +30,7 @@ export const EditInvoiceSettings: FC<EditInvoiceSettingsProps> = ({ client }) =>
       <Form className={css.invoiceBlock}>
         <Toast ref={toast} />
         <InputGroup>
-          <Field
-            as={Input}
-            label='Владелец'
-            name='entrepreneur'
-            placeholder={'Не задан'}
-          />
+          <Field as={Input} label='Владелец' name='entrepreneur' placeholder={'Не задан'} />
         </InputGroup>
         <InputGroup>
           <Field
