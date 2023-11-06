@@ -33,7 +33,6 @@ export const EditInvoiceSettings: FC<EditInvoiceSettingsProps> = ({ client }) =>
           <Field
             as={Input}
             label='Владелец'
-            value={client.entrepreneur || ''}
             name='entrepreneur'
             placeholder={'Не задан'}
           />
@@ -42,7 +41,6 @@ export const EditInvoiceSettings: FC<EditInvoiceSettingsProps> = ({ client }) =>
           <Field
             as={Input}
             label='Сумма для оплаты'
-            value={client.basic_payment || ''}
             name='basic_payment'
             placeholder={'Не задана'}
           />

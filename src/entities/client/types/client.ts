@@ -30,6 +30,21 @@ export interface Client extends Model, ClientRelations {
   group_id?: number;
   is_mine?: boolean;
   monitoring_type_id: number;
+  bot_chats: TelegramChat[];
+}
+
+interface TelegramChat {
+  id: number;
+  type: string;
+  title: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+  is_forum: null | boolean;
+  all_members_are_administrators: boolean;
+  created_at: string;
+  updated_at: string;
+  old_id: null | number;
 }
 
 interface ClientRelations {

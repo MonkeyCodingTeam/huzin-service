@@ -10,14 +10,16 @@ import { EditClientModal } from '@pages/Target/BudgetCutsPage/ui/EditClientModal
 import { FormikValues } from 'formik';
 import { Toast } from 'primereact/toast';
 import { BudgetCutsHeader } from '@pages/Target/BudgetCutsPage/ui/BudgetCutsHeader';
-import { index, redirectToVK } from '@shared/lib/util';
+import { getWordEnding, index, redirectToVK } from '@shared/lib/util';
 import { Client, ClientAPI } from '@entities/client';
 import { User, UserAPI } from '@entities/user';
 import { DropdownChangeEvent } from 'primereact/dropdown';
 import { useAppSelector } from '@shared/lib/redux';
 import { MenuItem } from 'primereact/menuitem';
-import { Tag } from 'primereact/tag';
 import { TableLoader } from '@widgets';
+import { Button, Flex, message } from 'antd';
+import { axiosTargetInstance } from '@shared/lib/axios';
+import { WarningOutlined } from '@ant-design/icons';
 
 interface SpentPlans {
   day_plan: number;
@@ -192,6 +194,26 @@ const BudgetCutsPage = () => {
     );
   };
 
+  const redirectToTelegramChat = ($chatId: number) => {
+    axiosTargetInstance
+      .get(`telegram_chat/${$chatId}/invite`)
+      .then(({ data }) => {
+        const win = window.open(data, '_blank');
+        win?.focus();
+      })
+      .catch(() => {
+        message.error('Чат клиента не найден');
+      });
+  };
+
+  const copyTextTemplate = (zeroDays: number, balance = 0) => {
+    const days = getWordEnding(zeroDays, ['день', 'дня', 'дней']);
+    const text = `На счету ${balance}, без рекламы ${zeroDays} ${days}, прошу сегодня срочно пополнить`;
+    message.success('Текст сохранён');
+
+    navigator.clipboard.writeText(text);
+  };
+
   const balanceBodyTemplate = (client: ClientPlans) => {
     return (
       <div className={css.budgetCell}>
@@ -199,14 +221,16 @@ const BudgetCutsPage = () => {
           {client.balance.toLocaleString()} / {client.critical_balance.toLocaleString()}
         </span>
         {client.zero_days !== 0 && (
-          <Tag
-            title='Дней без затрат'
-            className={css.budgetCell__tag}
-            icon='pi pi-exclamation-triangle'
-            severity='warning'
-            value={`${client.zero_days}`}
-            rounded
-          />
+          <Flex vertical>
+            <Button
+              title='Дней без затрат'
+              shape={'circle'}
+              icon={<WarningOutlined rev={undefined} />}
+              onClick={() => copyTextTemplate(client.zero_days)}
+            >
+              {client.zero_days}
+            </Button>
+          </Flex>
         )}
       </div>
     );
@@ -360,6 +384,25 @@ const BudgetCutsPage = () => {
           contextMenuSelection={selectedClient}
           onContextMenuSelectionChange={(e) => setSelectedClients(e.value as Client)}
         >
+          <Column
+            body={(client: ClientPlans) => (
+              <Flex gap={8} vertical>
+                {client.bot_chats.map((chat, index) => (
+                  <a
+                    href='#'
+                    onClick={() => redirectToTelegramChat(chat.id)}
+                    key={chat.id}
+                    title={chat.title}
+                  >
+                    Чат #{index + 1}
+                  </a>
+                ))}
+              </Flex>
+            )}
+            header='Телеграм'
+            field='telegram'
+            className={css.nameColumn}
+          />
           <Column
             body={nameBodyTemplate}
             header='Проект'

@@ -3,3 +3,4 @@ export * from './getPeriodList';
 export * from './cookieTools';
 export * from './redirectToVK';
 export * from './sumStats';
+export * from './getWordEnding';

@@ -28,6 +28,7 @@ export const emptyClientState: Client = {
   paid_at: null,
   zero_balance_at: null,
   monitoring_type_id: 0,
+  bot_chats: []
 };
 
 export const selectedClient = createSlice({
