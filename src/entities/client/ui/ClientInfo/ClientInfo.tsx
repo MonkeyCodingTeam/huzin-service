@@ -12,6 +12,7 @@ interface Props {
 
 export const ClientInfo: FC<Props> = ({ children }) => {
   const client = useSelector((state: RootState) => state.selectedClient);
+
   return (
     <div className={css.clientInfo}>
       <div className={css.clientInfo__container}>
@@ -29,7 +30,11 @@ export const ClientInfo: FC<Props> = ({ children }) => {
           <Text>Организация: {client.entrepreneur}</Text>
         )}
 
-        <Text>Ссылка на отчет</Text>
+        <Text>
+          <a href={`/guest-stats/${client.id}/${client.token}`} target='_blank' rel='noreferrer'>
+            Ссылка на отчет
+          </a>
+        </Text>
       </div>
       {children}
       <Text className={css.clientInfo__secondaryText} type='secondary'>

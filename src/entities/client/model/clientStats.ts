@@ -31,6 +31,7 @@ export interface StatsRes {
   reach: number;
   join_rate: number;
   spent: number;
+  uniq_views_count: number;
 }
 
 export interface ClientStatsRes {

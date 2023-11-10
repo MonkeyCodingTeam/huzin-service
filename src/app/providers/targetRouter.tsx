@@ -1,11 +1,21 @@
-import { ExpensesPage } from '@pages/Target/Expenses';
+import { CampaignsSettingsPage } from '@pages/Target/CampaignsSettingsPage';
 import { SenlerPage } from '@pages/Target/SenlerPage';
 import { TARGET_ROUTES } from '@shared/const';
+import { ClientSettingsPage } from 'pages/Target/ClientSettingsPage';
 import { ClientsPage } from 'pages/Target/ClientsPage';
-import { ClientSettingsPage } from 'pages/Target/SettingsPage';
+import { ExpensesPage } from 'pages/Target/ExpensesPage';
+import { GuestStatsPage } from 'pages/Target/GuestStatsPage';
 
-const { BaseClientStats, ClientStats, SenlerStats, Expenses, BaseClientSettings, ClientSettings } =
-  TARGET_ROUTES;
+const {
+  BaseClientStats,
+  ClientStats,
+  SenlerStats,
+  Expenses,
+  BaseClientSettings,
+  ClientSettings,
+  GuestStats,
+  CampaignsSettings,
+} = TARGET_ROUTES;
 
 export const targetRouter = [
   {
@@ -31,5 +41,13 @@ export const targetRouter = [
   {
     path: ClientSettings,
     element: <ClientSettingsPage />,
+  },
+  {
+    path: CampaignsSettings,
+    element: <CampaignsSettingsPage />,
+  },
+  {
+    path: GuestStats,
+    element: <GuestStatsPage />,
   },
 ];

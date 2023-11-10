@@ -4,5 +4,5 @@ export const initCampaignTemplateState: CampaignTemplate = {
   id: 0,
   name: '',
   tags: [],
-  has_senler: 0,
+  has_senler: false,
 };

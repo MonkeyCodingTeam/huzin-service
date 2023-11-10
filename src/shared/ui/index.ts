@@ -6,3 +6,4 @@ export * from './DateRangePicker';
 export * from './SearchInput';
 export * from './WeekPicker';
 export * from './SubmitFormButton/ui/SubmitFormButton';
+export { SkeletonBlock } from './SkeletonBlock/ui/SkeletonBlock';

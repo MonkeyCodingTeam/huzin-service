@@ -1,0 +1,39 @@
+.campaignsSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  max-width: 1280px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+
+  &__text {
+    display: flex;
+    align-items: center;
+
+    min-width: fit-content;
+    height: 100%;
+    padding: 6px;
+
+    white-space: nowrap;
+
+    background-color: var(--secondary-background-color);
+    border-right: 1px solid var(--border-color);
+  }
+
+  &__compact {
+    box-sizing: content-box;
+    border: 1px solid var(--border-color);
+    border-right: none;
+    border-radius: var(--middle-border-radius) 0 0 var(--middle-border-radius);
+  }
+
+
+
+  &__content {
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--large-border-radius);
+  }
+
+}

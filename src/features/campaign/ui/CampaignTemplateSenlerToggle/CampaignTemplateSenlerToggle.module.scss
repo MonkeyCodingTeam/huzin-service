@@ -1,0 +1,12 @@
+.senlerCheckBox {
+  cursor: pointer;
+
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  padding: 6px;
+
+  border-left: 1px solid var(--border-color);
+
+}

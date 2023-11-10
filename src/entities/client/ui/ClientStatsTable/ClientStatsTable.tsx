@@ -10,8 +10,8 @@ import {
   sumStatsForPeriod,
   useLazyGetClientStatsQuery,
 } from '@entities/client';
+import { roundValue } from '@shared/lib/roundValue';
 import { toFixed } from '@shared/lib/toFixed';
-import { truncValue } from '@shared/lib/truncValue';
 
 const { useBreakpoint } = Grid;
 
@@ -62,19 +62,19 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
       title: 'Расход',
       dataIndex: 'spent',
       sorter: (a, b) => +a.spent - +b.spent,
-      render: (value) => (value ? truncValue(+value) : '-'),
+      render: (value) => (value ? roundValue(+value) : '-'),
     },
     {
       title: 'Клики',
       dataIndex: 'clicks',
       sorter: (a, b) => +a.clicks - +b.clicks,
-      render: (value) => (value ? truncValue(+value) : '-'),
+      render: (value) => (value ? roundValue(+value) : '-'),
     },
     {
       title: 'Охват',
-      dataIndex: 'impressions',
-      sorter: (a, b) => +a.impressions - +b.impressions,
-      render: (value) => (value ? truncValue(+value) : '-'),
+      dataIndex: 'reach',
+      sorter: (a, b) => +a.reach - +b.reach,
+      render: (value) => (value ? roundValue(+value) : '-'),
     },
     {
       title: <Tooltip title={'Коэффициент кликабельности'}>CTR</Tooltip>,

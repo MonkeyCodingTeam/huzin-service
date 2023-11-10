@@ -7,12 +7,12 @@ import { TelegramBotInfo } from '@entities/telegram';
 import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { SettingsTabs } from '@widgets/settings';
-import css from './SettingsPage.module.scss';
+import { GroupSettingsTabs } from 'widgets/groupSettings';
+import css from './ClientSettingsPage.module.scss';
 
 const { Text } = Typography;
 
-const SettingsPage = () => {
+const ClientSettingsPage = () => {
   const navigate = useNavigate();
   const selectedClientId = useSelector((state: RootState) => state.selectedClient.id);
 
@@ -34,7 +34,7 @@ const SettingsPage = () => {
         <Row gutter={16}>
           <Col span={16}>
             <div className={css.settingsPage__content}>
-              <SettingsTabs />
+              <GroupSettingsTabs />
             </div>
           </Col>
           <Col span={8}>
@@ -50,4 +50,4 @@ const SettingsPage = () => {
   );
 };
 
-export default SettingsPage;
+export default ClientSettingsPage;

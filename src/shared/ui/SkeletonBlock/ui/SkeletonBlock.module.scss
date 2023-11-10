@@ -1,0 +1,25 @@
+@keyframes skeleton {
+  from {
+    background-position: 100% 50%;
+  }
+
+  to {
+    background-position: 0 50%;
+  }
+
+}
+
+.skeleton {
+  width: 100%;
+  max-width: 1280px;
+  height: calc(100vh - 17rem);
+
+  background: linear-gradient(90deg, rgb(0 0 0 / 6%) 25%, rgb(0 0 0 / 15%) 37%, rgb(0 0 0 / 6%) 63%);
+  background-size: 400% 100%;
+  border-radius: var(--large-border-radius);
+
+  animation-name: skeleton;
+  animation-duration: 1.4s;
+  animation-timing-function: ease;
+  animation-iteration-count: infinite;
+}
