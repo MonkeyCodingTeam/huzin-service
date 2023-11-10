@@ -10,7 +10,7 @@ interface CampaignProps {
 const { Title } = Typography;
 
 export const CampaignTemplateAdd = () => {
-  const [addCampaign] = useAddCampaignMutation();
+  const [addCampaign, { isLoading }] = useAddCampaignMutation();
 
   const handleSubmit = (values: CampaignProps) => {
     console.log(values);
@@ -38,7 +38,7 @@ export const CampaignTemplateAdd = () => {
           <Input placeholder='Введите название рекламной компании' />
         </Form.Item>
 
-        <Button type={'primary'} htmlType='submit'>
+        <Button type={'primary'} htmlType='submit' loading={isLoading}>
           Добавить
         </Button>
       </Space.Compact>

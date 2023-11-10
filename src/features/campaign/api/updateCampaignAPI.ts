@@ -10,12 +10,31 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        const { data } = await queryFulfilled;
+        dispatch(
+          CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
+            campaigns.push(data);
+            return campaigns;
+          }),
+        );
+      },
     }),
     deleteCampaign: builder.mutation<CampaignTemplate, CampaignTemplate['id']>({
       query: (campaignTemplateId) => ({
         url: `target/company-template/${campaignTemplateId}`,
         method: 'DELETE',
       }),
+      async onQueryStarted(args, { queryFulfilled, dispatch }) {
+        await queryFulfilled;
+        dispatch(
+          CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
+            return campaigns.filter((campaign) => {
+              if (campaign.id !== args) return campaign;
+            });
+          }),
+        );
+      },
     }),
     toggleSenler: builder.mutation<CampaignTemplate, CampaignTemplate['id']>({
       query: (campaignTemplateId) => ({
@@ -27,7 +46,6 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         dispatch(
           CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
             return campaigns.map((campaign) => {
-              console.log(JSON.stringify(campaign));
               if (campaign.id === data.id) return data;
               return campaign;
             });
@@ -49,7 +67,6 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         dispatch(
           CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
             return campaigns.map((campaign) => {
-              console.log(JSON.stringify(campaign));
               if (campaign.id === data.id) return data;
               return campaign;
             });

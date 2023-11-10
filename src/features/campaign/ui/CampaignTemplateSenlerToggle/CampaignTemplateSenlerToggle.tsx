@@ -1,7 +1,6 @@
 import { Checkbox } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { CampaignTemplate } from '@entities/campaign';
 import { useToggleSenlerMutation } from '@features/campaign';
 import css from './CampaignTemplateSenlerToggle.module.scss';
@@ -14,7 +13,6 @@ interface Props {
 export const CampaignTemplateSenlerToggle: FC<Props> = ({ campaignId, isChecked }) => {
   const [toggleSenler] = useToggleSenlerMutation();
   const [checked, setChecked] = useState(false);
-  const dispatch = useDispatch();
 
   const onChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);

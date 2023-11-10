@@ -4,18 +4,15 @@ import {
   CampaignTemplateAdd,
   CampaignTemplateDelete,
   CampaignTemplateSenlerToggle,
+  CampaignTemplateTagsUpdate,
 } from '@features/campaign';
 import { Transition } from '@shared/ui/Transition';
-import { CampaignsSettings } from '@widgets/CampaignsSettings';
 import css from './CampaignsSettingsPage.module.scss';
 
 const { Text } = Typography;
 
 const CampaignsSettingsPage = () => {
   const { data: campaignsTemplates } = useGetCampaignTemplatesQuery(null);
-
-  console.log(campaignsTemplates);
-
   return (
     <Transition className={css.campaignsSettings}>
       <section className={css.campaignsSettings__content}>
@@ -34,7 +31,7 @@ const CampaignsSettingsPage = () => {
                 >
                   <Text className={css.campaignsSettings__text}>{campaignsTemplate.name} </Text>
                   <Flex justify={'space-between'} style={{ width: '100%' }}>
-                    <CampaignsSettings
+                    <CampaignTemplateTagsUpdate
                       templateId={campaignsTemplate.id}
                       templateTags={campaignsTemplate.tags}
                     />

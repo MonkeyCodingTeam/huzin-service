@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const CampaignTemplateDelete: FC<Props> = ({ campaignTemplateId }) => {
-  const [campaignDelete] = useDeleteCampaignMutation();
+  const [campaignDelete, { isLoading }] = useDeleteCampaignMutation();
 
   return (
     <Button
@@ -19,6 +19,7 @@ export const CampaignTemplateDelete: FC<Props> = ({ campaignTemplateId }) => {
       onClick={() => {
         campaignDelete(campaignTemplateId);
       }}
+      loading={isLoading}
     />
   );
 };

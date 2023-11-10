@@ -1,0 +1,17 @@
+.tags {
+  &__input {
+    width: 64px;
+    height: 22px;
+    margin-inline-end: 8px;
+
+    vertical-align: top;
+
+    border-radius: var(--border-radius) !important;
+  }
+
+  &__plus {
+    height: 22px;
+    background: var(--light-color);
+    border-style: dashed;
+  }
+}
