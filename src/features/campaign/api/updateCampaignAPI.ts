@@ -1,6 +1,7 @@
 import { CampaignAPI, CampaignTemplate } from '@entities/campaign';
-import { updateCampaignTemplateTags } from '@features/campaign/api/updateTagsType';
+import { updateCampaigns } from '@features/campaign';
 import { baseApi } from '@shared/api/baseApi';
+import { updateCampaignTemplateTags } from './updateTagsType';
 
 export const UpdateCampaignAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -20,6 +21,7 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         );
       },
     }),
+
     deleteCampaign: builder.mutation<CampaignTemplate, CampaignTemplate['id']>({
       query: (campaignTemplateId) => ({
         url: `target/company-template/${campaignTemplateId}`,
@@ -36,6 +38,7 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         );
       },
     }),
+
     toggleSenler: builder.mutation<CampaignTemplate, CampaignTemplate['id']>({
       query: (campaignTemplateId) => ({
         url: `target/company-template/${campaignTemplateId}/toggle-senler`,
@@ -45,14 +48,12 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(
           CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
-            return campaigns.map((campaign) => {
-              if (campaign.id === data.id) return data;
-              return campaign;
-            });
+            return updateCampaigns(campaigns, data);
           }),
         );
       },
     }),
+
     updateTags: builder.mutation<
       CampaignTemplate,
       { body: updateCampaignTemplateTags; campaignTemplateId: CampaignTemplate['id'] }
@@ -66,10 +67,7 @@ export const UpdateCampaignAPI = baseApi.injectEndpoints({
         const { data } = await queryFulfilled;
         dispatch(
           CampaignAPI.util.updateQueryData('getCampaignTemplates', null, (campaigns) => {
-            return campaigns.map((campaign) => {
-              if (campaign.id === data.id) return data;
-              return campaign;
-            });
+            return updateCampaigns(campaigns, data);
           }),
         );
       },

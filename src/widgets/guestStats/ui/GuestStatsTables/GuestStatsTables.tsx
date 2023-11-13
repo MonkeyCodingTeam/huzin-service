@@ -10,12 +10,7 @@ import {
   useLazyGetGuestSenlerStatsQuery,
 } from '@entities/client';
 import { SkeletonBlock } from '@shared/ui';
-import {
-  GuestStatsCampaignsTablesWrapper,
-  GuestStatsTableWrapper,
-  monthPeriod,
-  weekPeriod,
-} from '@widgets/guestStats';
+import { GuestStatsTableWrapper, monthPeriod, weekPeriod } from '@widgets/guestStats';
 import { groupTableData } from '@widgets/guestStats/lib/groupTableData';
 import { TableData_campaign } from '../../types/types';
 
@@ -29,6 +24,7 @@ export const GuestStatsTables: FC<Props> = ({ client, period }) => {
     useLazyGetGuestClientStatsQuery();
   const [getCampaigns, { data: campaignsTemps = [], isFetching: campaignsIsFetching }] =
     useLazyGetGuestCampaignTemplatesQuery();
+  // TODO SENLER
   const [getSenler, { data: senler, isFetching: senlerIsFetching }] =
     useLazyGetGuestSenlerStatsQuery();
 
@@ -59,9 +55,13 @@ export const GuestStatsTables: FC<Props> = ({ client, period }) => {
 
   // TODO Переделать
   useEffect(() => {
-    if (!groupedData?.withoutCampaign.length || !groupedData?.withCampaign.length) return;
-    setTableDataWithoutCampaign(sumStatsForPeriod(groupedData.withoutCampaign));
-    setTableDataWithCampaign(groupedData.withCampaign);
+    if (!groupedData) return;
+    if (groupedData.withoutCampaign.length) {
+      setTableDataWithoutCampaign(sumStatsForPeriod(groupedData.withoutCampaign));
+    }
+    if (groupedData.withCampaign.length) {
+      setTableDataWithCampaign(groupedData.withCampaign);
+    }
   }, [groupedData]);
 
   useEffect(() => {
@@ -70,10 +70,23 @@ export const GuestStatsTables: FC<Props> = ({ client, period }) => {
 
   if (isLoading || !client) return <SkeletonBlock />;
   return (
-    <Flex id={'stats'} gap={16} vertical>
-      <GuestStatsTableWrapper tableData={sumStatsForPeriod(stats)} isLoading={isLoading} />
-      <GuestStatsCampaignsTablesWrapper tableData={tableDataWithCampaign} isLoading={isLoading} />
-      <GuestStatsTableWrapper tableData={tableDataWithoutCampaign} isLoading={isLoading} isOther />
+    <Flex gap={16} vertical>
+      <GuestStatsTableWrapper
+        tableData={sumStatsForPeriod(stats)}
+        isLoading={isLoading}
+        title={'Другие компании'}
+      />
+      <GuestStatsTableWrapper
+        tableDataCampaigns={tableDataWithCampaign}
+        isLoading={isLoading}
+        title={'Рекламные компании'}
+        titleMarginBottom={'0'}
+      />
+      <GuestStatsTableWrapper
+        tableData={tableDataWithoutCampaign}
+        isLoading={isLoading}
+        title={'Общая статистика'}
+      />
     </Flex>
   );
 };

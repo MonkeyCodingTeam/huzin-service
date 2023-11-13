@@ -179,7 +179,6 @@ export const ExpensesTable: FC<Props> = ({ clientSearch, selectedUser, actions }
 
   return (
     <Table
-      // ширина таблицы
       scroll={{
         x: screens.lg ? 1024 : screens.xs ? 512 : 768,
         y: screens.lg

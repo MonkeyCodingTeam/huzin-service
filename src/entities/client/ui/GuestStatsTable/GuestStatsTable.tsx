@@ -1,5 +1,6 @@
 import { Divider, Grid, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import { FC } from 'react';
 import { setCostPerClick, StatsRes, transformDateByFormat } from '@entities/client';
 import { roundValue } from '@shared/lib/roundValue';
@@ -20,9 +21,9 @@ export const GuestStatsTable: FC<Props> = ({ dataTable, isLoading, dividerText }
       title: 'Дата',
       dataIndex: 'period_date',
       sorter: (a, b) => {
-        const aPeriod = a.period_date.replace(/-/g, '');
-        const bPeriod = b.period_date.replace(/-/g, '');
-        return +aPeriod - +bPeriod;
+        const aPeriod = dayjs(a.period_date);
+        const bPeriod = dayjs(b.period_date);
+        return aPeriod.diff(bPeriod);
       },
       defaultSortOrder: 'descend',
       render: (value) => (value ? transformDateByFormat(value) : value),
@@ -67,14 +68,8 @@ export const GuestStatsTable: FC<Props> = ({ dataTable, isLoading, dividerText }
     <>
       {dividerText && <Divider orientation='left'>{dividerText}</Divider>}
       <Table
-        // ширина таблицы
         scroll={{
           x: screens.lg ? 1024 : screens.xs ? 612 : 768,
-          // y: screens.lg
-          //   ? 'calc(100vh - 18em)'
-          //   : screens.xs
-          //   ? 'calc(100vh - 13em)'
-          //   : 'calc(100vh - 14em)',
         }}
         rowKey={'period_date'}
         loading={isLoading}

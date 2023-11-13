@@ -94,7 +94,6 @@ export const ClientStatsTable: FC<Props> = ({ selectedTemplate }) => {
 
   return (
     <Table
-      // ширина таблицы
       scroll={{
         x: screens.lg ? 1024 : screens.xs ? 612 : 768,
         y: screens.lg
