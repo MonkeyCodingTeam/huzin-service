@@ -104,7 +104,6 @@ export const SenlerStatsTable: FC<Props> = ({ selectedPeriod, clientSearch }) =>
 
   return (
     <Table
-      // ширина таблицы
       scroll={{
         x: screens.lg ? 1024 : screens.xs ? 512 : 768,
         y: screens.lg ? 'calc(100vh - 18em)' : 'calc(100vh - 14em)',

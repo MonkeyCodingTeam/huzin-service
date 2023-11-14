@@ -1,0 +1,10 @@
+.emptyBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40vh;
+
+  background-color: var(--light-color);
+  border-radius: var(--large-border-radius);
+}

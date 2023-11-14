@@ -9,7 +9,13 @@ export const CampaignAPI = baseApi.injectEndpoints({
         method: 'GET',
       }),
     }),
+    getGuestCampaignTemplates: builder.query<CampaignTemplate[], { clientId: number }>({
+      query: ({ clientId }) => ({
+        url: `guest-stat/client/${clientId}/company-template`,
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
-export const { useGetCampaignTemplatesQuery } = CampaignAPI;
+export const { useGetCampaignTemplatesQuery, useLazyGetGuestCampaignTemplatesQuery } = CampaignAPI;

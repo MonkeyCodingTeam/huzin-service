@@ -11,7 +11,6 @@ export const LoginForm: FC = () => {
   const handleSubmit = async (value: LoginRequest) => {
     await csrf(null);
     const user = await login(value);
-    console.log(user);
   };
 
   return (

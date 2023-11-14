@@ -5,6 +5,8 @@ export enum TARGET_ROUTES {
   Expenses = '/expenses',
   BaseClientSettings = '/client-settings',
   ClientSettings = '/client-settings/:id',
+  GuestStats = '/guest-stats/:clientId/:token',
+  CampaignsSettings = '/campaigns-settings',
 
   Companies = '/target/company',
   Invoice = '/target/invoice',
@@ -12,5 +14,4 @@ export enum TARGET_ROUTES {
   SettingsClients = '/target/settings/*',
   SettingsClient = '/target/settings/client/:clientId',
   SettingsCompanies = '/target/settings/company',
-  ClientReport = '/client_report/:clientId/:token',
 }

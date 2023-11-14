@@ -14,11 +14,18 @@ import { CLIENT_TAG } from '@shared/api/tags';
 
 const STAT_URL = 'target/statistic/client';
 const SENLER_URL = 'target/senler/subscribers_count';
+const GUEST_URL = 'guest-stat/client/';
 
 const collator = new Intl.Collator('ru', { caseFirst: 'upper' });
 
 export const ClientAPI = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    getGuestClient: builder.query<Client, { clientId: number }>({
+      query: ({ clientId }) => ({
+        url: GUEST_URL + clientId,
+        method: 'GET',
+      }),
+    }),
     getClients: builder.query<Client[], null>({
       query: () => ({
         url: 'target/client',
@@ -54,6 +61,20 @@ export const ClientStatsAPI = baseApi.injectEndpoints({
         };
       },
     }),
+    getGuestClientStats: builder.query<ClientStatsRes[], ClientStatsReq>({
+      query: (params) => {
+        return {
+          url: `${GUEST_URL + params.id}/stats${
+            params.company_template_ids ? `/${params.company_template_ids}` : ''
+          }`,
+          method: 'GET',
+          params,
+        };
+      },
+      transformResponse: (response: ClientStatsRes[], fetch, request) => {
+        return response.map((client) => setPeriodDate(client, request.period));
+      },
+    }),
   }),
 });
 
@@ -73,9 +94,31 @@ export const SenlerStatsAPI = baseApi.injectEndpoints({
           .sort((a, b) => collator.compare(a.client_name, b.client_name));
       },
     }),
+    getGuestSenlerStats: builder.query<
+      SenlerStatsRes[],
+      { params: SenlerStatsReq; groupId: number }
+    >({
+      query: ({ params, groupId }) => {
+        return {
+          url: `guest-stat/subscribers_count/${groupId}/period${
+            params.company_template_id ? `${params.company_template_id}` : ''
+          }`,
+          method: 'GET',
+          params,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetClientsQuery, useLazyGetClientsQuery } = ClientAPI;
-export const { useGetSenlerStatsQuery, useLazyGetSenlerStatsQuery } = SenlerStatsAPI;
-export const { useLazyGetClientStatsQuery, useLazyGetClientsStatsQuery } = ClientStatsAPI;
+export const { useLazyGetGuestClientQuery, useGetClientsQuery, useLazyGetClientsQuery } = ClientAPI;
+export const {
+  useGetSenlerStatsQuery,
+  useLazyGetSenlerStatsQuery,
+  useLazyGetGuestSenlerStatsQuery,
+} = SenlerStatsAPI;
+export const {
+  useLazyGetClientStatsQuery,
+  useLazyGetClientsStatsQuery,
+  useLazyGetGuestClientStatsQuery,
+} = ClientStatsAPI;

@@ -1,0 +1,11 @@
+.guestStatsTables {
+  &__table {
+    padding: 12px;
+    background: var(--light-color);
+    border-radius: 6px;
+
+    @media screen and (max-width: 576px){
+      padding: 0
+    }
+  }
+}

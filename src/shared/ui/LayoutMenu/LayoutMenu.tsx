@@ -35,8 +35,18 @@ const items: MenuProps['items'] = [
     icon: <DollarOutlined rev={undefined} />,
   },
   {
-    label: <Link to='/client-settings'>Настройки</Link>,
-    key: 'client-settings',
+    label: 'Настройки',
+    children: [
+      {
+        label: <Link to='/client-settings'>Клиент</Link>,
+        key: 'client-settings',
+      },
+      {
+        label: <Link to='/campaigns-settings'>Рекламная компания</Link>,
+        key: 'campaigns-settings',
+      },
+    ],
+    key: 'settings',
     icon: <SettingOutlined rev={undefined} />,
   },
 ];

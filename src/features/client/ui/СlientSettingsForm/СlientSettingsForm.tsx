@@ -26,9 +26,6 @@ export const ClientSettingsForm = () => {
       .unwrap()
       .then(() => {
         message.success('Сохранено!');
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 

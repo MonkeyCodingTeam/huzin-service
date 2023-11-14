@@ -2,11 +2,11 @@ import { Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
+import { StatusBadge } from '@shared/ui/StatusBadge';
 import { GroupSettingsTab, SettingsTabLabel } from '@widgets/settings';
-import { StatusBadge } from 'shared/ui/StatusBadge';
-import css from './SettingsTabs.module.scss';
+import css from './TargetSettingsTabs.module.scss';
 
-export const SettingsTabs = () => {
+export const TargetSettingsTabs = () => {
   const [activeTab, setActiveTab] = useState<string>('1');
   const client = useSelector((state: RootState) => state.selectedClient);
 
