@@ -2,11 +2,11 @@ import { Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
-import { StatusBadge } from 'shared/ui/StatusBadge';
-import { ClientSettingsTab, ClientSettingsTabLabel } from 'widgets/settings';
-import css from './ClientSettingsTabs.module.scss';
+import { StatusBadge } from '@shared/ui/StatusBadge';
+import { GroupSettingsTab, SettingsTabLabel } from '@widgets/settings';
+import css from './TargetSettingsTabs.module.scss';
 
-export const ClientSettingsTabs = () => {
+export const TargetSettingsTabs = () => {
   const [activeTab, setActiveTab] = useState<string>('1');
   const client = useSelector((state: RootState) => state.selectedClient);
 
@@ -29,11 +29,7 @@ export const ClientSettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={false}>
-              <ClientSettingsTabLabel
-                text={'Настройки клиента'}
-                activeTab={activeTab}
-                activeKey={'1'}
-              />
+              <SettingsTabLabel text={'Настройки клиента'} activeTab={activeTab} activeKey={'1'} />
             </StatusBadge>
           ),
           key: '1',
@@ -47,17 +43,13 @@ export const ClientSettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={!client.group_id}>
-              <ClientSettingsTabLabel
-                text={'Настройки группы'}
-                activeTab={activeTab}
-                activeKey={'2'}
-              />
+              <SettingsTabLabel text={'Настройки группы'} activeTab={activeTab} activeKey={'2'} />
             </StatusBadge>
           ),
           key: '2',
           children: (
             <div className={css.tabs__element}>
-              <ClientSettingsTab />
+              <GroupSettingsTab />
             </div>
           ),
         },

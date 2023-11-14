@@ -18,7 +18,7 @@ interface Props {
 
 export const CampaignSettings: FC<Props> = ({ campaignTemplate, isLoading }) => {
   if (isLoading) return <SkeletonBlock />;
-  if (!isLoading && !campaignTemplate.length) return <EmptyBlock />;
+  if (!campaignTemplate.length) return <EmptyBlock />;
   return (
     <div className={css.campaignSettings}>
       <Flex vertical gap={16}>

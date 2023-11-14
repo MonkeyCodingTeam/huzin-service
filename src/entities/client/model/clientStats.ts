@@ -2,17 +2,18 @@ import { CampaignTemplate } from '@entities/campaign/@x/client';
 import { Client } from '@entities/client';
 
 type StatsType = 'ad' | 'campaign' | 'client' | 'office';
+type PeriodWM = Exclude<Period, 'day' | 'year'>;
 
 export interface ClientStatsReq {
   id: number;
-  period: Exclude<Period, 'day' | 'year'>;
+  period: PeriodWM;
   date_from: string;
   date_to: string;
   company_template_ids?: CampaignTemplate['id'][];
 }
 
 export interface ClientsStatsReq {
-  period: Exclude<Period, 'day' | 'year'>;
+  period: PeriodWM;
   date_from: string;
   date_to: string;
   only_field?: string[];

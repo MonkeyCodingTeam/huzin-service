@@ -4,9 +4,9 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { GroupInfo, useLazyGetClientGroupQuery } from '@entities/group';
 import { GroupAdd, GroupDelete, GroupSettingsForm } from '@features/group';
-import css from './ClientSettingsTab.module.scss';
+import css from './GroupSettingsTab.module.scss';
 
-export const ClientSettingsTab = () => {
+export const GroupSettingsTab = () => {
   const [getGroup, { data: group, isFetching }] = useLazyGetClientGroupQuery();
   const client = useSelector((state: RootState) => state.selectedClient);
 

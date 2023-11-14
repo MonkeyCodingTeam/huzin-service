@@ -7,7 +7,7 @@ import { TelegramBotInfo } from '@entities/telegram';
 import { ClientSelect } from '@features/client';
 import { TARGET_ROUTES } from '@shared/const';
 import { Transition } from '@shared/ui/Transition';
-import { ClientSettingsTabs } from 'widgets/settings';
+import { TargetSettingsTabs } from 'widgets/settings';
 import css from './ClientSettingsPage.module.scss';
 
 const { Text } = Typography;
@@ -34,7 +34,7 @@ const ClientSettingsPage = () => {
         <Row gutter={16}>
           <Col span={16}>
             <div className={css.settingsPage__content}>
-              <ClientSettingsTabs />
+              <TargetSettingsTabs />
             </div>
           </Col>
           <Col span={8}>
