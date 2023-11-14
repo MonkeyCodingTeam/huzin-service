@@ -13,7 +13,6 @@ export const CampaignTemplateAdd = () => {
   const [addCampaign, { isLoading }] = useAddCampaignMutation();
 
   const handleSubmit = (values: CampaignProps) => {
-    console.log(values);
     addCampaign(values);
     form.resetFields();
   };

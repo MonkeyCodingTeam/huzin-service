@@ -5,14 +5,14 @@ type StatsType = 'ad' | 'campaign' | 'client' | 'office';
 
 export interface ClientStatsReq {
   id: number;
-  period: Period;
+  period: Exclude<Period, 'day' | 'year'>;
   date_from: string;
   date_to: string;
   company_template_ids?: CampaignTemplate['id'][];
 }
 
 export interface ClientsStatsReq {
-  period: Period;
+  period: Exclude<Period, 'day' | 'year'>;
   date_from: string;
   date_to: string;
   only_field?: string[];

@@ -13,7 +13,7 @@ const { Text } = Typography;
 const GuestStatsPage = () => {
   const { clientId = '', token = '' } = useParams();
   const [getClient, { data: client }] = useLazyGetGuestClientQuery();
-  const [period, setPeriod] = useState<ClientStatsReq['period']>();
+  const [period, setPeriod] = useState<ClientStatsReq['period']>('week');
 
   useEffect(() => {
     if (!clientId || !token) return;
@@ -45,7 +45,7 @@ const GuestStatsPage = () => {
           <Text strong className={css.guestStatsPage__text}>
             Период:
           </Text>
-          <PeriodRadio onPeriodChange={setPeriod} />
+          <PeriodRadio onPeriodChange={setPeriod} period={period} />
         </Flex>
       </section>
       <section id={'tables'}>

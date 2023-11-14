@@ -38,10 +38,6 @@ export const GroupAdd = () => {
               state: redirectBack,
             });
           });
-      })
-      .catch((err) => {
-        // TODO Добавить обработчик
-        console.log(err);
       });
   };
 

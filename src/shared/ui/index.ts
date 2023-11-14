@@ -7,3 +7,4 @@ export * from './SearchInput';
 export * from './WeekPicker';
 export * from './SubmitFormButton/ui/SubmitFormButton';
 export { SkeletonBlock } from './SkeletonBlock/ui/SkeletonBlock';
+export { EmptyBlock } from './EmptyBlock/EmptyBlock';

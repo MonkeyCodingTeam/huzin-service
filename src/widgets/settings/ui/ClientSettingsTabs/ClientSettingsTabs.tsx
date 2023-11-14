@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ClientSettingsForm } from '@features/client';
 import { StatusBadge } from 'shared/ui/StatusBadge';
-import { GroupSettingsTab, GroupSettingsTabLabel } from 'widgets/groupSettings';
-import css from './GroupSettingsTabs.module.scss';
+import { ClientSettingsTab, ClientSettingsTabLabel } from 'widgets/settings';
+import css from './ClientSettingsTabs.module.scss';
 
-export const GroupSettingsTabs = () => {
+export const ClientSettingsTabs = () => {
   const [activeTab, setActiveTab] = useState<string>('1');
   const client = useSelector((state: RootState) => state.selectedClient);
 
@@ -29,7 +29,7 @@ export const GroupSettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={false}>
-              <GroupSettingsTabLabel
+              <ClientSettingsTabLabel
                 text={'Настройки клиента'}
                 activeTab={activeTab}
                 activeKey={'1'}
@@ -47,7 +47,7 @@ export const GroupSettingsTabs = () => {
         {
           label: (
             <StatusBadge isError={!client.group_id}>
-              <GroupSettingsTabLabel
+              <ClientSettingsTabLabel
                 text={'Настройки группы'}
                 activeTab={activeTab}
                 activeKey={'2'}
@@ -57,7 +57,7 @@ export const GroupSettingsTabs = () => {
           key: '2',
           children: (
             <div className={css.tabs__element}>
-              <GroupSettingsTab />
+              <ClientSettingsTab />
             </div>
           ),
         },

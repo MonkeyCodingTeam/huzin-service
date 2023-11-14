@@ -1,7 +1,7 @@
 import { Typography } from 'antd';
 import classNames from 'classnames';
 import React from 'react';
-import css from './GroupSettingsTabLabel.module.scss';
+import css from './ClientSettingsTabLabel.module.scss';
 
 const { Text } = Typography;
 
@@ -11,7 +11,7 @@ interface Props {
   activeKey: string;
 }
 
-export const GroupSettingsTabLabel = ({ text, activeTab, activeKey }: Props) => {
+export const ClientSettingsTabLabel = ({ text, activeTab, activeKey }: Props) => {
   return (
     <Text
       className={classNames(css.label, {

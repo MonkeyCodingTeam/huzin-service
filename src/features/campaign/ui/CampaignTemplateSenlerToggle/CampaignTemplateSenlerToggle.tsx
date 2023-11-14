@@ -20,9 +20,6 @@ export const CampaignTemplateSenlerToggle: FC<Props> = ({ campaignId, isChecked 
       .unwrap()
       .then((res) => {
         setChecked(res.has_senler);
-      })
-      .catch(() => {
-        console.log('Произошла ошибка');
       });
   };
 

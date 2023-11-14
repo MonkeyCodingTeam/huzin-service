@@ -9,7 +9,7 @@ const { useBreakpoint } = Grid;
 
 interface Props {
   dataTable: StatsRes[];
-  isLoading: boolean;
+  isLoading?: boolean;
   dividerText?: string;
 }
 

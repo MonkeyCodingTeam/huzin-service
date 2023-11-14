@@ -10,20 +10,15 @@ interface Props {
   templateTags?: CampaignTemplate['tags'];
 }
 
-export const CampaignTemplateTagsUpdate: FC<Props> = ({ templateId, templateTags }) => {
+export const CampaignTemplateTagsUpdate: FC<Props> = ({ templateId, templateTags = [] }) => {
   const [updateTags] = useUpdateTagsMutation();
-
   const [tags, setTags] = useState<string[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [editInputIndex, setEditInputIndex] = useState(-1);
-  const [editInputValue, setEditInputValue] = useState('');
-
   const inputRef = useRef<InputRef>(null);
-  const editInputRef = useRef<InputRef>(null);
 
   useEffect(() => {
-    if (!templateTags?.length) return;
+    if (!templateTags.length) return;
     const tagsName: string[] = [];
 
     templateTags.map((templateTag) => {
@@ -39,13 +34,8 @@ export const CampaignTemplateTagsUpdate: FC<Props> = ({ templateId, templateTags
     }
   }, [inputVisible]);
 
-  useEffect(() => {
-    editInputRef.current?.focus();
-  }, [editInputValue]);
-
   const handleClose = (removedTag: string) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    // TODO обработку ошибок
     setTags(newTags);
     updateTags({
       body: { tags: newTags.map((value) => ({ tag: value })) },
@@ -63,7 +53,6 @@ export const CampaignTemplateTagsUpdate: FC<Props> = ({ templateId, templateTags
 
   const handleInputConfirm = () => {
     if (inputValue && !tags.includes(inputValue)) {
-      // TODO обработку ошибок
       setTags([...tags, inputValue]);
       updateTags({
         body: { tags: [...tags, inputValue].map((value) => ({ tag: value })) },
@@ -75,35 +64,9 @@ export const CampaignTemplateTagsUpdate: FC<Props> = ({ templateId, templateTags
     setInputValue('');
   };
 
-  const handleEditInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEditInputValue(e.target.value);
-  };
-
-  const handleEditInputConfirm = () => {
-    const newTags = [...tags];
-    newTags[editInputIndex] = editInputValue;
-    setTags(newTags);
-    setEditInputIndex(-1);
-    setEditInputValue('');
-  };
-
   return (
     <Space size={[0, 8]} wrap style={{ padding: '6px 0' }}>
-      {tags.map((tag, index) => {
-        if (editInputIndex === index) {
-          return (
-            <Input
-              ref={editInputRef}
-              key={tag}
-              size='small'
-              className={css.tags__input}
-              value={editInputValue}
-              onChange={handleEditInputChange}
-              onBlur={handleEditInputConfirm}
-              onPressEnter={handleEditInputConfirm}
-            />
-          );
-        }
+      {tags.map((tag) => {
         const isLongTag = tag.length > 20;
         const tagElem = (
           <Tag key={tag} closable style={{ userSelect: 'none' }} onClose={() => handleClose(tag)}>

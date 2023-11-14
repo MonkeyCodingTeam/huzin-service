@@ -20,7 +20,8 @@ export const ExpensesEditModal: React.FC<Props> = ({ client, onCancel }) => {
 
   const onFormSubmit = () => {
     if (!client) {
-      console.log('Error, check client.ts exist: ', client);
+      // TODO анализ и возможный рефактор
+      console.log('Error, check client exist: ', client);
       return;
     }
     form

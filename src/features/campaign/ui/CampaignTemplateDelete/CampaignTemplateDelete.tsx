@@ -1,6 +1,6 @@
-import { DeleteOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
-import { FC } from 'react';
+import { DeleteOutlined, LoadingOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Popconfirm } from 'antd';
+import React, { FC } from 'react';
 import { CampaignTemplate } from '@entities/campaign';
 import { useDeleteCampaignMutation } from '@features/campaign';
 
@@ -12,14 +12,20 @@ export const CampaignTemplateDelete: FC<Props> = ({ campaignTemplateId }) => {
   const [campaignDelete, { isLoading }] = useDeleteCampaignMutation();
 
   return (
-    <Button
-      danger
-      style={{ height: 'inherit' }}
-      icon={<DeleteOutlined />}
-      onClick={() => {
+    <Popconfirm
+      title='Удаление рекламной компании'
+      description='Вы уверены что хотите удалить рекламную компанию?'
+      okText='Да'
+      cancelText='Нет'
+      placement='bottomRight'
+      icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+      onConfirm={() => {
         campaignDelete(campaignTemplateId);
       }}
-      loading={isLoading}
-    />
+    >
+      <Button type='default' danger style={{ height: 'auto', padding: '0 12px' }}>
+        {isLoading ? <LoadingOutlined spin /> : <DeleteOutlined />}
+      </Button>
+    </Popconfirm>
   );
 };
