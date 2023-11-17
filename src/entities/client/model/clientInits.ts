@@ -24,4 +24,5 @@ export const initClientState: Client = {
   zero_balance_at: null,
   companies: [],
   users: [],
+  invoices: [],
 };

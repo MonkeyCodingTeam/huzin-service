@@ -30,7 +30,7 @@ const items: MenuProps['items'] = [
     icon: <MonitorOutlined rev={undefined} />,
   },
   {
-    label: 'Счета',
+    label: <Link to='/invoice'>Счета</Link>,
     key: 'invoice',
     icon: <DollarOutlined rev={undefined} />,
   },

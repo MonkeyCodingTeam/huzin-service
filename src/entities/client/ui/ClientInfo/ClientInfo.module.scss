@@ -13,11 +13,6 @@
   &__title {
     cursor: pointer;
     max-width: fit-content;
-    transition: color .1s ease-out;
-
-    &:hover {
-      color: var(--primary-color);
-    }
   }
 
   &__secondaryText {

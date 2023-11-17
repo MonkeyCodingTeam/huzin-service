@@ -4,6 +4,7 @@ export * from './model/client';
 export * from './model/clientInits';
 export * from './model/clientSenler';
 export * from './model/clientStats';
+export type { ClientRelationsName } from './model/clientRelations';
 
 export * from './model/slice';
 

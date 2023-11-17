@@ -1,4 +1,5 @@
 import { CampaignsSettingsPage } from '@pages/Target/CampaignsSettingsPage';
+import { InvoicePage } from '@pages/Target/InvoicePage';
 import { SenlerPage } from '@pages/Target/SenlerPage';
 import { TARGET_ROUTES } from '@shared/const';
 import { ClientSettingsPage } from 'pages/Target/ClientSettingsPage';
@@ -15,6 +16,7 @@ const {
   ClientSettings,
   GuestStats,
   CampaignsSettings,
+  Invoice,
 } = TARGET_ROUTES;
 
 export const targetRouter = [
@@ -33,6 +35,10 @@ export const targetRouter = [
   {
     path: Expenses,
     element: <ExpensesPage />,
+  },
+  {
+    path: Invoice,
+    element: <InvoicePage />,
   },
   {
     path: BaseClientSettings,

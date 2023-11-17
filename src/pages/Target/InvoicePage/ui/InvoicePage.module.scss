@@ -1,4 +1,4 @@
-.guestStatsPage {
+.invoicePage {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -12,7 +12,6 @@
     gap: 1rem;
     align-items: center;
 
-    width: fit-content;
     padding: 1rem;
 
     background-color: var(--light-color);
@@ -24,20 +23,22 @@
     }
   }
 
+  &__text {
+    white-space: nowrap;
+  }
+
   &__option {
     display: flex;
     gap: 8px;
     align-items: center;
-    justify-content: flex-start
+    justify-content: flex-start;
+
+    width: 100%;
   }
 
-  &__text {
-    min-width: fit-content;
-    font-size: var(--semi-large-font-size);
-    white-space: nowrap;
-
-    @media screen and (max-width: 576px){
-      min-width: 52px;
-    }
+  &__content {
+    padding: 1rem;
+    background-color: var(--light-color);
+    border-radius: var(--large-border-radius);
   }
 }
