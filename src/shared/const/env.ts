@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const envVariables = z.object({
   VITE_MODE: z.enum(['development', 'production']).optional(),
-  VITE_API_URL: z.string().url(),
+  VITE_API_URL: z.string(),
   VITE_APP_TITLE: z.string().min(1).optional(),
   VITE_API_DELAY: z.string().regex(/^\d+$/, { message: 'Must be a positive number' }).optional(),
   VITE_DOMAIN: z.string(),

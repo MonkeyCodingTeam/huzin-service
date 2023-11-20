@@ -8,6 +8,20 @@ import svgr from 'vite-plugin-svgr';
 export default defineConfig({
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'https://api.ads-huzin.store/',
+        changeOrigin: true,
+      },
+      '/auth': {
+        target: 'https://api.ads-huzin.store/',
+        changeOrigin: true,
+      },
+      '/sanctum': {
+        target: 'https://api.ads-huzin.store/',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [react(), svgr(), tsconfigPaths()],
 });
