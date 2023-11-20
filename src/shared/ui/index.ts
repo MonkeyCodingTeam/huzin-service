@@ -8,3 +8,5 @@ export * from './WeekPicker';
 export * from './SubmitFormButton/ui/SubmitFormButton';
 export { SkeletonBlock } from './SkeletonBlock/ui/SkeletonBlock';
 export { EmptyBlock } from './EmptyBlock/EmptyBlock';
+export { AddButton } from './buttons/AddButton/AddButton';
+export { DeleteButton } from './buttons/DeleteButton/DeleteButton';

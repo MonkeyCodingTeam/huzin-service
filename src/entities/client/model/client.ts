@@ -1,4 +1,5 @@
 import { CampaignTemplate } from '@entities/campaign/@x/client';
+import { Invoice } from '@entities/invoice/@x/client';
 import { User } from '@entities/user/@x/client';
 
 export interface Client extends Model {
@@ -27,4 +28,5 @@ export interface Client extends Model {
   is_mine?: boolean;
   companies?: CampaignTemplate[];
   users: User[];
+  invoices: Invoice[];
 }

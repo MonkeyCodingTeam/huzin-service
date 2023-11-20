@@ -1,0 +1,18 @@
+.clientInvoice {
+  width: 100%;
+
+  &__title {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--primary-color) !important;
+    transition: color .1s ease-out;
+
+    &:hover {
+      color: #69b1ff !important;
+    }
+  }
+
+  &__text {
+    font-weight: 500;
+  }
+}
