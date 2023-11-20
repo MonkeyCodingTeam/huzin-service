@@ -38,12 +38,12 @@
     "**/*.tsx",
     "src",
     "types"
-  ],
+, "src/setupProxy.js"  ],
   "typeRoots": [
     "node_modules/@types"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
   ],
   "references": [
     {
