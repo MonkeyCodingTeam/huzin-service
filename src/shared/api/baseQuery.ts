@@ -27,5 +27,5 @@ export const baseQuery: BaseQueryFn<
 
     return headers;
   },
-  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' })
+  paramsSerializer: (params) => queryString.stringify(params, { arrayFormat: 'bracket-separator' }),
 });
