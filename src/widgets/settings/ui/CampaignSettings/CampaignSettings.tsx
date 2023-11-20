@@ -2,11 +2,11 @@ import { Flex, Space, Typography } from 'antd';
 import { FC } from 'react';
 import { CampaignTemplate } from '@entities/campaign';
 import {
-  CampaignTemplateDelete,
   CampaignTemplateSenlerToggle,
   CampaignTemplateTagsUpdate,
+  useDeleteCampaignMutation,
 } from '@features/campaign';
-import { EmptyBlock, SkeletonBlock } from '@shared/ui';
+import { DeleteButton, EmptyBlock, SkeletonBlock } from '@shared/ui';
 import css from './CampaignSettings.module.scss';
 
 const { Text } = Typography;
@@ -17,6 +17,7 @@ interface Props {
 }
 
 export const CampaignSettings: FC<Props> = ({ campaignTemplate, isLoading }) => {
+  const [campaignDelete, { isLoading: deleteLoading }] = useDeleteCampaignMutation();
   if (isLoading) return <SkeletonBlock />;
   if (!campaignTemplate.length) return <EmptyBlock />;
   return (
@@ -43,7 +44,17 @@ export const CampaignSettings: FC<Props> = ({ campaignTemplate, isLoading }) => 
                 />
               </Flex>
             </Flex>
-            <CampaignTemplateDelete campaignTemplateId={campaignTemplate.id} />
+            <DeleteButton
+              title='Удаление рекламной компании'
+              description='Вы уверены что хотите удалить рекламную компанию?'
+              okText='Да'
+              cancelText='Нет'
+              placement='bottomRight'
+              onConfirm={() => {
+                campaignDelete(campaignTemplate.id);
+              }}
+              isLoading={deleteLoading}
+            />
           </Space.Compact>
         ))}
       </Flex>

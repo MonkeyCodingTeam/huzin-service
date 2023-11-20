@@ -4,6 +4,9 @@ export * from './model/client';
 export * from './model/clientInits';
 export * from './model/clientSenler';
 export * from './model/clientStats';
+
+// TODO переименовать
+export type { ClientInvoice as ClientInvoiceType } from './model/clientInvoice';
 export type { ClientRelationsName } from './model/clientRelations';
 
 export * from './model/slice';
@@ -21,3 +24,4 @@ export { SenlerStatsTable } from './ui/SenlerStatsTable/SenlerStatsTable';
 export { ExpensesTable } from './ui/ExpensesTable/ExpensesTable';
 export { ClientInfo } from './ui/ClientInfo/ClientInfo';
 export { GuestStatsTable } from './ui/GuestStatsTable/GuestStatsTable';
+export { ClientInvoice } from './ui/ClientInvoice/ClientInvoice';

@@ -1,17 +1,24 @@
 import { Typography } from 'antd';
 import { ChangeEvent, useState } from 'react';
-import { InvoiceList } from '@entities/invoice';
+import { ClientInvoiceType } from '@entities/client';
+import { InvoiceAddModal } from '@features/invoice';
 import { SearchInput } from '@shared/ui';
 import { Transition } from '@shared/ui/Transition';
+import { ClientInvoiceList } from '@widgets/invoice';
 import css from './InvoicePage.module.scss';
 
 const { Text } = Typography;
 
 const InvoicePage = () => {
   const [keyword, setKeyword] = useState<string>('');
+  const [clientInvoice, setClientInvoice] = useState<ClientInvoiceType>();
 
   const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
+  };
+
+  const handleCancel = () => {
+    setClientInvoice(undefined);
   };
 
   return (
@@ -27,8 +34,10 @@ const InvoicePage = () => {
       </section>
 
       <section className={css.invoicePage__content}>
-        <InvoiceList filterValue={keyword} />
+        <ClientInvoiceList filterValue={keyword} handleAddClick={setClientInvoice} />
       </section>
+
+      <InvoiceAddModal clientInvoice={clientInvoice} onCancel={handleCancel} />
     </Transition>
   );
 };

@@ -1,49 +1,44 @@
-import { HistoryOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Flex, Typography } from 'antd';
-import { FC } from 'react';
-import { InvData, InvoiceChildList } from '@entities/invoice';
-import { ClientInvoice } from '@entities/invoice/model/invoice';
-import css from '@entities/invoice/ui/InvoiceList/InvoiceList.module.scss';
+import { Flex, Tooltip, Typography } from 'antd';
+import React, { FC, ReactNode } from 'react';
+import { InvoiceType } from '@entities/invoice';
+import css from './Invoice.module.scss';
+
+interface Props {
+  invoice: InvoiceType;
+  children: ReactNode;
+}
 
 const { Text } = Typography;
 
-interface Props {
-  invoice: ClientInvoice;
-}
+export const Invoice: FC<Props> = ({ invoice, children }) => {
+  const sum = invoice.sum.toLocaleString();
+  const isLongSum = sum.length > 9;
+  const sumElement = `${sum.slice(0, 8)}...`;
 
-export const Invoice: FC<Props> = ({ invoice }) => {
   return (
-    <>
-      <Flex justify={'space-between'} style={{ padding: '0 16px' }}>
-        <Flex vertical>
-          <div>
-            <Text className={css.invoiceList__text}>Организация: </Text>
-            <Text>{invoice.entrepreneur ? invoice.entrepreneur : 'Не указана'}</Text>
-          </div>
-          <div>
-            <Text className={css.invoiceList__text}>Бюджет: </Text>
-            <Text>{invoice.month_plan.toLocaleString()}</Text>
-          </div>
-          <div>
-            <Text className={css.invoiceList__text}>Сумма оплаты: </Text>
-            <Text>
-              {invoice.basic_payment ? invoice.basic_payment.toLocaleString() : 'Не задана'}
-            </Text>
-          </div>
-        </Flex>
-        <Flex gap={16} align={'center'}>
-          <Button type='dashed' key={'invoice-history'} style={{ alignItems: 'center' }}>
-            <HistoryOutlined />
-            История
-          </Button>
-
-          <Button type='primary' key={'invoice-add'} style={{ alignItems: 'center' }}>
-            <PlusOutlined />
-            Добавить
-          </Button>
-        </Flex>
+    <div className={css.invoice}>
+      <Flex gap={16} align={'center'}>
+        <Text className={css.invoice__title}>
+          №<Text className={css.invoice__text}>{invoice.number}</Text>
+        </Text>
+        <Text className={css.invoice__title}>
+          ИНН:<Text className={css.invoice__text}> {invoice.inn}</Text>
+        </Text>
+        <Text className={css.invoice__title}>
+          Организация:
+          <Text className={css.invoice__text}> {invoice.entrepreneur}</Text>
+        </Text>
       </Flex>
-      <InvoiceChildList invoices={InvData} />
-    </>
+      <Flex gap={8} align={'center'}>
+        <Text className={css.invoice__title}>Сумма: </Text>
+        {isLongSum ? (
+          <Tooltip title={sum}>{sumElement}</Tooltip>
+        ) : (
+          <Text className={css.invoice__sum}>{sum}</Text>
+        )}
+
+        {children}
+      </Flex>
+    </div>
   );
 };

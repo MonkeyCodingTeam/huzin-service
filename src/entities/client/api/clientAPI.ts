@@ -1,5 +1,7 @@
 import {
   Client,
+  ClientInvoiceType,
+  ClientRelationsName,
   ClientsStatsReq,
   ClientsStatsRes,
   ClientStatsReq,
@@ -34,6 +36,23 @@ export const ClientAPI = baseApi.injectEndpoints({
       providesTags: [CLIENT_TAG],
       transformResponse: (response: Client[]) =>
         response.sort((a, b) => collator.compare(a.name, b.name)),
+    }),
+
+    // TODO пока только получаем с invoice
+    getClientsWith: builder.query<ClientInvoiceType[], { with: ClientRelationsName[] }>({
+      query: (params) => ({
+        url: 'target/client',
+        method: 'GET',
+        params,
+      }),
+      transformResponse: (clients: Client[]): ClientInvoiceType[] => {
+        const resCopy: ClientInvoiceType[] = [];
+        clients.forEach((client) => {
+          // TODO добавить ИНН
+          resCopy.push({ ...client, searchField: client.name + client.entrepreneur });
+        });
+        return resCopy;
+      },
     }),
   }),
 });
@@ -111,7 +130,12 @@ export const SenlerStatsAPI = baseApi.injectEndpoints({
   }),
 });
 
-export const { useLazyGetGuestClientQuery, useGetClientsQuery, useLazyGetClientsQuery } = ClientAPI;
+export const {
+  useLazyGetGuestClientQuery,
+  useGetClientsQuery,
+  useLazyGetClientsQuery,
+  useGetClientsWithQuery,
+} = ClientAPI;
 export const {
   useGetSenlerStatsQuery,
   useLazyGetSenlerStatsQuery,
